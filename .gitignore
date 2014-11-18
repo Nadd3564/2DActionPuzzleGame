@@ -28,3 +28,11 @@
 *.app
 
 Resources/Resources/
+proj.blackberry/
+proj.linux/
+proj.mac/
+proj.marmalade/
+proj.tizen/
+
+
+
