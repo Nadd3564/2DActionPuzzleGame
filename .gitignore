@@ -33,6 +33,5 @@ proj.linux/
 proj.mac/
 proj.marmalade/
 proj.tizen/
-
-
-
+Debug.win32/
+ipch/
