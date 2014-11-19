@@ -33,7 +33,7 @@ bool GameLayer::init()
     }
  
     this->initPhysics();
-    //マルチタップモード
+    //シングルタップモード
     this->setTouchMode(kCCTouchesOneByOne);
 	this->setTouchEnabled(true);
 
