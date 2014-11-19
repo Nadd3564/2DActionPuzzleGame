@@ -1,5 +1,5 @@
-#ifndef __b2test__PhysicsSprite__
-#define __b2test__PhysicsSprite__
+#ifndef __RigidSprite__
+#define __RigidSprite__
 #define PTM_RATIO 32.0
 
 #include <iostream>
@@ -8,17 +8,17 @@
 
 USING_NS_CC;
 
-class PhysicsSprite : public CCSprite
+class RigidSprite : public CCSprite
 {
 protected:
     b2Body* m_pBody;
     
 public:
-    PhysicsSprite();
-    void setPhysicsBody(b2Body* body);
+    RigidSprite();
+    void setRigidBody(b2Body* body);
     
     virtual bool isDirty(void);
     virtual CCAffineTransform nodeToParentTransform(void);
 };
 
-#endif /* defined(__b2test__PhysicsSprite__) */
+#endif // defined(__RigidSprite__)

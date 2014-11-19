@@ -1,25 +1,25 @@
-#include "PhysicsSprite.h"
+#include "RigidSprite.h"
 
-PhysicsSprite::PhysicsSprite()
+RigidSprite::RigidSprite()
 :m_pBody(NULL)
 {
 }
 
-void PhysicsSprite::setPhysicsBody(b2Body* body)
+void RigidSprite::setRigidBody(b2Body* body)
 {
     m_pBody = body;
 }
 
 // CCSpriteクラスの関数をオーバーロード
 
-bool PhysicsSprite::isDirty(void)
+bool RigidSprite::isDirty(void)
 {
     return true;
 }
 
 // CCNodeクラスの関数をオーバーロード
 // 表示されている画像を m_pBody に追従させるコード
-CCAffineTransform PhysicsSprite::nodeToParentTransform(void)
+CCAffineTransform RigidSprite::nodeToParentTransform(void)
 {
     b2Vec2 pos = m_pBody->GetPosition();
     

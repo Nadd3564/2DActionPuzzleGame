@@ -1,13 +1,13 @@
 #pragma once
 
-#ifndef _SmileyDog_GameLayer_
-#define _SmileyDog_GameLayer_
+#ifndef _EN_GameLayer_
+#define _EN_GameLayer_
 //#define PTM_RATIO 32.0
 #define BALL_RADIUS 8.0
 
 #include "cocos2d.h"
 #include <Box2D\Box2D.h>
-#include "PhysicsSprite.h"
+#include "RigidSprite.h"
 
 
 class GameLayer : public cocos2d::CCLayer
@@ -18,26 +18,26 @@ protected:
 	{
 		kTag_Background = 1,
 		kTag_Enemy,
-		kTag_Ball,
-		kTag_Gum1,
-		kTag_Gum2,
+		kTag_Wisp,
+		kTag_Chain1,
+		kTag_Chain2,
 	};
 
 	enum kOrder
 	{
 		kOrder_Background = 1,
 		kOrder_Enemy,
-		kOrder_Launcher2,
-		kOrder_Gum2,
-		kOrder_Ball,
-		kOrder_Gum1,
-		kOrder_Launcher1,
+		kOrder_Cross2,
+		kOrder_Chain2,
+		kOrder_Wisp,
+		kOrder_Chain1,
+		kOrder_Cross1,
 	};
 
 	void instantiateBackground(); 
 	void instantiateGround(); 
 	void instantiateEnemy(cocos2d::CCPoint position);
-	void instantiateBall();
+	void instantiateWisp();
 	cocos2d::CCPoint processingPosition(cocos2d::CCPoint touch);
 	
 public:
@@ -58,4 +58,4 @@ public:
 	virtual void ccTouchCancelled(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
 };
 
-#endif // defined(_SmileyDog_GameLayer_)
+#endif // defined(_EN_GameLayer_)
