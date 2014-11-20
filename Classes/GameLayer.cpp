@@ -188,9 +188,9 @@ void GameLayer::instantiateWisp(){
 
 
 	//発射台を追加
-	//RigidSprite* Cross1 = new RigidSprite();
-	//launcher1->autorelease();
-	//launcher1->initWithFile("Cross1.png");
+	//RigidSprite* cross1 = new RigidSprite();
+	//cross1->autorelease();
+	//cross1->initWithFile("Cross1.png");
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);
 	cross1->setPosition(ccp(100, 100));
@@ -207,7 +207,7 @@ CCPoint GameLayer::processingPosition(CCPoint touch){
 	int distance = touch.getDistance(WISP_INIT_POS);
 
 	if(distance > WISP_STRETCH_LENGTH)
-		//距離がBALL_STRETCH_LENGTHとなる位置を返す
+		//距離がWISP_STRETCH_LENGTHとなる位置を返す
 		return WISP_INIT_POS + (touch - WISP_INIT_POS) * WISP_STRETCH_LENGTH / distance;
 	else
 		//タップ位置を返す

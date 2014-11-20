@@ -3,29 +3,35 @@
 *.lo
 *.o
 *.obj
+*.sdf
 
 # Precompiled Headers
 *.gch
 *.pch
+*.sdf
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
+*.sdf
 
 # Fortran module files
 *.mod
+*.sdf
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
 *.lib
+*.sdf
 
 # Executables
 *.exe
 *.out
 *.app
+*.sdf
 
 Resources/Resources/
 proj.blackberry/
@@ -36,3 +42,4 @@ proj.tizen/
 proj.win32/
 Debug.win32/
 ipch/
+Resources/
