@@ -10,15 +10,13 @@ USING_NS_CC;
 
 class RigidSprite : public CCSprite
 {
-protected:
-    b2Body* m_pBody;
-    
 public:
+	b2Body* m_pBody;
+
     RigidSprite();
     void setRigidBody(b2Body* body);
     
     virtual bool isDirty(void);
-    virtual CCAffineTransform nodeToParentTransform(void);
 };
 
 #endif // defined(__RigidSprite__)

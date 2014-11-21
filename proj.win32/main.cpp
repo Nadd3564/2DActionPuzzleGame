@@ -16,6 +16,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     AppDelegate app;
     CCEGLView* eglView = CCEGLView::sharedOpenGLView();
     eglView->setViewName("EN - Enter Nirvana -");
-    eglView->setFrameSize(800, 640);
+    eglView->setFrameSize(1136, 640);
     return CCApplication::sharedApplication()->run();
 }

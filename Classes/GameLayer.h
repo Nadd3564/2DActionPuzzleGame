@@ -21,6 +21,7 @@ protected:
 		kTag_Wisp,
 		kTag_Chain1,
 		kTag_Chain2,
+		kTag_Obstacles,
 	};
 
 	enum kOrder
@@ -32,6 +33,15 @@ protected:
 		kOrder_Wisp,
 		kOrder_Chain1,
 		kOrder_Cross1,
+		kOrder_Obstacles,
+	};
+
+	enum ObstacleType
+	{
+		Obstacle1,
+		Obstacle2,
+		Obstacle3,
+		Obstacle4,
 	};
 
 	void instantiateBackground(); 
@@ -39,6 +49,10 @@ protected:
 	void instantiateEnemy(cocos2d::CCPoint position);
 	void instantiateWisp();
 	cocos2d::CCPoint processingPosition(cocos2d::CCPoint touch);
+	void addForceToWisp(cocos2d::CCNode* wisp);
+	void instantiateObstacleWithEnemy();
+	void instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos, float angle);
+	void instantiateObs(cocos2d::CCPoint pos, float angle);
 	
 public:
 	static cocos2d::CCScene* createScene(); 
