@@ -5,4 +5,4 @@
 開発中の画面
 ![image](playscene.jpg)
 <br>開発環境　
-<br>Cocos2d-x ver 2.2.5 windows7 64bit VisualStudioExpress Update4
+<br>Cocos2d-x ver 2.2.5 windows7 64bit VisualStudioExpress 2012 Update4
