@@ -131,15 +131,33 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ApproachState.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\GameLayer.cpp" />
     <ClCompile Include="..\Classes\RigidSprite.cpp" />
+    <ClCompile Include="..\Enemy.cpp" />
+    <ClCompile Include="..\GameObject.cpp" />
+    <ClCompile Include="..\GameState.cpp" />
+    <ClCompile Include="..\HudLayer.cpp" />
+    <ClCompile Include="..\NormalState.cpp" />
+    <ClCompile Include="..\ObjectManager.cpp" />
+    <ClCompile Include="..\Player.cpp" />
+    <ClCompile Include="..\StateMachine.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ApproachState.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\GameLayer.h" />
     <ClInclude Include="..\Classes\RigidSprite.h" />
+    <ClInclude Include="..\Enemy.h" />
+    <ClInclude Include="..\GameObject.h" />
+    <ClInclude Include="..\GameState.h" />
+    <ClInclude Include="..\HudLayer.h" />
+    <ClInclude Include="..\NormalState.h" />
+    <ClInclude Include="..\ObjectManager.h" />
+    <ClInclude Include="..\Player.h" />
+    <ClInclude Include="..\StateMachine.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

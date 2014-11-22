@@ -12,6 +12,8 @@
 
 USING_NS_CC;
 
+GameLayer* GameLayer::s_pInstance = 0;
+
 GameLayer::GameLayer() {
     
 }
@@ -20,8 +22,17 @@ GameLayer::GameLayer() {
 CCScene* GameLayer::createScene()
 {
 	CCScene* scene = CCScene::create();
-	CCLayer* layer = GameLayer::create();
+	GameLayer* layer = GameLayer::create();
 	scene->addChild(layer);
+
+	HudLayer *hud = new HudLayer();
+    hud->init();
+    scene->addChild(hud);
+    layer->_hud = hud;
+
+	ObjectManager *gm = ObjectManager::Instance();
+    scene->addChild(gm);
+    layer->_gm = gm;
 
 	return scene; 
 }
@@ -36,11 +47,15 @@ bool GameLayer::init()
   CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
 
     this->initPhysics();
+
+	Game::Instance()->getStateMachine()->pushState(new NormalState());
+
     //シングルタップモード
     this->setTouchMode(kCCTouchesOneByOne);
 	this->setTouchEnabled(true);
 
     scheduleUpdate();
+	this->schedule(schedule_selector(GameLayer::update));
  
     return true;
 }
@@ -65,6 +80,7 @@ void GameLayer::onEnter(){
 	instantiateWisp();
 	instantiateObstacleWithEnemy();
 }
+
 
 //背景の生成
 void GameLayer::instantiateBackground(){
@@ -113,7 +129,8 @@ void GameLayer::instantiateGround(){
 
 void GameLayer::instantiateEnemy(CCPoint position){
 	//エネミー生成
-	RigidSprite* enemy = new RigidSprite();
+	//RigidSprite* enemy = new RigidSprite();
+	Enemy* enemy = new Enemy();
 	enemy->autorelease();
 	enemy->initWithFile("enemy2.png");
 	enemy->setPosition(position);
@@ -150,29 +167,30 @@ void GameLayer::instantiateEnemy(CCPoint position){
 	
 	enemy->setRigidBody(_body);
 	this->addChild(enemy, kOrder_Enemy);
-
+	Game::Instance()->addGameObjectMap("enemy", _enemy);
+	Game::Instance()->addGameObject(_enemy);
 }
 
 void GameLayer::instantiateWisp(){
 	//ウィスプ生成
-	RigidSprite* wisp = new RigidSprite();
-	wisp->autorelease();
-	wisp->initWithFile("wisp_1.png");
-	wisp->setPosition(WISP_INIT_POS);
-	wisp->setTag(kTag_Wisp);
-	wisp->setZOrder(kOrder_Wisp);
+	_wisp = new Player();
+	_wisp->autorelease();
+	_wisp->initWithFile("wisp_1.png");
+	_wisp->setPosition(WISP_INIT_POS);
+	_wisp->setTag(kTag_Wisp);
+	_wisp->setZOrder(kOrder_Wisp);
 
 	//物理ボディ生成
     b2BodyDef bodyDef;
     bodyDef.type = b2_staticBody;
-	bodyDef.position.Set(wisp->getPositionX() / PTM_RATIO,
-                               wisp->getPositionY() / PTM_RATIO);
-	bodyDef.userData = wisp; 
+	bodyDef.position.Set(_wisp->getPositionX() / PTM_RATIO,
+                               _wisp->getPositionY() / PTM_RATIO);
+	bodyDef.userData = _wisp; 
 	_body = _world->CreateBody(&bodyDef);
 
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
-    spriteShape.m_radius = wisp->getContentSize().width * 0.3 / PTM_RATIO;
+    spriteShape.m_radius = _wisp->getContentSize().width * 0.3 / PTM_RATIO;
 
 	//物理特性
     b2FixtureDef fixtureDef;
@@ -182,8 +200,10 @@ void GameLayer::instantiateWisp(){
 	fixtureDef.friction = 0.3;
 	_body->CreateFixture(&fixtureDef);
     
-	wisp->setRigidBody(_body);
-	addChild(wisp);
+	_wisp->setRigidBody(_body);
+	addChild(_wisp);
+	Game::Instance()->addGameObjectMap("wisp", _wisp);
+	Game::Instance()->addGameObject(_wisp);
 
 
 	//発射台を追加
@@ -210,14 +230,6 @@ CCPoint GameLayer::processingPosition(CCPoint touch){
 		return touch;
 }
 
-void GameLayer::addForceToWisp(CCNode* wisp){
-	//ウィスプを可動出来るようにする
-	RigidSprite* will = dynamic_cast<RigidSprite*>(wisp);
-	will->m_pBody->SetType(b2_dynamicBody);
-	//ウィスプに力を加える
-	will->m_pBody->ResetMassData();
-	will->m_pBody->ApplyLinearImpulse(b2Vec2(10.0f, 3.0f), will->m_pBody->GetWorldCenter());
-}
 
 void GameLayer::instantiateObstacleWithEnemy(){
 	//エネミー生成
@@ -412,7 +424,7 @@ void GameLayer::ccTouchEnded(CCTouch* touch, CCEvent* event){
 		wisp->setPosition(processingPosition(touch->getLocation()));
 
 		//ウィスプに力を加える
-		addForceToWisp(wisp);
+		_wisp->addForceToWisp(wisp);
 	}
 }
 
@@ -422,7 +434,8 @@ void GameLayer::ccTouchCancelled(CCTouch* touch, CCEvent* event){
 
 void GameLayer::update(float dt)
 {
-   //フレーム毎にWorldの情報を更新
+	Game::Instance()->getStateMachine()->update();
+    //フレーム毎にWorldの情報を更新
 	float32 timeStep = 1.0f / 60.0f;
     int32 velocityIterations = 10;
     int32 positionIterations = 10;
@@ -434,13 +447,6 @@ void GameLayer::update(float dt)
 			CCSprite* myActor = (CCSprite*)b->GetUserData();
             myActor->setPosition(ccp( b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO) );
 			myActor->setRotation( -1 * CC_RADIANS_TO_DEGREES(b->GetAngle()) );
-
-		
-            //スプライトが画面の1/3まで落ちたら、非アクティブにする
-            /*CCSize s = CCDirector::sharedDirector()->getWinSize();
-            if(myActor->getPositionY()<s.height/1){
-                b->SetActive(false);
-			}*/
         }
     }
 }

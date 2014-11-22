@@ -21,6 +21,15 @@
     <ClCompile Include="..\Classes\RigidSprite.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Enemy.cpp" />
+    <ClCompile Include="..\GameObject.cpp" />
+    <ClCompile Include="..\GameState.cpp" />
+    <ClCompile Include="..\HudLayer.cpp" />
+    <ClCompile Include="..\NormalState.cpp" />
+    <ClCompile Include="..\ObjectManager.cpp" />
+    <ClCompile Include="..\Player.cpp" />
+    <ClCompile Include="..\StateMachine.cpp" />
+    <ClCompile Include="..\ApproachState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -35,5 +44,14 @@
     <ClInclude Include="..\Classes\RigidSprite.h">
       <Filter>Classes</Filter>
     </ClInclude>
+    <ClInclude Include="..\Enemy.h" />
+    <ClInclude Include="..\GameObject.h" />
+    <ClInclude Include="..\GameState.h" />
+    <ClInclude Include="..\HudLayer.h" />
+    <ClInclude Include="..\NormalState.h" />
+    <ClInclude Include="..\ObjectManager.h" />
+    <ClInclude Include="..\Player.h" />
+    <ClInclude Include="..\StateMachine.h" />
+    <ClInclude Include="..\ApproachState.h" />
   </ItemGroup>
 </Project>
