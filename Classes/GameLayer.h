@@ -52,7 +52,6 @@ protected:
 	void addForceToWisp(cocos2d::CCNode* wisp);
 	void instantiateObstacleWithEnemy();
 	void instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos, float angle);
-	void instantiateObs(cocos2d::CCPoint pos, float angle);
 	
 public:
 	static cocos2d::CCScene* createScene(); 

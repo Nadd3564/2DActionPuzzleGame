@@ -247,7 +247,7 @@ void GameLayer::instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos,
 		fileName = "isi.png";
 		break;
 	case GameLayer::Obstacle3:
-		fileName = "headStone.png";
+		fileName = "pumpkin.png";
 		break;
 	case GameLayer::Obstacle4:
 		fileName = "baseStone1.png";
@@ -288,7 +288,7 @@ void GameLayer::instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos,
 			//•¨—“Á«
 			b2FixtureDef fixtureDef;
 			fixtureDef.shape = &spriteShape;
-			fixtureDef.density = 0.1;
+			fixtureDef.density = 0.5;
 			fixtureDef.restitution = 0.5;
 			fixtureDef.friction = 0.3;
 			_body->CreateFixture(&fixtureDef);
@@ -307,7 +307,7 @@ void GameLayer::instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos,
 
 			//•¨—ƒGƒ“ƒWƒ“ã‚Ì•¨¿‚ÌŒ`‚Æ‘å‚«‚³
 			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(obstacles->getContentSize().width * 1.0 / PTM_RATIO, obstacles->getContentSize().height * 0.3 / PTM_RATIO);
+			spriteShape.SetAsBox(obstacles->getContentSize().width * 0.5 / PTM_RATIO, obstacles->getContentSize().height * 0.3 / PTM_RATIO);
 			_body->CreateFixture(&spriteShape, 2);
 
 			//•¨—“Á«
