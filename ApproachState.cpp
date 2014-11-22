@@ -10,7 +10,7 @@
 #include "ObjectManager.h"
 #include "NormalState.h"
 
-const std::string ApproachState::s_approachID = "ALARM";
+const std::string ApproachState::s_approachID = "APPROACH";
 
 void ApproachState::s_approachToNormal() {
     Game::Instance()->getStateMachine()->changeState(new NormalState());
