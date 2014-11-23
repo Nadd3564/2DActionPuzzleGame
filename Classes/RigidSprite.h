@@ -14,6 +14,7 @@ public:
 	b2Body* m_pBody;
 
     RigidSprite();
+	~RigidSprite();
     void setRigidBody(b2Body* body);
     
     virtual bool isDirty(void);

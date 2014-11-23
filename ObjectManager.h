@@ -58,6 +58,8 @@ public:
     
     std::vector<std::string> getLevelFiles() { return m_levelFiles; }
     
+	CCSprite* instantiateBackground();
+
 private:
     
     StateMachine* m_pStateMachine;

@@ -5,6 +5,10 @@ RigidSprite::RigidSprite()
 {
 }
 
+RigidSprite::~RigidSprite()
+{
+}
+
 void RigidSprite::setRigidBody(b2Body* body)
 {
     m_pBody = body;

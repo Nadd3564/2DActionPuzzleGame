@@ -50,7 +50,6 @@ protected:
 		Obstacle4,
 	};
 
-	void instantiateBackground(); 
 	void instantiateGround(); 
 	void instantiateEnemy(cocos2d::CCPoint position);
 	void instantiateWisp();
@@ -107,8 +106,9 @@ public:
 	CC_SYNTHESIZE(b2World *, _world, World);
 	CC_SYNTHESIZE(b2Body *, _body, Body);
     CC_SYNTHESIZE(GameLayer *, _game, Game);
-	virtual void onEnter(); //ƒŒƒCƒ„[•\¦ˆ—
+	virtual void onEnter();
 	GameLayer();
+	~GameLayer();
 	void update(float dt);
 	
 

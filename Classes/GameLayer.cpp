@@ -11,12 +11,18 @@
 #define CROSS_POS2 ccp(125, 140)
 
 USING_NS_CC;
-
+using namespace CocosDenshion;
 GameLayer* GameLayer::s_pInstance = 0;
 
 GameLayer::GameLayer() {
-    
+
 }
+
+GameLayer::~GameLayer() {
+    delete _world;
+    _world = NULL;
+}
+
 
 //シーン生成
 CCScene* GameLayer::createScene()
@@ -44,7 +50,8 @@ bool GameLayer::init()
     {
         return false;
     }
-  CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
+
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
 
     this->initPhysics();
 
@@ -75,21 +82,12 @@ void GameLayer::initPhysics(){
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
 
-	instantiateBackground();
+	addChild(Game::Instance()->instantiateBackground(), kOrder_Background, kTag_Background);
 	instantiateGround();
 	instantiateWisp();
 	instantiateObstacleWithEnemy();
 }
 
-
-//背景の生成
-void GameLayer::instantiateBackground(){
-	//背景の設定
-	CCSprite* background = CCSprite::create("background1.png");
-	background->setAnchorPoint(ccp(0.0, 0.5));
-	background->setPosition(ccp(0, WINSIZE.height / 2));
-	addChild(background, kOrder_Background, kTag_Background);
-}
 
 //地面の生成
 void GameLayer::instantiateGround(){
@@ -97,10 +95,10 @@ void GameLayer::instantiateGround(){
 	
 
 	//物理ボディ生成
-    b2BodyDef groundBodyDef;
-	groundBodyDef.type = b2_staticBody;
-    groundBodyDef.position.Set(0.0f, 0.0f);
-	b2Body* groundBody = _world->CreateBody(&groundBodyDef);
+    //b2BodyDef groundBodyDef;
+	//groundBodyDef.type = b2_staticBody;
+    //groundBodyDef.position.Set(0.0f, 0.0f);
+	b2Body* groundBody = _world->CreateBody(&_wisp->groundBodyDef());
     
     // 地面の形と大きさの定義
     float groundHeight = WINSIZE.height * 0.1;

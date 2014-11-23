@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef __TileGame__StateMachine__
-#define __TileGame__StateMachine__
+#ifndef __StateMachine__
+#define __StateMachine__
 
 #include <vector>
 #include "GameState.h"
@@ -31,4 +31,4 @@ private:
 
 typedef StateMachine theStateMachine;
 
-#endif /* defined(__TileGame__StateMachine__) */
+#endif /* defined(__StateMachine__) */

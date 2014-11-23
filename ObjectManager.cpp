@@ -31,7 +31,7 @@ bool ObjectManager::init()
 {
     // ここで画像や音声のロード、その他初期化を行えますが、
     // TODO: 慣れたらGOのファクトリーでの初期化を実装すること
-    m_pStateMachine->changeState(new NormalState());
+	m_pStateMachine->changeState(new NormalState());
     return true;
 }
 
@@ -107,4 +107,14 @@ void ObjectManager::clean()
     m_pStateMachine = 0;
     delete m_pStateMachine;
 
+}
+
+CCSprite* ObjectManager::instantiateBackground(){
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+
+	//背景の設定
+	CCSprite* background = CCSprite::create("background1.png");
+	background->setAnchorPoint(ccp(0.0, 0.5));
+	background->setPosition(ccp(0, size.height / 2));
+	return background;
 }
