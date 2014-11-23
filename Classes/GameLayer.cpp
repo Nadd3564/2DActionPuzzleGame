@@ -82,37 +82,16 @@ void GameLayer::initPhysics(){
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
 
+	//背景の設定
 	addChild(Game::Instance()->instantiateBackground(), kOrder_Background, kTag_Background);
-	instantiateGround();
+	//地面の生成
+	addChild(Game::Instance()->instantiateGround(_body, _world, getChildByTag(kTag_Background)));
+	//instantiateGround();
 	instantiateWisp();
 	instantiateObstacleWithEnemy();
 }
 
 
-//地面の生成
-void GameLayer::instantiateGround(){
-	CCNode* background = getChildByTag(kTag_Background);
-	
-	//物理ボディ生成
-    _body = _world->CreateBody(&Game::Instance()->groundBodyDef());
-    
-	// 地面の形と大きさの定義
-    b2EdgeShape groundBox = Game::Instance()->groundShape();
-
-	//物理性質
-	b2FixtureDef fixtureDef;
-    fixtureDef.shape = &groundBox;
-    fixtureDef.density = 0.5;
-    fixtureDef.restitution = 0.5;
-	fixtureDef.friction = 0.8;
-	_body->CreateFixture(&fixtureDef);
-	
-	//地面ノード作成
-	CCNode* node = CCNode::create();
-	node->setAnchorPoint(ccp(0.5, 0.5));
-	node->setPosition(ccp(background->getContentSize().width / 2, 25));
-	this->addChild(node);
-}
 
 void GameLayer::instantiateEnemy(CCPoint position){
 	//エネミー生成

@@ -49,7 +49,6 @@ protected:
 		Obstacle4,
 	};
 
-	void instantiateGround(); 
 	void instantiateEnemy(cocos2d::CCPoint position);
 	void instantiateWisp();
 	cocos2d::CCPoint processingPosition(cocos2d::CCPoint touch);

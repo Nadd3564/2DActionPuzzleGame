@@ -15,6 +15,8 @@
 #include <cocos2d.h>
 #include "GameObject.h"
 
+USING_NS_CC;
+
 class ObjectManager : public cocos2d::CCLayer
 {
 public:
@@ -61,6 +63,7 @@ public:
 	CCSprite* instantiateBackground();
 	b2BodyDef groundBodyDef();
 	b2EdgeShape groundShape();
+	CCNode* instantiateGround(b2Body* _body, b2World* _world, CCNode* kTag);
 
 private:
     

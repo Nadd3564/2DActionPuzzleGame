@@ -11,6 +11,7 @@
 #include "ApproachState.h"
 
 using namespace std;
+USING_NS_CC;
 
 ObjectManager* ObjectManager::s_pInstance = 0;
 
@@ -110,13 +111,34 @@ void ObjectManager::clean()
 }
 
 CCSprite* ObjectManager::instantiateBackground(){
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
-
 	//背景の設定
 	CCSprite* background = CCSprite::create("background1.png");
 	background->setAnchorPoint(ccp(0.0, 0.5));
-	background->setPosition(ccp(0, size.height / 2));
+	background->setPosition(ccp(0, WINSIZE.height / 2));
 	return background;
+}
+
+//地面生成
+CCNode* ObjectManager::instantiateGround(b2Body* _body, b2World* _world, CCNode* kTag){
+	//物理ボディ生成
+	_body = _world->CreateBody(&Game::Instance()->groundBodyDef());
+	
+	// 地面の形と大きさの定義
+    b2EdgeShape groundBox = Game::Instance()->groundShape();
+
+	//物理性質
+	b2FixtureDef fixtureDef;
+    fixtureDef.shape = &groundBox;
+    fixtureDef.density = 0.5;
+    fixtureDef.restitution = 0.5;
+	fixtureDef.friction = 0.8;
+	_body->CreateFixture(&fixtureDef);
+	
+	//地面ノード作成
+	CCNode* node = CCNode::create();
+	node->setAnchorPoint(ccp(0.5, 0.5));
+	node->setPosition(ccp(kTag->getContentSize().width / 2, 25));
+	return node;
 }
 
 //物理ボディ生成
