@@ -14,7 +14,11 @@
 
 class Enemy : public GameObject
 {
-    
+public:
+    Enemy();
+	~Enemy();
+
+	b2BodyDef enemyBodyDef(Enemy* enemy);
 };
 
 

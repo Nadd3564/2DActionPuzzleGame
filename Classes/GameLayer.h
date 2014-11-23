@@ -2,7 +2,6 @@
 
 #ifndef _EN_GameLayer_
 #define _EN_GameLayer_
-//#define PTM_RATIO 32.0
 #define BALL_RADIUS 8.0
 
 #include "cocos2d.h"

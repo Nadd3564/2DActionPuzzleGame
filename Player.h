@@ -10,9 +10,7 @@
 #define __TileGame__Player__
 
 #include <iostream>
-#include "cocos2d.h"
 #include "GameObject.h"
-#include <Box2D\Box2D.h>
 
 USING_NS_CC;
 
@@ -23,7 +21,6 @@ public:
                            float tileWidth, float tileHeight, float mapWidth, float mapHeight);
 
 	void addForceToWisp(cocos2d::CCNode* wisp);
-	b2BodyDef groundBodyDef();
 };
 
 #endif /* defined(__TileGame__Player__) */

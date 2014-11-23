@@ -1,6 +1,7 @@
 #ifndef __RigidSprite__
 #define __RigidSprite__
 #define PTM_RATIO 32.0
+#define WINSIZE CCDirector::sharedDirector()->getWinSize()
 
 #include <iostream>
 #include "cocos2d.h"

@@ -93,31 +93,20 @@ void GameLayer::onEnter(){
 void GameLayer::instantiateGround(){
 	CCNode* background = getChildByTag(kTag_Background);
 	
-
 	//物理ボディ生成
-    //b2BodyDef groundBodyDef;
-	//groundBodyDef.type = b2_staticBody;
-    //groundBodyDef.position.Set(0.0f, 0.0f);
-	b2Body* groundBody = _world->CreateBody(&_wisp->groundBodyDef());
+    _body = _world->CreateBody(&Game::Instance()->groundBodyDef());
     
-    // 地面の形と大きさの定義
-    float groundHeight = WINSIZE.height * 0.1;
-    b2EdgeShape groundBox;
-    groundBox.Set(b2Vec2(0, groundHeight / PTM_RATIO),
-                  b2Vec2(WINSIZE.width / PTM_RATIO, groundHeight / PTM_RATIO));
-    groundBody->CreateFixture(&groundBox, 0);
+	// 地面の形と大きさの定義
+    b2EdgeShape groundBox = Game::Instance()->groundShape();
 
-
-    
-
-	//物理特性
+	//物理性質
 	b2FixtureDef fixtureDef;
     fixtureDef.shape = &groundBox;
     fixtureDef.density = 0.5;
     fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.8;
-	groundBody->CreateFixture(&groundBox,0);
-
+	_body->CreateFixture(&fixtureDef);
+	
 	//地面ノード作成
 	CCNode* node = CCNode::create();
 	node->setAnchorPoint(ccp(0.5, 0.5));
@@ -127,12 +116,11 @@ void GameLayer::instantiateGround(){
 
 void GameLayer::instantiateEnemy(CCPoint position){
 	//エネミー生成
-	//RigidSprite* enemy = new RigidSprite();
-	Enemy* enemy = new Enemy();
-	enemy->autorelease();
-	enemy->initWithFile("enemy2.png");
-	enemy->setPosition(position);
-	enemy->setTag(kTag_Enemy);
+	_enemy = new Enemy();
+	_enemy->autorelease();
+	_enemy->initWithFile("enemy2.png");
+	_enemy->setPosition(position);
+	_enemy->setTag(kTag_Enemy);
 
 	//エネミーのアニメーション
 	/*CCAnimation* animation =  CCAnimation::create();
@@ -144,18 +132,13 @@ void GameLayer::instantiateEnemy(CCPoint position){
 	enemy->runAction(repeat);*/
 
 	//物理ボディ生成
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(enemy->getPositionX() / PTM_RATIO,
-                               enemy->getPositionY() / PTM_RATIO);
-	bodyDef.userData = enemy; 
-	_body = _world->CreateBody(&bodyDef);
+    _body = _world->CreateBody(&_enemy->enemyBodyDef(_enemy));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
-    spriteShape.m_radius = enemy->getContentSize().width * 0.4 / PTM_RATIO;
+    spriteShape.m_radius = _enemy->getContentSize().width * 0.4 / PTM_RATIO;
 
-   //物理特性
+    //物理性質
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &spriteShape;
     fixtureDef.density = 0.5;
@@ -163,8 +146,8 @@ void GameLayer::instantiateEnemy(CCPoint position){
 	fixtureDef.friction = 0.3;
 	_body->CreateFixture(&fixtureDef);
 	
-	enemy->setRigidBody(_body);
-	this->addChild(enemy, kOrder_Enemy);
+	_enemy->setRigidBody(_body);
+	this->addChild(_enemy, kOrder_Enemy);
 	Game::Instance()->addGameObjectMap("enemy", _enemy);
 	Game::Instance()->addGameObject(_enemy);
 }
@@ -190,7 +173,7 @@ void GameLayer::instantiateWisp(){
     b2CircleShape spriteShape;
     spriteShape.m_radius = _wisp->getContentSize().width * 0.3 / PTM_RATIO;
 
-	//物理特性
+	//物理性質
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &spriteShape;
     fixtureDef.density = 0.5;
@@ -295,7 +278,7 @@ void GameLayer::instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos,
 			_body->CreateFixture(&spriteShape, 1);
 				
 
-			//物理特性
+			//物理性質
 			b2FixtureDef fixtureDef;
 			fixtureDef.shape = &spriteShape;
 			fixtureDef.density = 0.5;
@@ -320,7 +303,7 @@ void GameLayer::instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos,
 			spriteShape.SetAsBox(obstacles->getContentSize().width * 0.5 / PTM_RATIO, obstacles->getContentSize().height * 0.3 / PTM_RATIO);
 			_body->CreateFixture(&spriteShape, 2);
 
-			//物理特性
+			//物理性質
 			b2FixtureDef fixtureDef;
 			fixtureDef.shape = &spriteShape;
 			fixtureDef.density = 0.5;
@@ -343,7 +326,7 @@ void GameLayer::instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos,
 			spriteShape.SetAsBox(obstacles->getContentSize().width * 0.5 / PTM_RATIO, obstacles->getContentSize().height * 0.5 / PTM_RATIO);
 			_body->CreateFixture(&spriteShape, 3);
 
-			//物理特性
+			//物理性質
 			b2FixtureDef fixtureDef;
 			fixtureDef.shape = &spriteShape;
 			fixtureDef.density = 0.5;

@@ -118,3 +118,19 @@ CCSprite* ObjectManager::instantiateBackground(){
 	background->setPosition(ccp(0, size.height / 2));
 	return background;
 }
+
+//物理ボディ生成
+b2BodyDef ObjectManager::groundBodyDef(){
+	 b2BodyDef groundBodyDef;
+	groundBodyDef.type = b2_staticBody;
+    groundBodyDef.position.Set(0.0f, 0.0f);
+	return groundBodyDef;
+}
+
+// 地面の形と大きさの定義
+b2EdgeShape ObjectManager::groundShape(){
+	b2EdgeShape groundBox;
+    groundBox.Set(b2Vec2(0, WINSIZE.height * 0.1 / PTM_RATIO),
+                  b2Vec2(WINSIZE.width / PTM_RATIO, WINSIZE.height * 0.1 / PTM_RATIO));
+	return groundBox;
+}

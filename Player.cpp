@@ -45,10 +45,3 @@ void Player::addForceToWisp(CCNode* wisp){
 	will->m_pBody->ResetMassData();
 	will->m_pBody->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->m_pBody->GetWorldCenter());
 }
-
-b2BodyDef Player::groundBodyDef(){
-	 b2BodyDef groundBodyDef;
-	groundBodyDef.type = b2_staticBody;
-    groundBodyDef.position.Set(0.0f, 0.0f);
-	return groundBodyDef;
-}
