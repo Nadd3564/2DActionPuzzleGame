@@ -12,13 +12,21 @@
 #include <iostream>
 #include "GameObject.h"
 
+USING_NS_CC;
+
 class Enemy : public GameObject
 {
 public:
-    Enemy();
-	~Enemy();
+    ~Enemy();
+	Enemy();
+    static Enemy* create(Enemy* _enemy, b2Body* _body, b2World* _world,
+							CCPoint position, const char* FileName, int kTag);
+    b2BodyDef enemyBodyDef(Enemy* enemy);
+	b2FixtureDef enemyFixtureDef(b2Shape* shape);
 
-	b2BodyDef enemyBodyDef(Enemy* enemy);
+private:
+    Enemy* initEnemy(Enemy* _enemy, b2Body* _body, b2World* _world,
+					CCPoint position, const char* FileName, int kTag);
 };
 
 

@@ -61,9 +61,9 @@ public:
     std::vector<std::string> getLevelFiles() { return m_levelFiles; }
     
 	CCSprite* instantiateBackground();
+	CCNode* instantiateGround(b2Body* _body, b2World* _world, CCNode* kTag);
 	b2BodyDef groundBodyDef();
 	b2EdgeShape groundShape();
-	CCNode* instantiateGround(b2Body* _body, b2World* _world, CCNode* kTag);
 
 private:
     

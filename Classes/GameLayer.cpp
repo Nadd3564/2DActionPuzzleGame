@@ -1,9 +1,6 @@
 #include "GameLayer.h"
 #include "SimpleAudioEngine.h"
 
-
-#define WINSIZE CCDirector::sharedDirector()->getWinSize()
-
 #define WISP_INIT_POS ccp(100 ,150)
 #define WISP_STRETCH_LENGTH 50
 
@@ -86,49 +83,8 @@ void GameLayer::onEnter(){
 	addChild(Game::Instance()->instantiateBackground(), kOrder_Background, kTag_Background);
 	//地面の生成
 	addChild(Game::Instance()->instantiateGround(_body, _world, getChildByTag(kTag_Background)));
-	//instantiateGround();
 	instantiateWisp();
 	instantiateObstacleWithEnemy();
-}
-
-
-
-void GameLayer::instantiateEnemy(CCPoint position){
-	//エネミー生成
-	_enemy = new Enemy();
-	_enemy->autorelease();
-	_enemy->initWithFile("enemy2.png");
-	_enemy->setPosition(position);
-	_enemy->setTag(kTag_Enemy);
-
-	//エネミーのアニメーション
-	/*CCAnimation* animation =  CCAnimation::create();
-	animation->addSpriteFrameWithFileName("Resources/enemy2.png");
-	animation->addSpriteFrameWithFileName("Resources/enemy1.png");
-	animation->setDelayPerUnit(1);
-
-	CCRepeatForever* repeat = CCRepeatForever::create(CCAnimate::create(animation));
-	enemy->runAction(repeat);*/
-
-	//物理ボディ生成
-    _body = _world->CreateBody(&_enemy->enemyBodyDef(_enemy));
-    
-	//物理エンジン上の物質の形と大きさ
-    b2CircleShape spriteShape;
-    spriteShape.m_radius = _enemy->getContentSize().width * 0.4 / PTM_RATIO;
-
-    //物理性質
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &spriteShape;
-    fixtureDef.density = 0.5;
-    fixtureDef.restitution = 0.5;
-	fixtureDef.friction = 0.3;
-	_body->CreateFixture(&fixtureDef);
-	
-	_enemy->setRigidBody(_body);
-	this->addChild(_enemy, kOrder_Enemy);
-	Game::Instance()->addGameObjectMap("enemy", _enemy);
-	Game::Instance()->addGameObject(_enemy);
 }
 
 void GameLayer::instantiateWisp(){
@@ -193,8 +149,8 @@ CCPoint GameLayer::processingPosition(CCPoint touch){
 
 void GameLayer::instantiateObstacleWithEnemy(){
 	//エネミー生成
-	instantiateEnemy(ccp(636, 125));
-
+	this->addChild(Enemy::create(_enemy, _body, _world, ccp(636, 125), "enemy2.png", kTag_Enemy), kOrder_Enemy);
+	
 	//障害物生成
 	instantiateObstacle(ObstacleType::Obstacle4, ccp(536, 75), 0);
 	instantiateObstacle(ObstacleType::Obstacle4, ccp(636, 75), 0);

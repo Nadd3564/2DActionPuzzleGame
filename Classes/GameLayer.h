@@ -103,8 +103,7 @@ public:
 	CREATE_FUNC(GameLayer); 
 	CC_SYNTHESIZE(b2World *, _world, World);
 	CC_SYNTHESIZE(b2Body *, _body, Body);
-    CC_SYNTHESIZE(GameLayer *, _game, Game);
-	virtual void onEnter();
+    virtual void onEnter();
 	GameLayer();
 	~GameLayer();
 	void update(float dt);
