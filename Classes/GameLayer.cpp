@@ -20,7 +20,6 @@ GameLayer::~GameLayer() {
     _world = NULL;
 }
 
-
 //シーン生成
 CCScene* GameLayer::createScene()
 {
@@ -149,7 +148,8 @@ CCPoint GameLayer::processingPosition(CCPoint touch){
 
 void GameLayer::instantiateObstacleWithEnemy(){
 	//エネミー生成
-	this->addChild(Enemy::create(_enemy, _body, _world, ccp(636, 125), "enemy2.png", kTag_Enemy), kOrder_Enemy);
+	this->addChild(Enemy::create(_enemy, _body, _world,
+					ccp(636, 125), "enemy2.png", kTag_Enemy), kOrder_Enemy);
 	
 	//障害物生成
 	instantiateObstacle(ObstacleType::Obstacle4, ccp(536, 75), 0);
@@ -163,7 +163,7 @@ void GameLayer::instantiateObstacleWithEnemy(){
 	instantiateObstacle(ObstacleType::Obstacle3, ccp(636, 325), 0);
 }
 
-void GameLayer::instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos, float angle){
+void GameLayer::instantiateObstacle(int obstacle, cocos2d::CCPoint pos, float angle){
 	std::string fileName;
 
 	switch (obstacle)

@@ -40,22 +40,22 @@ Enemy* Enemy::initEnemy(Enemy* _enemy, b2Body* _body, b2World* _world,
 
 	//エネミーのアニメーション
 	/*CCAnimation* animation =  CCAnimation::create();
-	animation->addSpriteFrameWithFileName("Resources/enemy2.png");
-	animation->addSpriteFrameWithFileName("Resources/enemy1.png");
+	animation->addSpriteFrameWithFileName("enemy2.png");
+	animation->addSpriteFrameWithFileName("enemy1.png");
 	animation->setDelayPerUnit(1);
 
 	CCRepeatForever* repeat = CCRepeatForever::create(CCAnimate::create(animation));
 	enemy->runAction(repeat);*/
 
 	//物理ボディ生成
-    _body = _world->CreateBody(&_enemy->enemyBodyDef(_enemy));
+    _body = _world->CreateBody(&enemyBodyDef(_enemy));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
     spriteShape.m_radius = _enemy->getContentSize().width * 0.4 / PTM_RATIO;
 
     //物理性質
-	_body->CreateFixture(&Enemy::enemyFixtureDef(&spriteShape));
+	_body->CreateFixture(&enemyFixtureDef(&spriteShape));
 	
 	_enemy->setRigidBody(_body);
 	Game::Instance()->addGameObjectMap("enemy", _enemy);

@@ -53,7 +53,7 @@ protected:
 	void instantiateWisp();
 	cocos2d::CCPoint processingPosition(cocos2d::CCPoint touch);
 	void instantiateObstacleWithEnemy();
-	void instantiateObstacle(ObstacleType obstacle, cocos2d::CCPoint pos, float angle);
+	void instantiateObstacle(int obstacle, cocos2d::CCPoint pos, float angle);
 	
 
 private:
