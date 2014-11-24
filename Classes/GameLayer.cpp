@@ -9,6 +9,7 @@
 
 USING_NS_CC;
 using namespace CocosDenshion;
+
 GameLayer* GameLayer::s_pInstance = 0;
 
 GameLayer::GameLayer() {
@@ -47,6 +48,7 @@ bool GameLayer::init()
         return false;
     }
 
+	GameLayer::s_pInstance = this;
 	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
 
     this->initPhysics();
@@ -58,8 +60,7 @@ bool GameLayer::init()
 	this->setTouchEnabled(true);
 
     scheduleUpdate();
-	this->schedule(schedule_selector(GameLayer::update));
- 
+	
     return true;
 }
 
@@ -310,7 +311,7 @@ void GameLayer::update(float dt)
 {
 	//_enemy->update(dt);
 	//_wisp->update(dt);
-	Game::Instance()->getStateMachine()->update();
+	Game::Instance()->update();
     //フレーム毎にWorldの情報を更新
 	int32 velocityIterations = 10;
     int32 positionIterations = 10;
