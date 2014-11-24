@@ -6,6 +6,12 @@
 //
 //
 #include "Player.h"
+#include "ObjectManager.h"
+#include "GameLayer.h"
+
+Player::Player(GameLayer* game) : GameObject(game){}
+
+Player::~Player(){}
 
 void Player::setPlayerPosition(cocos2d::CCPoint* diff, cocos2d::CCPoint playerPos,
                        float tileWidth, float tileHeight, float mapWidth, float mapHeight)

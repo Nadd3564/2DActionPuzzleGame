@@ -88,7 +88,7 @@ void GameLayer::onEnter(){
 
 void GameLayer::instantiateWisp(){
 	//ウィスプ生成
-	_wisp = new Player();
+	_wisp = new Player(this);
 	_wisp->autorelease();
 	_wisp->initWithFile("wisp_1.png");
 	_wisp->setPosition(WISP_INIT_POS);
@@ -148,8 +148,8 @@ CCPoint GameLayer::processingPosition(CCPoint touch){
 
 void GameLayer::instantiateObstacleWithEnemy(){
 	//エネミー生成
-	this->addChild(Enemy::create(_enemy, _body, _world,
-					ccp(636, 125), "enemy2.png", kTag_Enemy), kOrder_Enemy);
+	this->addChild(Enemy::create(this, ccp(636, 125), 
+					"enemy2.png", kTag_Enemy), kOrder_Enemy);
 	
 	//障害物生成
 	instantiateObstacle(ObstacleType::Obstacle4, ccp(536, 75), 0);

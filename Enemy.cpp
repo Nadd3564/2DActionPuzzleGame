@@ -8,22 +8,20 @@
 
 #include "Enemy.h"
 #include "ObjectManager.h"
+#include "GameLayer.h"
 
-Enemy::Enemy(){
-	
-}
+
+Enemy::Enemy(GameLayer * game) : GameObject(game){}
 
 Enemy::~Enemy(){}
 
-Enemy* Enemy::create(Enemy* _enemy, b2Body* _body, b2World* _world,
-					 CCPoint position, const char* FileName, int kTag)
+Enemy* Enemy::create(GameLayer* game, CCPoint position, const char* FileName, int kTag)
 {
 	//エネミー生成
-	_enemy = new Enemy();
+	Enemy* _enemy = new Enemy(game);
 	
 	if (_enemy) {
-        _enemy = _enemy->initEnemy(_enemy, _body, _world,
-							position, FileName,kTag);
+        _enemy = _enemy->initEnemy(game, position, FileName, kTag);
 		_enemy->autorelease();
 		return _enemy;
 	}
@@ -31,12 +29,11 @@ Enemy* Enemy::create(Enemy* _enemy, b2Body* _body, b2World* _world,
 	return NULL;
 }
 
-Enemy* Enemy::initEnemy(Enemy* _enemy, b2Body* _body, b2World* _world,
-					 CCPoint position, const char* FileName, int kTag)
+Enemy* Enemy::initEnemy(GameLayer* game, CCPoint position, const char* FileName, int kTag)
 {
-	_enemy->initWithFile(FileName);
-	_enemy->setPosition(position);
-	_enemy->setTag(kTag);
+	this->initWithFile(FileName);
+	this->setPosition(position);
+	this->setTag(kTag);
 
 	//エネミーのアニメーション
 	/*CCAnimation* animation =  CCAnimation::create();
@@ -48,19 +45,19 @@ Enemy* Enemy::initEnemy(Enemy* _enemy, b2Body* _body, b2World* _world,
 	enemy->runAction(repeat);*/
 
 	//物理ボディ生成
-    _body = _world->CreateBody(&enemyBodyDef(_enemy));
+	_body = _game->getWorld()->CreateBody(&enemyBodyDef(this));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
-    spriteShape.m_radius = _enemy->getContentSize().width * 0.4 / PTM_RATIO;
+   spriteShape.m_radius = this->getContentSize().width * 0.4 / PTM_RATIO;
 
     //物理性質
 	_body->CreateFixture(&enemyFixtureDef(&spriteShape));
 	
-	_enemy->setRigidBody(_body);
-	Game::Instance()->addGameObjectMap("enemy", _enemy);
-	Game::Instance()->addGameObject(_enemy);
-	return _enemy;
+	this->setRigidBody(_body);
+	Game::Instance()->addGameObjectMap("enemy", this);
+	Game::Instance()->addGameObject(this);
+	return this;
 }
 
 //物理ボディ生成

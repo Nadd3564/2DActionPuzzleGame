@@ -13,10 +13,17 @@
 #include <cocos2d.h>
 #include "RigidSprite.h"
 
+
+class GameLayer;
+
 class GameObject : public RigidSprite
 {
 public:
     //virtual void setStrategy();
+	GameObject(GameLayer* game);
+	~GameObject();
+	CC_SYNTHESIZE(b2Body *, _body, Body);
+    CC_SYNTHESIZE(GameLayer *, _game, gGame);
 private:
     //std::string strategy;
     

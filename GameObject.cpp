@@ -8,6 +8,12 @@
 
 #include "GameObject.h"
 
+GameObject::GameObject(GameLayer* game){
+	_game = game;
+}
+
+GameObject::~GameObject(){}
+
 /* void GameObject::setStrategy()
 {
     

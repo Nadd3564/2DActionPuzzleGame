@@ -18,15 +18,14 @@ class Enemy : public GameObject
 {
 public:
     ~Enemy();
-	Enemy();
-    static Enemy* create(Enemy* _enemy, b2Body* _body, b2World* _world,
-							CCPoint position, const char* FileName, int kTag);
+	Enemy(GameLayer * game);
+    static Enemy* create(GameLayer* game, CCPoint position, const char* fileName, int kTag);
     b2BodyDef enemyBodyDef(Enemy* enemy);
 	b2FixtureDef enemyFixtureDef(b2Shape* shape);
 
 private:
-    Enemy* initEnemy(Enemy* _enemy, b2Body* _body, b2World* _world,
-					CCPoint position, const char* FileName, int kTag);
+	//Enemy * _enemy;
+    Enemy* initEnemy(GameLayer* game, CCPoint position, const char* fileName, int kTag);
 };
 
 
