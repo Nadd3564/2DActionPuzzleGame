@@ -8,6 +8,7 @@
 
 #include "NormalState.h"
 #include "cocos2d.h"
+#include "Player.h"
 
 using namespace cocos2d;
 
@@ -24,10 +25,8 @@ NormalState::~NormalState() {
 void NormalState::stateUpdate() {
     std::vector<GameObject*> gameObjects = Game::Instance()->getGameObjects();
     for (std::vector<GameObject*>::iterator it = gameObjects.begin() ; it != gameObjects.end(); ++it){
-        // ここで各ゲームオブジェクト＝NPCのアップデートを行います。
-        // 人工知能的な動作については
         // Game::Instance()->getStateMachine()->changeState(new AlarmState());
-        // をお使いください。
+		(*it)->stateUpdate();
 		}
 }
 
@@ -38,7 +37,6 @@ void NormalState::onInputEvent(CCPoint* diff) {
     _mapHeight = Game::Instance()->getTileMap()->getMapSize().height;
     
     Player* player = dynamic_cast<Player*>( Game::Instance()->findGameObject("player"));
-	Player* wisp = dynamic_cast<Player*>(Game::Instance()->findGameObject("wisp"));
 	
     CCPoint playerPos = player->getPosition();
     

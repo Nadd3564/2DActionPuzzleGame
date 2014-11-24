@@ -74,17 +74,17 @@ void GameLayer::initPhysics(){
 	//オブジェクトの衝突判定をする時にすり抜けないように調整して計算する。
     _world->SetContinuousPhysics(true);
 	
-	_wisp = Player::create(this, WISP_INIT_POS, "wisp_1.png", kTag_Wisp, kOrder_Wisp);
-	_enemy = Enemy::create(this, ccp(636, 125), "enemy2.png", kTag_Enemy);
+	_wisp = Player::create();
+	_enemy = Enemy::create(ccp(636, 125), "enemy2.png");
 }
 
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
 
 	//背景の設定
-	this->addChild(Game::Instance()->instantiateBackground(), kOrder_Background, kTag_Background);
+	this->addChild(Game::Instance()->initBackground());
 	//地面の生成
-	this->addChild(Game::Instance()->instantiateGround(_body, _world, getChildByTag(kTag_Background)));
+	this->addChild(Game::Instance()->initGround(_body, _world, getChildByTag(kTag_Background)));
 	//ウィスプと発射台生成
 	this->addChild(_wisp);
 	this->addChild(_wisp->initCrossOne(), kOrder_Cross1);
@@ -92,7 +92,7 @@ void GameLayer::onEnter(){
 	//エネミー生成
 	this->addChild(_enemy, kTag_Enemy);
 	//障害オブジェクト生成
-	instantiateObstacleWithEnemy();
+	initObstacles();
 }
 
 CCPoint GameLayer::processingPosition(CCPoint touch){
@@ -108,131 +108,18 @@ CCPoint GameLayer::processingPosition(CCPoint touch){
 }
 
 
-void GameLayer::instantiateObstacleWithEnemy(){
+void GameLayer::initObstacles(){
 	
 	//障害物生成
-	instantiateObstacle(ObstacleType::Obstacle4, ccp(536, 75), 0);
-	instantiateObstacle(ObstacleType::Obstacle4, ccp(636, 75), 0);
-	instantiateObstacle(ObstacleType::Obstacle4, ccp(736, 75), 0);
+	addChild(Obstacles::create(ObstacleType::Obstacle4, ccp(536, 75), 0), (int)kOrder::kOrder_Obstacles);
+	addChild(Obstacles::create(ObstacleType::Obstacle4, ccp(636, 75), 0), (int)kOrder::kOrder_Obstacles);
+	addChild(Obstacles::create(ObstacleType::Obstacle4, ccp(736, 75), 0), (int)kOrder::kOrder_Obstacles);
 
-	instantiateObstacle(ObstacleType::Obstacle1, ccp(586, 150), 90);
-	instantiateObstacle(ObstacleType::Obstacle1, ccp(586, 250), 90);
-	instantiateObstacle(ObstacleType::Obstacle1, ccp(686, 150), 90);
-	instantiateObstacle(ObstacleType::Obstacle1, ccp(686, 250), 90);
-	instantiateObstacle(ObstacleType::Obstacle3, ccp(636, 325), 0);
-}
-
-void GameLayer::instantiateObstacle(int obstacle, cocos2d::CCPoint pos, float angle){
-	std::string fileName;
-
-	switch (obstacle)
-	{
-	case GameLayer::Obstacle1:
-		fileName = "stone1.png";
-		break;
-	case GameLayer::Obstacle2:
-		fileName = "isi.png";
-		break;
-	case GameLayer::Obstacle3:
-		fileName = "pumpkin.png";
-		break;
-	case GameLayer::Obstacle4:
-		fileName = "baseStone1.png";
-		break;
-	default:
-		break;
-	}
-
-	//障害物の生成
-	RigidSprite* obstacles = new RigidSprite();
-	obstacles->autorelease();
-	obstacles->initWithFile(fileName.c_str());
-	obstacles->setPosition(pos);
-	obstacles->setRotation(angle);
-	obstacles->setTag(kTag_Obstacles);
-
-	//物理ボディ生成
-	 b2BodyDef bodyDef;
-
-	 switch(obstacle)
-	 {
-		case ObstacleType::Obstacle1:
-		case ObstacleType::Obstacle2:
-		{
-			bodyDef.type = b2_dynamicBody;
-			bodyDef.position.Set(obstacles->getPositionX() / PTM_RATIO,
-                               obstacles->getPositionY() / PTM_RATIO);
-			bodyDef.angle = 50 / PTM_RATIO;
-			bodyDef.userData = obstacles;
-			_body = _world->CreateBody(&bodyDef);
-
-			//物理エンジン上の物質の形と大きさ
-			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(obstacles->getContentSize().width * 0.49/ PTM_RATIO, obstacles->getContentSize().height * 0.45/ PTM_RATIO);
-			_body->CreateFixture(&spriteShape, 1);
-				
-
-			//物理性質
-			b2FixtureDef fixtureDef;
-			fixtureDef.shape = &spriteShape;
-			fixtureDef.density = 0.5;
-			fixtureDef.restitution = 0.5;
-			fixtureDef.friction = 0.3;
-			_body->CreateFixture(&fixtureDef);
-			break;
-		}
-
-		case ObstacleType::Obstacle3:
-		{
-			b2BodyDef bodyDef;
-			bodyDef.type = b2_dynamicBody;
-			bodyDef.position.Set(obstacles->getPositionX() / PTM_RATIO,
-                               obstacles->getPositionY() / PTM_RATIO);
-			bodyDef.userData = obstacles;
-			_body = _world->CreateBody(&bodyDef);
-			
-
-			//物理エンジン上の物質の形と大きさ
-			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(obstacles->getContentSize().width * 0.5 / PTM_RATIO, obstacles->getContentSize().height * 0.3 / PTM_RATIO);
-			_body->CreateFixture(&spriteShape, 2);
-
-			//物理性質
-			b2FixtureDef fixtureDef;
-			fixtureDef.shape = &spriteShape;
-			fixtureDef.density = 0.5;
-			fixtureDef.restitution = 0.5;
-			fixtureDef.friction = 0.3;
-			_body->CreateFixture(&fixtureDef);
-			break; 
-		}
-
-		default:
-		{
-			bodyDef.type = b2_staticBody;
-			bodyDef.position.Set(obstacles->getPositionX() / PTM_RATIO,
-                               obstacles->getPositionY() / PTM_RATIO);
-			bodyDef.userData = obstacles;
-			_body = _world->CreateBody(&bodyDef);
-
-			//物理エンジン上の物質の形と大きさ
-			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(obstacles->getContentSize().width * 0.5 / PTM_RATIO, obstacles->getContentSize().height * 0.5 / PTM_RATIO);
-			_body->CreateFixture(&spriteShape, 3);
-
-			//物理性質
-			b2FixtureDef fixtureDef;
-			fixtureDef.shape = &spriteShape;
-			fixtureDef.density = 0.5;
-			fixtureDef.restitution = 0.5;
-			fixtureDef.friction = 0.3;
-			_body->CreateFixture(&fixtureDef);
-			break;
-		}
-	 }
-    
-	 obstacles->setRigidBody(_body);
-	 addChild(obstacles, (int)kOrder::kOrder_Obstacles);
+	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(586, 150), 90), (int)kOrder::kOrder_Obstacles);
+	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(586, 250), 90), (int)kOrder::kOrder_Obstacles);
+	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(686, 150), 90), (int)kOrder::kOrder_Obstacles);
+	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(686, 250), 90), (int)kOrder::kOrder_Obstacles);
+	addChild(Obstacles::create(ObstacleType::Obstacle3, ccp(636, 325), 0), (int)kOrder::kOrder_Obstacles);
 }
 
 bool GameLayer::ccTouchBegan(CCTouch* touch, CCEvent* event){

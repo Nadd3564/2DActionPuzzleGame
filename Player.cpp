@@ -1,10 +1,11 @@
 //
 //  Player.cpp
-//  TileGame
 //
 //  Created by athenaeum on 2014/11/18.
 //
 //
+#define WISP_INIT_POS ccp(100 ,150)
+
 #include "Player.h"
 #include "ObjectManager.h"
 #include "GameLayer.h"
@@ -13,11 +14,11 @@ Player::Player(GameLayer* game) : GameObject(game){}
 
 Player::~Player(){}
 
-Player* Player::create(GameLayer* game, CCPoint position, const char* fileName, int kTag, int kOrder){
+Player* Player::create(){
 	//ウィスプ生成
-	Player* wisp = new Player(game);
+	Player* wisp = new Player(GameLayer::s_pInstance);
 	if (wisp) {
-        wisp = wisp->initWisp(game, position, fileName, kTag, kOrder);
+        wisp = wisp->initWisp();
 		wisp->autorelease();
 		return wisp;
 	}
@@ -25,12 +26,12 @@ Player* Player::create(GameLayer* game, CCPoint position, const char* fileName, 
 	return NULL;
 }
 
-Player* Player::initWisp(GameLayer* game, CCPoint position, const char* FileName, int kTag, int kOrder)
+Player* Player::initWisp()
 {
-	this->initWithFile(FileName);
-	this->setPosition(position);
-	this->setTag(kTag);
-	this->setZOrder(kOrder);
+	this->initWithFile("wisp_1.png");
+	this->setPosition(WISP_INIT_POS);
+	this->setTag(_game->kTag_Wisp);
+	this->setZOrder(_game->kOrder_Wisp);
 
 
 	//物理ボディ生成
@@ -48,6 +49,11 @@ Player* Player::initWisp(GameLayer* game, CCPoint position, const char* FileName
 	Game::Instance()->addGameObject(this);
 	return this;
 }
+
+void Player::stateUpdate(){
+    std::cout << "Update for the player.";
+}
+
 
 //物理ボディ生成
 b2BodyDef Player::wispBodyDef(Player* wisp){

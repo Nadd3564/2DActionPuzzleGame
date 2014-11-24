@@ -13,48 +13,17 @@
 #include "ApproachState.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Obstacles.h"
 
 
 class GameLayer : public cocos2d::CCLayer
 {
 protected:
 
-	enum kTag
-	{
-		kTag_Background = 1,
-		kTag_Enemy,
-		kTag_Wisp,
-		kTag_Chain1,
-		kTag_Chain2,
-		kTag_Obstacles,
-	};
-
-	enum kOrder
-	{
-		kOrder_Background = 1,
-		kOrder_Enemy,
-		kOrder_Cross2,
-		kOrder_Chain2,
-		kOrder_Wisp,
-		kOrder_Chain1,
-		kOrder_Cross1,
-		kOrder_Obstacles,
-	};
-
-	enum ObstacleType
-	{
-		Obstacle1,
-		Obstacle2,
-		Obstacle3,
-		Obstacle4,
-	};
-
 	void instantiateEnemy(cocos2d::CCPoint position);
 	void instantiateWisp();
 	cocos2d::CCPoint processingPosition(cocos2d::CCPoint touch);
-	void instantiateObstacleWithEnemy();
-	void instantiateObstacle(int obstacle, cocos2d::CCPoint pos, float angle);
-	
+	void initObstacles();
 
 private:
     
@@ -96,6 +65,36 @@ public:
         kAlarm,
         kEnegyDrink,
     };
+
+	enum kTag
+	{
+		kTag_Background = 1,
+		kTag_Enemy,
+		kTag_Wisp,
+		kTag_Chain1,
+		kTag_Chain2,
+		kTag_Obstacles,
+	};
+
+	enum kOrder
+	{
+		kOrder_Background = 1,
+		kOrder_Enemy,
+		kOrder_Cross2,
+		kOrder_Chain2,
+		kOrder_Wisp,
+		kOrder_Chain1,
+		kOrder_Cross1,
+		kOrder_Obstacles,
+	};
+
+	enum ObstacleType
+	{
+		Obstacle1,
+		Obstacle2,
+		Obstacle3,
+		Obstacle4,
+	};
 
 	static cocos2d::CCScene* createScene(); 
 	void initPhysics();

@@ -1,13 +1,12 @@
 //
 //  ObjectManager.h
-//  TileGame
 //
 //  Created by athenaeum on 2014/11/15.
 //
 //
 
-#ifndef __TileGame__ObjectManager__
-#define __TileGame__ObjectManager__
+#ifndef __ObjectManager__
+#define __ObjectManager__
 
 #include "StateMachine.h"
 #include <vector>
@@ -60,8 +59,8 @@ public:
     
     std::vector<std::string> getLevelFiles() { return m_levelFiles; }
     
-	CCSprite* instantiateBackground();
-	CCNode* instantiateGround(b2Body* _body, b2World* _world, CCNode* kTag);
+	CCSprite* initBackground();
+	CCNode* initGround(b2Body* _body, b2World* _world, CCNode* kTag);
 	b2BodyDef groundBodyDef();
 	b2EdgeShape groundShape();
 
@@ -90,4 +89,4 @@ private:
 
 typedef ObjectManager Game;
 
-#endif /* defined(__TileGame__ObjectManager__) */
+#endif /* defined(__ObjectManager__) */

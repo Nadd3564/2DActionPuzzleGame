@@ -1,6 +1,5 @@
 ﻿//
 //  ObjectManager.cpp
-//  TileGame
 //
 //  Created by athenaeum on 2014/11/15.
 //
@@ -9,6 +8,7 @@
 #include "ObjectManager.h"
 #include "NormalState.h"
 #include "ApproachState.h"
+#include "GameLayer.h"
 
 using namespace std;
 USING_NS_CC;
@@ -30,8 +30,6 @@ ObjectManager::~ObjectManager()
 
 bool ObjectManager::init()
 {
-    // ここで画像や音声のロード、その他初期化を行えますが、
-    // TODO: 慣れたらGOのファクトリーでの初期化を実装すること
 	m_pStateMachine->changeState(new NormalState());
     return true;
 }
@@ -110,16 +108,18 @@ void ObjectManager::clean()
 
 }
 
-CCSprite* ObjectManager::instantiateBackground(){
+CCSprite* ObjectManager::initBackground(){
 	//背景の設定
 	CCSprite* background = CCSprite::create("background1.png");
 	background->setAnchorPoint(ccp(0.0, 0.5));
 	background->setPosition(ccp(0, WINSIZE.height / 2));
+	background->setTag(GameLayer::s_pInstance->kTag_Background);
+	background->setZOrder(GameLayer::s_pInstance->kOrder_Background);
 	return background;
 }
 
 //地面生成
-CCNode* ObjectManager::instantiateGround(b2Body* _body, b2World* _world, CCNode* kTag){
+CCNode* ObjectManager::initGround(b2Body* _body, b2World* _world, CCNode* kTag){
 	//物理ボディ生成
 	_body = _world->CreateBody(&Game::Instance()->groundBodyDef());
 	

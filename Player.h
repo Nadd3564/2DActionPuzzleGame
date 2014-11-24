@@ -6,8 +6,8 @@
 //
 //
 
-#ifndef __TileGame__Player__
-#define __TileGame__Player__
+#ifndef __Player__
+#define __Player__
 
 #include <iostream>
 #include "GameObject.h"
@@ -19,7 +19,8 @@ class Player : public GameObject
 public:
 	Player(GameLayer* game);
 	~Player();
-	static Player* create(GameLayer* game, CCPoint position, const char* fileName, int kTag, int kOrder);
+	virtual void stateUpdate();
+	static Player* create();
     b2BodyDef wispBodyDef(Player* wisp);
 	b2FixtureDef wispFixtureDef(b2Shape* shape);
 	CCSprite* initCrossOne();
@@ -31,7 +32,7 @@ public:
 	void addForceToWisp(cocos2d::CCNode* wisp);
 
 private:
-	Player* initWisp(GameLayer* game, CCPoint position, const char* fileName, int kTag, int kOrder);
+	Player* initWisp();
 };
 
-#endif /* defined(__TileGame__Player__) */
+#endif /* defined(__Player__) */

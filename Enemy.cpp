@@ -15,12 +15,12 @@ Enemy::Enemy(GameLayer * game) : GameObject(game){}
 
 Enemy::~Enemy(){}
 
-Enemy* Enemy::create(GameLayer* game, CCPoint position, const char* fileName, int kTag)
+Enemy* Enemy::create(CCPoint position, const char* fileName)
 {
 	//エネミー生成
-	Enemy* enemy = new Enemy(game);
+	Enemy* enemy = new Enemy(GameLayer::s_pInstance);
 	if (enemy) {
-        enemy = enemy->initEnemy(game, position, fileName, kTag);
+        enemy = enemy->initEnemy(position, fileName);
 		enemy->autorelease();
 		return enemy;
 	}
@@ -28,11 +28,11 @@ Enemy* Enemy::create(GameLayer* game, CCPoint position, const char* fileName, in
 	return NULL;
 }
 
-Enemy* Enemy::initEnemy(GameLayer* game, CCPoint position, const char* FileName, int kTag)
+Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 {
 	this->initWithFile(FileName);
 	this->setPosition(position);
-	this->setTag(kTag);
+	this->setTag(GameLayer::s_pInstance->kTag_Enemy);
 
 	//エネミーのアニメーション
 	/*CCAnimation* animation =  CCAnimation::create();
@@ -58,6 +58,11 @@ Enemy* Enemy::initEnemy(GameLayer* game, CCPoint position, const char* FileName,
 	Game::Instance()->addGameObject(this);
 	return this;
 }
+
+void Enemy::stateUpdate(){
+    std::cout << "Update for the enemy.";
+}
+
 
 //物理ボディ生成
 b2BodyDef Enemy::enemyBodyDef(Enemy* enemy){

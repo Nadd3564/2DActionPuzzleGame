@@ -1,13 +1,12 @@
 //
 //  NormalState.h
-//  TileGame
 //
 //  Created by athenaeum on 2014/11/15.
 //
 //
 
-#ifndef __TileGame__NormalState__
-#define __TileGame__NormalState__
+#ifndef __NormalState__
+#define __NormalState__
 
 #include "GameState.h"
 #include <cocos2d.h>
@@ -39,4 +38,4 @@ private:
 };
 
 
-#endif /* defined(__TileGame__NormalState__) */
+#endif /* defined(__NormalState__) */
