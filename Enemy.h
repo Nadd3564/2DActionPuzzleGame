@@ -17,15 +17,15 @@ USING_NS_CC;
 class Enemy : public GameObject
 {
 public:
-    ~Enemy();
 	Enemy(GameLayer * game);
+	~Enemy();
     static Enemy* create(GameLayer* game, CCPoint position, const char* fileName, int kTag);
     b2BodyDef enemyBodyDef(Enemy* enemy);
 	b2FixtureDef enemyFixtureDef(b2Shape* shape);
+	virtual void update (float dt);
 
 private:
-	//Enemy * _enemy;
-    Enemy* initEnemy(GameLayer* game, CCPoint position, const char* fileName, int kTag);
+	Enemy* initEnemy(GameLayer* game, CCPoint position, const char* fileName, int kTag);
 };
 
 

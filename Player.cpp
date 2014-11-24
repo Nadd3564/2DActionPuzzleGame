@@ -13,6 +13,76 @@ Player::Player(GameLayer* game) : GameObject(game){}
 
 Player::~Player(){}
 
+Player* Player::create(GameLayer* game, CCPoint position, const char* fileName, int kTag, int kOrder){
+	//ウィスプ生成
+	Player* wisp = new Player(game);
+	if (wisp) {
+        wisp = wisp->initWisp(game, position, fileName, kTag, kOrder);
+		wisp->autorelease();
+		return wisp;
+	}
+	CC_SAFE_DELETE(wisp);
+	return NULL;
+}
+
+Player* Player::initWisp(GameLayer* game, CCPoint position, const char* FileName, int kTag, int kOrder)
+{
+	this->initWithFile(FileName);
+	this->setPosition(position);
+	this->setTag(kTag);
+	this->setZOrder(kOrder);
+
+
+	//物理ボディ生成
+	_body = _game->getWorld()->CreateBody(&wispBodyDef(this));
+    
+	//物理エンジン上の物質の形と大きさ
+    b2CircleShape spriteShape;
+    spriteShape.m_radius = this->getContentSize().width * 0.3 / PTM_RATIO;
+
+    //物理性質
+	_body->CreateFixture(&wispFixtureDef(&spriteShape));
+	
+	this->setRigidBody(_body);
+	Game::Instance()->addGameObjectMap("wisp", this);
+	Game::Instance()->addGameObject(this);
+	return this;
+}
+
+//物理ボディ生成
+b2BodyDef Player::wispBodyDef(Player* wisp){
+	b2BodyDef bodyDef;
+    bodyDef.type = b2_kinematicBody;
+	bodyDef.position.Set(wisp->getPositionX() / PTM_RATIO,
+                               wisp->getPositionY() / PTM_RATIO);
+	bodyDef.userData = wisp; 
+	return bodyDef;
+}
+
+//物理性質
+b2FixtureDef Player::wispFixtureDef(b2Shape* shape){
+	b2FixtureDef fixtureDef;
+    fixtureDef.shape = shape;
+    fixtureDef.density = 0.5;
+    fixtureDef.restitution = 0.5;
+	fixtureDef.friction = 0.3;
+	return fixtureDef;
+}
+
+CCSprite* Player::initCrossOne(){
+	CCSprite* cross1 = CCSprite::create("Cross1.png");
+	cross1->setScale(0.5);
+	cross1->setPosition(ccp(100, 100));
+	return cross1;
+}
+
+CCSprite* Player::initCrossTwo(){
+	CCSprite* cross2 = CCSprite::create("Cross2.png");
+	cross2->setScale(0.5);
+	cross2->setPosition(initCrossOne()->getPosition());
+	return cross2;
+}
+
 void Player::setPlayerPosition(cocos2d::CCPoint* diff, cocos2d::CCPoint playerPos,
                        float tileWidth, float tileHeight, float mapWidth, float mapHeight)
 {
@@ -50,4 +120,12 @@ void Player::addForceToWisp(CCNode* wisp){
 	//ウィスプに力を加える
 	will->m_pBody->ResetMassData();
 	will->m_pBody->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->m_pBody->GetWorldCenter());
+}
+
+void Player::update (float dt) {
+    
+    if (_body && isVisible()) {
+        setPositionX(_body->GetPosition().x * PTM_RATIO);
+        setPositionY(_body->GetPosition().y * PTM_RATIO);
+    }
 }

@@ -15,17 +15,16 @@ Enemy::Enemy(GameLayer * game) : GameObject(game){}
 
 Enemy::~Enemy(){}
 
-Enemy* Enemy::create(GameLayer* game, CCPoint position, const char* FileName, int kTag)
+Enemy* Enemy::create(GameLayer* game, CCPoint position, const char* fileName, int kTag)
 {
 	//エネミー生成
-	Enemy* _enemy = new Enemy(game);
-	
-	if (_enemy) {
-        _enemy = _enemy->initEnemy(game, position, FileName, kTag);
-		_enemy->autorelease();
-		return _enemy;
+	Enemy* enemy = new Enemy(game);
+	if (enemy) {
+        enemy = enemy->initEnemy(game, position, fileName, kTag);
+		enemy->autorelease();
+		return enemy;
 	}
-	CC_SAFE_DELETE(_enemy);
+	CC_SAFE_DELETE(enemy);
 	return NULL;
 }
 
@@ -78,4 +77,12 @@ b2FixtureDef Enemy::enemyFixtureDef(b2Shape* shape){
     fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.3;
 	return fixtureDef;
+}
+
+void Enemy::update (float dt) {
+    
+    if (_body && isVisible()) {
+        setPositionX(_body->GetPosition().x * PTM_RATIO);
+        setPositionY(_body->GetPosition().y * PTM_RATIO);
+    }
 }

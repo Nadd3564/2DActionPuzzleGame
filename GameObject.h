@@ -24,6 +24,8 @@ public:
 	~GameObject();
 	CC_SYNTHESIZE(b2Body *, _body, Body);
     CC_SYNTHESIZE(GameLayer *, _game, gGame);
+	virtual void update(float dt);
+
 private:
     //std::string strategy;
     

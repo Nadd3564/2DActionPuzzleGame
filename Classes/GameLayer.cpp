@@ -73,64 +73,25 @@ void GameLayer::initPhysics(){
 	//オブジェクトの衝突判定をする時にすり抜けないように調整して計算する。
     _world->SetContinuousPhysics(true);
 	
+	_wisp = Player::create(this, WISP_INIT_POS, "wisp_1.png", kTag_Wisp, kOrder_Wisp);
+	_enemy = Enemy::create(this, ccp(636, 125), "enemy2.png", kTag_Enemy);
 }
 
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
 
 	//背景の設定
-	addChild(Game::Instance()->instantiateBackground(), kOrder_Background, kTag_Background);
+	this->addChild(Game::Instance()->instantiateBackground(), kOrder_Background, kTag_Background);
 	//地面の生成
-	addChild(Game::Instance()->instantiateGround(_body, _world, getChildByTag(kTag_Background)));
-	instantiateWisp();
+	this->addChild(Game::Instance()->instantiateGround(_body, _world, getChildByTag(kTag_Background)));
+	//ウィスプと発射台生成
+	this->addChild(_wisp);
+	this->addChild(_wisp->initCrossOne(), kOrder_Cross1);
+	this->addChild(_wisp->initCrossTwo(), kOrder_Cross2);
+	//エネミー生成
+	this->addChild(_enemy, kTag_Enemy);
+	//障害オブジェクト生成
 	instantiateObstacleWithEnemy();
-}
-
-void GameLayer::instantiateWisp(){
-	//ウィスプ生成
-	_wisp = new Player(this);
-	_wisp->autorelease();
-	_wisp->initWithFile("wisp_1.png");
-	_wisp->setPosition(WISP_INIT_POS);
-	_wisp->setTag(kTag_Wisp);
-	_wisp->setZOrder(kOrder_Wisp);
-
-	//物理ボディ生成
-    b2BodyDef bodyDef;
-    bodyDef.type = b2_staticBody;
-	bodyDef.position.Set(_wisp->getPositionX() / PTM_RATIO,
-                               _wisp->getPositionY() / PTM_RATIO);
-	bodyDef.userData = _wisp; 
-	_body = _world->CreateBody(&bodyDef);
-
-	//物理エンジン上の物質の形と大きさ
-    b2CircleShape spriteShape;
-    spriteShape.m_radius = _wisp->getContentSize().width * 0.3 / PTM_RATIO;
-
-	//物理性質
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &spriteShape;
-    fixtureDef.density = 0.5;
-    fixtureDef.restitution = 0.5;
-	fixtureDef.friction = 0.3;
-	_body->CreateFixture(&fixtureDef);
-    
-	_wisp->setRigidBody(_body);
-	addChild(_wisp);
-	Game::Instance()->addGameObjectMap("wisp", _wisp);
-	Game::Instance()->addGameObject(_wisp);
-
-
-	//発射台を追加
-	CCSprite* cross1 = CCSprite::create("Cross1.png");
-	cross1->setScale(0.5);
-	cross1->setPosition(ccp(100, 100));
-	addChild(cross1, kOrder_Cross1);
-
-	CCSprite* cross2 = CCSprite::create("Cross2.png");
-	cross2->setScale(0.5);
-	cross2->setPosition(cross1->getPosition());
-	addChild(cross2, kOrder_Cross2);
 }
 
 CCPoint GameLayer::processingPosition(CCPoint touch){
@@ -147,9 +108,6 @@ CCPoint GameLayer::processingPosition(CCPoint touch){
 
 
 void GameLayer::instantiateObstacleWithEnemy(){
-	//エネミー生成
-	this->addChild(Enemy::create(this, ccp(636, 125), 
-					"enemy2.png", kTag_Enemy), kOrder_Enemy);
 	
 	//障害物生成
 	instantiateObstacle(ObstacleType::Obstacle4, ccp(536, 75), 0);
@@ -350,12 +308,13 @@ void GameLayer::ccTouchCancelled(CCTouch* touch, CCEvent* event){
 
 void GameLayer::update(float dt)
 {
+	//_enemy->update(dt);
+	//_wisp->update(dt);
 	Game::Instance()->getStateMachine()->update();
     //フレーム毎にWorldの情報を更新
-	float32 timeStep = 1.0f / 60.0f;
-    int32 velocityIterations = 10;
+	int32 velocityIterations = 10;
     int32 positionIterations = 10;
-    _world->Step(timeStep, velocityIterations, positionIterations);
+    _world->Step(dt, velocityIterations, positionIterations);
  
 	for (b2Body* b = _world->GetBodyList(); b; b = b->GetNext())
     {

@@ -39,6 +39,7 @@ void NormalState::onInputEvent(CCPoint* diff) {
     
     Player* player = dynamic_cast<Player*>( Game::Instance()->findGameObject("player"));
 	Player* wisp = dynamic_cast<Player*>(Game::Instance()->findGameObject("wisp"));
+	
     CCPoint playerPos = player->getPosition();
     
     player->setPlayerPosition(diff, playerPos, _tileWidth,_tileHeight, _mapWidth, _mapHeight);
