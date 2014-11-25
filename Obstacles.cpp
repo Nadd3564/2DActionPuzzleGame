@@ -46,7 +46,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 	this->initWithFile(fileName.c_str());
 	this->setPosition(pos);
 	this->setRotation(angle);
-	this->setTag(GameLayer::s_pInstance->kTag_Obstacles);
+	this->setTag(GameLayer::Instance()->kTag_Obstacles);
 
 	//•¨—ƒ{ƒfƒB¶¬
 	 b2BodyDef bodyDef;

@@ -20,7 +20,8 @@ USING_NS_CC;
 class GameLayer : public CCLayer
 {
 private:
-    
+    static GameLayer* s_pInstance;
+
     CCTMXTiledMap *_tileMap;
     
     CCTMXLayer *_background;
@@ -41,10 +42,13 @@ private:
     
     int _numCollected;
 
+	CCTouch* _beganTouch;
+
+	CCEvent* _beganEvent;
+
 	void initObstacles();
 
 public:
-	static GameLayer* s_pInstance;
     static GameLayer* Instance()
     {
         if(s_pInstance == 0)
@@ -58,6 +62,10 @@ public:
 
 	void setWisp(Player* wisp);
 	void setEnemy(Enemy* enemy);
+	CCTouch* getBeganTouch();
+	CCEvent* getBeganEvent();
+	CCNode* getWispTag();
+	Player* getWisp();
 	
 	enum Status {
         kNormal = 0,

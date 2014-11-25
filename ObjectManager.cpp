@@ -106,6 +106,11 @@ void ObjectManager::handleEvents(CCPoint* pts)
     m_pStateMachine->onEvent(pts);
 }
 
+bool ObjectManager::handleBeganEvents()
+{
+    return m_pStateMachine->onBeganEvent();
+}
+
 void ObjectManager::clean()
 {
     cout << "cleaning ObjectManager\n";

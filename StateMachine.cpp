@@ -59,3 +59,6 @@ void StateMachine::onEvent(CCPoint* pts) {
     m_gameStates.back()->onInputEvent(pts);
 }
 
+bool StateMachine::onBeganEvent(){
+	return m_gameStates.back()->onTouchBeganEvent();
+}

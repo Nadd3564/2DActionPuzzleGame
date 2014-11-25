@@ -23,6 +23,7 @@ public:
     void popState();
     void update(float dt);
     void onEvent(CCPoint * pts);
+	bool onBeganEvent();
     
 protected:
 private:

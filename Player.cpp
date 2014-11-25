@@ -53,15 +53,15 @@ Player* Player::initWisp()
 
 void Player::stateUpdate(float dt){
     std::cout << "Update for the player.";
+	update(dt);
 }
 
-
-bool Player::wispTouchBegan(CCTouch* touch, CCEvent* event, CCNode* tag){
+bool Player::wispTouchBegan(){
 	bool flg = false;
-	CCPoint location = touch->getLocationInView();
-	location = CCDirector::sharedDirector()->convertToGL(location);
 
-	CCNode* wisp = tag;
+	CCTouch* touch = _game->getBeganTouch();
+	CCNode* wisp = _game->getWispTag();
+
 	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
 	{
 		//ウィスプの位置を計算

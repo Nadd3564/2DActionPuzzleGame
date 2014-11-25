@@ -22,7 +22,8 @@ public:
     virtual bool onStateExit() = 0;
     
     virtual void onInputEvent(CCPoint* pts) = 0;
-    
+    virtual bool onTouchBeganEvent() = 0;
+
     virtual std::string getStateID() = 0;
     
     GameState();

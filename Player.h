@@ -31,7 +31,7 @@ public:
 	virtual void update (float dt);
 
 	void addForceToWisp(CCNode* wisp);
-	bool wispTouchBegan(CCTouch* touch, CCEvent* event, CCNode* tag);
+	bool wispTouchBegan();
 	void wispTouchMoved(CCTouch* touch, CCEvent* event, CCNode* tag);
 	void wispTouchEnded(CCTouch* touch, CCEvent* event, CCNode* tag);
 	void setChain1(CCNode* chain1, CCPoint pos);

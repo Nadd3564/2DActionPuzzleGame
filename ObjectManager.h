@@ -35,7 +35,8 @@ public:
     void update(float dt);
     void clean();
     void handleEvents(CCPoint* pts);
-    
+    bool handleBeganEvents();
+
     void setGameObjectPosition(const cocos2d::CCPoint &pts);
     void setTileMap(cocos2d::CCTMXTiledMap* tileMap);
     void setGameObjectStrategy();
