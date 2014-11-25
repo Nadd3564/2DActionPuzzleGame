@@ -51,8 +51,8 @@ void StateMachine::popState() {
     }
 }
 
-void StateMachine::update() {
-    m_gameStates.back()->stateUpdate();
+void StateMachine::update(float dt) {
+    m_gameStates.back()->stateUpdate(dt);
 }
 
 void StateMachine::onEvent(CCPoint* pts) {

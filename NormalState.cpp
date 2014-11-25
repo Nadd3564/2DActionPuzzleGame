@@ -22,12 +22,12 @@ NormalState::~NormalState() {
     
 }
 
-void NormalState::stateUpdate() {
+void NormalState::stateUpdate(float dt) {
     std::vector<GameObject*> gameObjects = Game::Instance()->getGameObjects();
     for (std::vector<GameObject*>::iterator it = gameObjects.begin() ; it != gameObjects.end(); ++it){
         // Game::Instance()->getStateMachine()->changeState(new AlarmState());
-		(*it)->stateUpdate();
-		}
+		(*it)->stateUpdate(dt);
+	}
 }
 
 void NormalState::onInputEvent(CCPoint* diff) {

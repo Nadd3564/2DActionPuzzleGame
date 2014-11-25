@@ -18,9 +18,9 @@ Enemy::~Enemy(){}
 Enemy* Enemy::create(CCPoint position, const char* fileName)
 {
 	//エネミー生成
-	Enemy* enemy = new Enemy(GameLayer::s_pInstance);
+	Enemy* enemy = new Enemy(GameLayer::Instance());
 	if (enemy) {
-        enemy = enemy->initEnemy(position, fileName);
+        enemy->initEnemy(position, fileName);
 		enemy->autorelease();
 		return enemy;
 	}
@@ -32,7 +32,7 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 {
 	this->initWithFile(FileName);
 	this->setPosition(position);
-	this->setTag(GameLayer::s_pInstance->kTag_Enemy);
+	this->setTag(_game->kTag_Enemy);
 
 	//エネミーのアニメーション
 	/*CCAnimation* animation =  CCAnimation::create();
@@ -59,7 +59,7 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 	return this;
 }
 
-void Enemy::stateUpdate(){
+void Enemy::stateUpdate(float dt){
     std::cout << "Update for the enemy.";
 }
 

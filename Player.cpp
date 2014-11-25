@@ -16,9 +16,9 @@ Player::~Player(){}
 
 Player* Player::create(){
 	//ウィスプ生成
-	Player* wisp = new Player(GameLayer::s_pInstance);
+	Player* wisp = new Player(GameLayer::Instance());
 	if (wisp) {
-        wisp = wisp->initWisp();
+        wisp->initWisp();
 		wisp->autorelease();
 		return wisp;
 	}
@@ -50,7 +50,7 @@ Player* Player::initWisp()
 	return this;
 }
 
-void Player::stateUpdate(){
+void Player::stateUpdate(float dt){
     std::cout << "Update for the player.";
 }
 
@@ -75,6 +75,7 @@ b2FixtureDef Player::wispFixtureDef(b2Shape* shape){
 	return fixtureDef;
 }
 
+//発射台
 CCSprite* Player::initCrossOne(){
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);

@@ -1,5 +1,4 @@
 #include "GameLayer.h"
-#include "SimpleAudioEngine.h"
 
 #define WISP_INIT_POS ccp(100 ,150)
 #define WISP_STRETCH_LENGTH 50
@@ -8,7 +7,6 @@
 #define CROSS_POS2 ccp(125, 140)
 
 USING_NS_CC;
-using namespace CocosDenshion;
 
 GameLayer* GameLayer::s_pInstance = 0;
 
@@ -49,10 +47,9 @@ bool GameLayer::init()
     }
 
 	GameLayer::s_pInstance = this;
-	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
 
     this->initPhysics();
-
+	Game::Instance()->init();
 	Game::Instance()->getStateMachine()->pushState(new NormalState());
 
     //シングルタップモード
@@ -72,15 +69,12 @@ void GameLayer::initPhysics(){
 	//動きが止まった物体について、計算を省略
     _world->SetAllowSleeping(true);
 	//オブジェクトの衝突判定をする時にすり抜けないように調整して計算する。
-    _world->SetContinuousPhysics(true);
-	
-	_wisp = Player::create();
-	_enemy = Enemy::create(ccp(636, 125), "enemy2.png");
+    _world->SetContinuousPhysics(true);	
 }
 
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
-
+	
 	//背景の設定
 	this->addChild(Game::Instance()->initBackground());
 	//地面の生成
@@ -93,6 +87,14 @@ void GameLayer::onEnter(){
 	this->addChild(_enemy, kTag_Enemy);
 	//障害オブジェクト生成
 	initObstacles();
+}
+
+void GameLayer::setWisp(Player* wisp){
+	_wisp = wisp;
+}
+
+void GameLayer::setEnemy(Enemy* enemy){
+	_enemy = enemy;
 }
 
 CCPoint GameLayer::processingPosition(CCPoint touch){
@@ -121,6 +123,8 @@ void GameLayer::initObstacles(){
 	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(686, 250), 90), (int)kOrder::kOrder_Obstacles);
 	addChild(Obstacles::create(ObstacleType::Obstacle3, ccp(636, 325), 0), (int)kOrder::kOrder_Obstacles);
 }
+
+
 
 bool GameLayer::ccTouchBegan(CCTouch* touch, CCEvent* event){
 	bool flg = false;
@@ -196,13 +200,11 @@ void GameLayer::ccTouchCancelled(CCTouch* touch, CCEvent* event){
 
 void GameLayer::update(float dt)
 {
-	//_enemy->update(dt);
-	//_wisp->update(dt);
-	Game::Instance()->update();
-    //フレーム毎にWorldの情報を更新
+	Game::Instance()->update(dt);
+	//ワールドを更新
 	int32 velocityIterations = 10;
     int32 positionIterations = 10;
-    _world->Step(dt, velocityIterations, positionIterations);
+	_world->Step(dt, velocityIterations, positionIterations);
  
 	for (b2Body* b = _world->GetBodyList(); b; b = b->GetNext())
     {

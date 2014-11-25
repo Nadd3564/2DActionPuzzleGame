@@ -19,14 +19,14 @@ class Player : public GameObject
 public:
 	Player(GameLayer* game);
 	~Player();
-	virtual void stateUpdate();
+	virtual void stateUpdate(float dt);
 	static Player* create();
     b2BodyDef wispBodyDef(Player* wisp);
 	b2FixtureDef wispFixtureDef(b2Shape* shape);
 	CCSprite* initCrossOne();
 	CCSprite* initCrossTwo();
 	virtual void update (float dt);
-    void setPlayerPosition(cocos2d::CCPoint* diff, cocos2d::CCPoint playerPos,
+    void setPlayerPosition(CCPoint* diff, CCPoint playerPos,
                            float tileWidth, float tileHeight, float mapWidth, float mapHeight);
 
 	void addForceToWisp(cocos2d::CCNode* wisp);

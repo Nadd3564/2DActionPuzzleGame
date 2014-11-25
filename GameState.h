@@ -16,7 +16,7 @@ using namespace cocos2d;
 class GameState : public CCNode
 {
 public:
-    virtual void stateUpdate() = 0;
+    virtual void stateUpdate(float dt) = 0;
     
     virtual bool onStateEnter() = 0;
     virtual bool onStateExit() = 0;

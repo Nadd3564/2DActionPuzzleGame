@@ -20,7 +20,7 @@ class GameObject : public RigidSprite
 {
 public:
     //virtual void setStrategy();
-	virtual void stateUpdate() = 0;
+	virtual void stateUpdate(float dt) = 0;
 	GameObject(GameLayer* game);
 	~GameObject();
 	CC_SYNTHESIZE(b2Body *, _body, Body);

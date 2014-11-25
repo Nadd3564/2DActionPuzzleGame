@@ -8,10 +8,12 @@
 #include "ObjectManager.h"
 #include "NormalState.h"
 #include "ApproachState.h"
+#include "SimpleAudioEngine.h"
 #include "GameLayer.h"
 
-using namespace std;
 USING_NS_CC;
+using namespace std;
+using namespace CocosDenshion;
 
 ObjectManager* ObjectManager::s_pInstance = 0;
 
@@ -30,6 +32,11 @@ ObjectManager::~ObjectManager()
 
 bool ObjectManager::init()
 {
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
+	//ウィスプ生成
+	GameLayer::Instance()->setWisp(Player::create());
+	//エネミー生成
+	GameLayer::Instance()->setEnemy(Enemy::create(ccp(636, 125), "enemy2.png"));
 	m_pStateMachine->changeState(new NormalState());
     return true;
 }
@@ -88,9 +95,9 @@ void ObjectManager::setCurrentLevel(int currentLevel)
     m_bLevelComplete = false;
 }
 
-void ObjectManager::update()
+void ObjectManager::update(float dt)
 {
-    m_pStateMachine->update();
+    m_pStateMachine->update(dt);
 }
 
 //GameLayerで呼び出しているインプットの処理
@@ -113,8 +120,8 @@ CCSprite* ObjectManager::initBackground(){
 	CCSprite* background = CCSprite::create("background1.png");
 	background->setAnchorPoint(ccp(0.0, 0.5));
 	background->setPosition(ccp(0, WINSIZE.height / 2));
-	background->setTag(GameLayer::s_pInstance->kTag_Background);
-	background->setZOrder(GameLayer::s_pInstance->kOrder_Background);
+	background->setTag(GameLayer::Instance()->kTag_Background);
+	background->setZOrder(GameLayer::Instance()->kOrder_Background);
 	return background;
 }
 

@@ -15,16 +15,10 @@
 #include "Enemy.h"
 #include "Obstacles.h"
 
+USING_NS_CC;
 
-class GameLayer : public cocos2d::CCLayer
+class GameLayer : public CCLayer
 {
-protected:
-
-	void instantiateEnemy(cocos2d::CCPoint position);
-	void instantiateWisp();
-	cocos2d::CCPoint processingPosition(cocos2d::CCPoint touch);
-	void initObstacles();
-
 private:
     
     CCTMXTiledMap *_tileMap;
@@ -33,7 +27,7 @@ private:
 
     Player * _wisp;
     Enemy * _enemy;
-    
+	
     NormalState *_normalState;
     ApproachState *_approachState;
 
@@ -46,6 +40,9 @@ private:
     ObjectManager* _gm;
     
     int _numCollected;
+
+	CCPoint processingPosition(CCPoint touch);
+	void initObstacles();
 
 public:
 	static GameLayer* s_pInstance;
@@ -60,6 +57,9 @@ public:
         return s_pInstance;
     }
 
+	void setWisp(Player* wisp);
+	void setEnemy(Enemy* enemy);
+	
 	enum Status {
         kNormal = 0,
         kAlarm,
@@ -108,10 +108,10 @@ public:
 	void update(float dt);
 	
 
-	virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
-	virtual void ccTouchMoved(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
-	virtual void ccTouchEnded(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
-	virtual void ccTouchCancelled(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
+	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
+	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
+	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
+	virtual void ccTouchCancelled(CCTouch* touch, CCEvent* event);
 };
 
 #endif /* defined(_EN_GameLayer_) */

@@ -18,7 +18,7 @@ using namespace cocos2d;
 class NormalState : public GameState
 {
 public:
-    virtual void stateUpdate();
+    virtual void stateUpdate(float dt);
     virtual bool onStateEnter();
     virtual bool onStateExit();
     virtual void onInputEvent(CCPoint* pts);

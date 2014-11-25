@@ -2,16 +2,17 @@
 #include "ObjectManager.h"
 #include "GameLayer.h"
 
+USING_NS_CC;
 
 Obstacles::Obstacles(GameLayer* game) : GameObject(game){}
 
 
 Obstacles::~Obstacles(){}
 
-Obstacles* Obstacles::create(int obstacle, cocos2d::CCPoint pos, float angle){
-	Obstacles* obs = new Obstacles(GameLayer::s_pInstance);
+Obstacles* Obstacles::create(int obstacle, CCPoint pos, float angle){
+	Obstacles* obs = new Obstacles(GameLayer::Instance());
 	if (obs) {
-        obs = obs->initObstacles(obstacle, pos, angle);
+        obs->initObstacles(obstacle, pos, angle);
 		obs->autorelease();
 		return obs;
 	}
@@ -19,7 +20,7 @@ Obstacles* Obstacles::create(int obstacle, cocos2d::CCPoint pos, float angle){
 	return NULL;
 }
 
-Obstacles* Obstacles::initObstacles(int obstacle, cocos2d::CCPoint pos, float angle)
+Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 {
 	std::string fileName;
 
@@ -52,8 +53,8 @@ Obstacles* Obstacles::initObstacles(int obstacle, cocos2d::CCPoint pos, float an
 
 	 switch(obstacle)
 	 {
-	 case GameLayer::ObstacleType::Obstacle1:
-		case GameLayer::ObstacleType::Obstacle2:
+	    case GameLayer::ObstacleType::Obstacle1:
+	    case GameLayer::ObstacleType::Obstacle2:
 		{
 			bodyDef.type = b2_dynamicBody;
 			bodyDef.position.Set(this->getPositionX() / PTM_RATIO,
@@ -64,7 +65,8 @@ Obstacles* Obstacles::initObstacles(int obstacle, cocos2d::CCPoint pos, float an
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(this->getContentSize().width * 0.49/ PTM_RATIO, this->getContentSize().height * 0.45/ PTM_RATIO);
+			spriteShape.SetAsBox(this->getContentSize().width * 0.49/ PTM_RATIO, 
+										this->getContentSize().height * 0.45/ PTM_RATIO);
 			_body->CreateFixture(&spriteShape, 1);
 				
 
@@ -90,7 +92,8 @@ Obstacles* Obstacles::initObstacles(int obstacle, cocos2d::CCPoint pos, float an
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(this->getContentSize().width * 0.5 / PTM_RATIO, this->getContentSize().height * 0.3 / PTM_RATIO);
+			spriteShape.SetAsBox(this->getContentSize().width * 0.5 / PTM_RATIO, 
+									this->getContentSize().height * 0.3 / PTM_RATIO);
 			_body->CreateFixture(&spriteShape, 2);
 
 			//物理性質
@@ -113,7 +116,8 @@ Obstacles* Obstacles::initObstacles(int obstacle, cocos2d::CCPoint pos, float an
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(this->getContentSize().width * 0.5 / PTM_RATIO, this->getContentSize().height * 0.5 / PTM_RATIO);
+			spriteShape.SetAsBox(this->getContentSize().width * 0.5 / PTM_RATIO,
+									this->getContentSize().height * 0.5 / PTM_RATIO);
 			_body->CreateFixture(&spriteShape, 3);
 
 			//物理性質
@@ -131,7 +135,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, cocos2d::CCPoint pos, float an
 	return this;
 }
 
-void Obstacles::stateUpdate(){
+void Obstacles::stateUpdate(float dt){
     std::cout << "Update for the obstacles.";
 }
 

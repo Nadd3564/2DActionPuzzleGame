@@ -32,7 +32,7 @@ public:
     }
     
     bool init();
-    void update();
+    void update(float dt);
     void clean();
     void handleEvents(CCPoint* pts);
     

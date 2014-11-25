@@ -19,7 +19,7 @@ class Enemy : public GameObject
 public:
 	Enemy(GameLayer * game);
 	~Enemy();
-	virtual void stateUpdate();
+	virtual void stateUpdate(float dt);
     static Enemy* create(CCPoint position, const char* fileName);
     b2BodyDef enemyBodyDef(Enemy* enemy);
 	b2FixtureDef enemyFixtureDef(b2Shape* shape);
