@@ -41,7 +41,6 @@ private:
     
     int _numCollected;
 
-	CCPoint processingPosition(CCPoint touch);
 	void initObstacles();
 
 public:
@@ -106,8 +105,10 @@ public:
 	GameLayer();
 	~GameLayer();
 	void update(float dt);
+	void removeChain();
+	CCNode* visibleChainOne();
+	CCNode* visibleChainTwo();
 	
-
 	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);

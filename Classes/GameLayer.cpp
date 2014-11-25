@@ -1,11 +1,5 @@
 #include "GameLayer.h"
 
-#define WISP_INIT_POS ccp(100 ,150)
-#define WISP_STRETCH_LENGTH 50
-
-#define CROSS_POS1 ccp(80, 135)
-#define CROSS_POS2 ccp(125, 140)
-
 USING_NS_CC;
 
 GameLayer* GameLayer::s_pInstance = 0;
@@ -32,6 +26,7 @@ CCScene* GameLayer::createScene()
     layer->_hud = hud;
 
 	ObjectManager *gm = ObjectManager::Instance();
+	gm->init();
     scene->addChild(gm);
     layer->_gm = gm;
 
@@ -49,7 +44,6 @@ bool GameLayer::init()
 	GameLayer::s_pInstance = this;
 
     this->initPhysics();
-	Game::Instance()->init();
 	Game::Instance()->getStateMachine()->pushState(new NormalState());
 
     //シングルタップモード
@@ -97,19 +91,6 @@ void GameLayer::setEnemy(Enemy* enemy){
 	_enemy = enemy;
 }
 
-CCPoint GameLayer::processingPosition(CCPoint touch){
-	//ウィスプの初期位置とタップ位置の距離
-	int distance = touch.getDistance(WISP_INIT_POS);
-
-	if(distance > WISP_STRETCH_LENGTH)
-		//距離がWISP_STRETCH_LENGTHとなる位置を返す
-		return WISP_INIT_POS + (touch - WISP_INIT_POS) * WISP_STRETCH_LENGTH / distance;
-	else
-		//タップ位置を返す
-		return touch;
-}
-
-
 void GameLayer::initObstacles(){
 	
 	//障害物生成
@@ -127,75 +108,48 @@ void GameLayer::initObstacles(){
 
 
 bool GameLayer::ccTouchBegan(CCTouch* touch, CCEvent* event){
-	bool flg = false;
-	CCPoint location = touch->getLocationInView();
-	location = CCDirector::sharedDirector()->convertToGL(location);
-
-	CCNode* wisp = getChildByTag(kTag_Wisp);
-	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
-	{
-		//ウィスプの位置を計算
-		wisp->setPosition(processingPosition(touch->getLocation()));
-		flg = true;
-	}
-
+	bool flg = _wisp->wispTouchBegan(touch, event, getChildByTag(kTag_Wisp));
 	return flg;
 }
 
 void GameLayer::ccTouchMoved(CCTouch* touch, CCEvent* event){
-	CCNode* wisp = getChildByTag(kTag_Wisp);
-	if(wisp)
-	{
-		wisp->setPosition(processingPosition(touch->getLocation()));
+	_wisp->wispTouchMoved(touch, event, getChildByTag(kTag_Wisp));
+}
 
-		//鎖を引くポイント
-		float angle = ((WISP_INIT_POS - wisp->getPosition()).getAngle());
-		CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
+void GameLayer::ccTouchEnded(CCTouch* touch, CCEvent* event){
+	_wisp->wispTouchEnded(touch, event, getChildByTag(kTag_Wisp));
+}
 
-		//鎖を表示
+void GameLayer::ccTouchCancelled(CCTouch* touch, CCEvent* event){
+	ccTouchEnded(touch, event);
+}
+
+void GameLayer::removeChain(){
+	//鎖を削除
+	removeChildByTag(kTag_Chain1);
+	removeChildByTag(kTag_Chain2);
+}
+
+CCNode* GameLayer::visibleChainOne(){
+		//鎖1を表示
 		CCNode* chain1 = getChildByTag(kTag_Chain1);
 		if(!chain1)
 		{
 			chain1 = CCSprite::create("iron.png");
 			addChild(chain1, kOrder_Chain1, kTag_Chain1);
 		}
+		return chain1;
+}
 
-		chain1->setPosition(CROSS_POS1 - (CROSS_POS1 - pos) / 2);
-		chain1->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS1 - pos).getAngle() * -1));
-		chain1->setScaleX(CROSS_POS1.getDistance(pos));
-		chain1->setScaleY(10);
-
+CCNode* GameLayer::visibleChainTwo(){
+		//鎖2を表示
 		CCNode* chain2 = getChildByTag(kTag_Chain2);
 		if(!chain2)
 		{
 			chain2 = CCSprite::create("iron.png");
 			addChild(chain2, kOrder_Chain2, kTag_Chain2);
 		}
-
-		chain2->setPosition(CROSS_POS2 - (CROSS_POS2 - pos) / 2);
-		chain2->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS2 - pos).getAngle() * -1));
-		chain2->setScaleX(CROSS_POS2.getDistance(pos));
-		chain2->setScaleY(10);
-	}
-}
-
-void GameLayer::ccTouchEnded(CCTouch* touch, CCEvent* event){
-	CCNode* wisp = getChildByTag(kTag_Wisp);
-	if(wisp)
-	{
-		//鎖を削除
-		removeChildByTag(kTag_Chain1);
-		removeChildByTag(kTag_Chain2);
-
-		wisp->setPosition(processingPosition(touch->getLocation()));
-
-		//ウィスプに力を加える
-		_wisp->addForceToWisp(wisp);
-	}
-}
-
-void GameLayer::ccTouchCancelled(CCTouch* touch, CCEvent* event){
-	ccTouchEnded(touch, event);
+		return chain2;
 }
 
 void GameLayer::update(float dt)

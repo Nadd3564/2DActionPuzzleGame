@@ -128,10 +128,10 @@ CCSprite* ObjectManager::initBackground(){
 //地面生成
 CCNode* ObjectManager::initGround(b2Body* _body, b2World* _world, CCNode* kTag){
 	//物理ボディ生成
-	_body = _world->CreateBody(&Game::Instance()->groundBodyDef());
+	_body = _world->CreateBody(&groundBodyDef());
 	
 	// 地面の形と大きさの定義
-    b2EdgeShape groundBox = Game::Instance()->groundShape();
+    b2EdgeShape groundBox = groundShape();
 
 	//物理性質
 	b2FixtureDef fixtureDef;

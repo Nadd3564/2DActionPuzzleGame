@@ -39,8 +39,6 @@ void NormalState::onInputEvent(CCPoint* diff) {
     Player* player = dynamic_cast<Player*>( Game::Instance()->findGameObject("player"));
 	
     CCPoint playerPos = player->getPosition();
-    
-    player->setPlayerPosition(diff, playerPos, _tileWidth,_tileHeight, _mapWidth, _mapHeight);
 }
 
 bool NormalState::onStateEnter() {

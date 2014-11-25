@@ -4,7 +4,8 @@
 //  Created by athenaeum on 2014/11/18.
 //
 //
-#define WISP_INIT_POS ccp(100 ,150)
+#define CROSS_POS1 ccp(80, 135)
+#define CROSS_POS2 ccp(125, 140)
 
 #include "Player.h"
 #include "ObjectManager.h"
@@ -29,7 +30,7 @@ Player* Player::create(){
 Player* Player::initWisp()
 {
 	this->initWithFile("wisp_1.png");
-	this->setPosition(WISP_INIT_POS);
+	this->setPosition(WISP_SET_POS);
 	this->setTag(_game->kTag_Wisp);
 	this->setZOrder(_game->kOrder_Wisp);
 
@@ -54,6 +55,75 @@ void Player::stateUpdate(float dt){
     std::cout << "Update for the player.";
 }
 
+
+bool Player::wispTouchBegan(CCTouch* touch, CCEvent* event, CCNode* tag){
+	bool flg = false;
+	CCPoint location = touch->getLocationInView();
+	location = CCDirector::sharedDirector()->convertToGL(location);
+
+	CCNode* wisp = tag;
+	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
+	{
+		//ウィスプの位置を計算
+		wisp->setPosition(processingPosition(touch->getLocation()));
+		flg = true;
+	}
+
+	return flg;
+}
+
+void Player::wispTouchMoved(CCTouch* touch, CCEvent* event, CCNode* tag){
+	if(tag)
+	{
+		tag->setPosition(processingPosition(touch->getLocation()));
+
+		//鎖を引くポイント
+		float angle = ((WISP_SET_POS - tag->getPosition()).getAngle());
+		CCPoint pos = tag->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
+
+		//鎖を表示
+		setChain1(GameLayer::Instance()->visibleChainOne(), pos);
+		setChain2(GameLayer::Instance()->visibleChainTwo(), pos);
+	}
+}
+
+void Player::wispTouchEnded(CCTouch* touch, CCEvent* event, CCNode* tag){
+	if(tag)
+	{
+		//鎖を削除
+		GameLayer::Instance()->removeChain();
+		tag->setPosition(processingPosition(touch->getLocation()));
+
+		//ウィスプに力を加える
+		addForceToWisp(tag);
+	}
+}
+
+void Player::setChain1(CCNode* chain1, CCPoint pos){
+	chain1->setPosition(CROSS_POS1 - (CROSS_POS1 - pos) / 2);
+	chain1->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS1 - pos).getAngle() * -1));
+	chain1->setScaleX(CROSS_POS1.getDistance(pos));
+	chain1->setScaleY(10);
+}
+
+void Player::setChain2(CCNode* chain2, CCPoint pos){
+	chain2->setPosition(CROSS_POS2 - (CROSS_POS2 - pos) / 2);
+	chain2->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS2 - pos).getAngle() * -1));
+	chain2->setScaleX(CROSS_POS2.getDistance(pos));
+	chain2->setScaleY(10);
+}
+
+CCPoint Player::processingPosition(CCPoint touch){
+	//ウィスプの初期位置とタップ位置の距離
+	int distance = touch.getDistance(WISP_SET_POS);
+
+	if(distance > WISP_EXTEND)
+		//距離がWISP_STRETCH_LENGTHとなる位置を返す
+		return WISP_SET_POS + (touch - WISP_SET_POS) * WISP_EXTEND / distance;
+	else
+		//タップ位置を返す
+		return touch;
+}
 
 //物理ボディ生成
 b2BodyDef Player::wispBodyDef(Player* wisp){
@@ -90,39 +160,9 @@ CCSprite* Player::initCrossTwo(){
 	return cross2;
 }
 
-void Player::setPlayerPosition(cocos2d::CCPoint* diff, cocos2d::CCPoint playerPos,
-                       float tileWidth, float tileHeight, float mapWidth, float mapHeight)
-{
-	if(diff){
-        if ( abs(diff->x) > abs(diff->y) ) {
-            if (diff->x > 0) {
-                
-                playerPos.x += tileWidth;
-            } else {
-                playerPos.x -= tileWidth;
-            }
-        } else {
-            if (diff->y > 0) {
-                playerPos.y += tileHeight;
-            } else {
-                playerPos.y -= tileHeight;
-            }
-        }
-        
-        // safety check on the bounds of the map
-        if (playerPos.x <= (mapWidth * tileWidth) &&
-            playerPos.y <= (mapHeight * tileHeight) &&
-            playerPos.y >= 0 &&
-            playerPos.x >= 0 )
-        {
-            this->setPosition(playerPos);
-		}
-    }
-}
-
 void Player::addForceToWisp(CCNode* wisp){
 	//ウィスプを可動出来るようにする
-	RigidSprite* will = dynamic_cast<RigidSprite*>(wisp);
+	Player* will = dynamic_cast<Player*>(wisp);
 	will->m_pBody->SetType(b2_dynamicBody);
 	//ウィスプに力を加える
 	will->m_pBody->ResetMassData();
