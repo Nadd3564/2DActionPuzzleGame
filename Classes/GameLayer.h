@@ -64,10 +64,13 @@ public:
 
 	void setWisp(Player* wisp);
 	void setEnemy(Enemy* enemy);
+	void setStaticSprite(CCSprite* sprite);
+	void setGround(CCNode* node);
 	CCTouch* getBeganTouch();
 	CCTouch* getMovedTouch();
 	CCTouch* getEndedTouch();
 	CCNode* getWispTag();
+	CCNode* getBgTag();
 	Player* getWisp();
 	
 	enum Status {

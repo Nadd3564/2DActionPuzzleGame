@@ -13,6 +13,9 @@
 
 using namespace cocos2d;
 
+class GameLayer;
+class ObjectManager;
+
 class GameState : public CCNode
 {
 public:
@@ -34,7 +37,12 @@ private:
     
     bool m_loadingComplete;
     bool m_exiting;
-    
+	
+ 
+protected:
+	GameLayer* _gl;
+	ObjectManager* _gm;
+
 };
 
 #endif /* defined(__GameState__) */

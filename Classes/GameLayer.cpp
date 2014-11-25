@@ -69,15 +69,20 @@ void GameLayer::initPhysics(){
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
 	
-	//背景の設定
-	this->addChild(_gm->initBackground());
-	//地面の生成
-	this->addChild(_gm->initGround(_body, _world, getChildByTag(kTag_Background)));
-	//発射台生成
-	this->addChild(_wisp->initCrossOne(), kOrder_Cross1);
-	this->addChild(_wisp->initCrossTwo(), kOrder_Cross2);
 	//障害オブジェクト生成
 	initObstacles();
+}
+
+CCNode* GameLayer::getWispTag(){
+	return getChildByTag(kTag_Wisp);
+}
+
+CCNode* GameLayer::getBgTag(){
+	return getChildByTag(kTag_Background);
+}
+
+Player* GameLayer::getWisp(){
+	return this->_wisp;
 }
 
 void GameLayer::setWisp(Player* wisp){
@@ -88,6 +93,14 @@ void GameLayer::setWisp(Player* wisp){
 void GameLayer::setEnemy(Enemy* enemy){
 	_enemy = enemy;
 	this->addChild(_enemy, kTag_Enemy);
+}
+
+void GameLayer::setGround(CCNode* node){
+	this->addChild(node);
+}
+
+void GameLayer::setStaticSprite(CCSprite* sprite){
+	this->addChild(sprite);
 }
 
 void GameLayer::initObstacles(){
@@ -116,13 +129,6 @@ CCTouch* GameLayer::getEndedTouch(){
 	return this->_endedTouch;
 }
 
-CCNode* GameLayer::getWispTag(){
-	return getChildByTag(kTag_Wisp);
-}
-
-Player* GameLayer::getWisp(){
-	return this->_wisp;
-}
 
 bool GameLayer::ccTouchBegan(CCTouch* touch, CCEvent* event){
 	this->_beganTouch = touch;

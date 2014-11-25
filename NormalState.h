@@ -21,7 +21,7 @@ public:
     virtual void stateUpdate(float dt);
     virtual bool onStateEnter();
     virtual bool onStateExit();
-   virtual bool onTouchBeganEvent();
+    virtual bool onTouchBeganEvent();
 	virtual void onTouchMovedEvent();
 	virtual void onTouchEndedEvent();
     
@@ -35,7 +35,7 @@ private:
     float _tileHeight;
     float _mapWidth;
     float _mapHeight;
-    static const std::string s_normalID;
+	static const std::string s_normalID;
     
 };
 

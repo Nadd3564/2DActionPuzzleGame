@@ -24,6 +24,7 @@ m_bLevelComplete(false)
 {
     m_pStateMachine = new StateMachine();
     m_currentLevel = 1;
+	_gl = GameLayer::Instance();
 }
 
 ObjectManager::~ObjectManager()
@@ -33,10 +34,6 @@ ObjectManager::~ObjectManager()
 bool ObjectManager::init()
 {
 	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
-	//ウィスプ生成
-	GameLayer::Instance()->setWisp(Player::create());
-	//エネミー生成
-	GameLayer::Instance()->setEnemy(Enemy::create(ccp(636, 125), "enemy2.png"));
 	m_pStateMachine->changeState(new NormalState());
     return true;
 }
@@ -128,15 +125,15 @@ CCSprite* ObjectManager::initBackground(){
 	CCSprite* background = CCSprite::create("background1.png");
 	background->setAnchorPoint(ccp(0.0, 0.5));
 	background->setPosition(ccp(0, WINSIZE.height / 2));
-	background->setTag(GameLayer::Instance()->kTag_Background);
-	background->setZOrder(GameLayer::Instance()->kOrder_Background);
+	background->setTag(_gl->kTag_Background);
+	background->setZOrder(_gl->kOrder_Background);
 	return background;
 }
 
 //地面生成
-CCNode* ObjectManager::initGround(b2Body* _body, b2World* _world, CCNode* kTag){
+CCNode* ObjectManager::initGround(){
 	//物理ボディ生成
-	_body = _world->CreateBody(&groundBodyDef());
+	b2Body* body = _gl->getWorld()->CreateBody(&groundBodyDef());
 	
 	// 地面の形と大きさの定義
     b2EdgeShape groundBox = groundShape();
@@ -147,12 +144,12 @@ CCNode* ObjectManager::initGround(b2Body* _body, b2World* _world, CCNode* kTag){
     fixtureDef.density = 0.5;
     fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.8;
-	_body->CreateFixture(&fixtureDef);
+	body->CreateFixture(&fixtureDef);
 	
 	//地面ノード作成
 	CCNode* node = CCNode::create();
 	node->setAnchorPoint(ccp(0.5, 0.5));
-	node->setPosition(ccp(kTag->getContentSize().width / 2, 25));
+	node->setPosition(ccp(_gl->getBgTag()->getContentSize().width / 2, 25));
 	return node;
 }
 

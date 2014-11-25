@@ -62,7 +62,7 @@ public:
     std::vector<std::string> getLevelFiles() { return m_levelFiles; }
     
 	CCSprite* initBackground();
-	CCNode* initGround(b2Body* _body, b2World* _world, CCNode* kTag);
+	CCNode* initGround();
 	b2BodyDef groundBodyDef();
 	b2EdgeShape groundShape();
 
@@ -70,6 +70,7 @@ private:
     
     StateMachine* m_pStateMachine;
     static ObjectManager* s_pInstance;
+	GameLayer* _gl;
     
     std::vector<GameObject*> m_gameObjects;
     std::map<std::string, GameObject*> m_gameObjectMap;

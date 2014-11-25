@@ -156,6 +156,7 @@ CCSprite* Player::initCrossOne(){
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);
 	cross1->setPosition(ccp(100, 100));
+	cross1->setZOrder(GameLayer::Instance()->kOrder_Cross1);
 	return cross1;
 }
 
@@ -163,6 +164,7 @@ CCSprite* Player::initCrossTwo(){
 	CCSprite* cross2 = CCSprite::create("Cross2.png");
 	cross2->setScale(0.5);
 	cross2->setPosition(initCrossOne()->getPosition());
+	cross2->setZOrder(GameLayer::Instance()->kOrder_Cross2);
 	return cross2;
 }
 
