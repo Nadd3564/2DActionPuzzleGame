@@ -31,13 +31,17 @@ void NormalState::stateUpdate(float dt) {
 	}
 }
 
-void NormalState::onInputEvent(CCPoint* diff) {
-	
-}
-
 bool NormalState::onTouchBeganEvent(){
 	Player* wisp = GameLayer::Instance()->getWisp();
 	return wisp->wispTouchBegan();
+}
+
+void NormalState::onTouchMovedEvent(){
+	GameLayer::Instance()->getWisp()->wispTouchMoved();
+}
+
+void NormalState::onTouchEndedEvent(){
+	GameLayer::Instance()->getWisp()->wispTouchEnded();
 }
 
 bool NormalState::onStateEnter() {

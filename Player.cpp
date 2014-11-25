@@ -72,41 +72,47 @@ bool Player::wispTouchBegan(){
 	return flg;
 }
 
-void Player::wispTouchMoved(CCTouch* touch, CCEvent* event, CCNode* tag){
-	if(tag)
+void Player::wispTouchMoved(){
+	CCTouch* touch = _game->getMovedTouch();
+	CCNode* wisp = _game->getWispTag();
+
+	if(wisp)
 	{
-		tag->setPosition(processingPosition(touch->getLocation()));
+		wisp->setPosition(processingPosition(touch->getLocation()));
 
 		//鎖を引くポイント
-		float angle = ((WISP_SET_POS - tag->getPosition()).getAngle());
-		CCPoint pos = tag->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
+		float angle = ((WISP_SET_POS - wisp->getPosition()).getAngle());
+		CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
 
 		//鎖を表示
-		setChain1(GameLayer::Instance()->visibleChainOne(), pos);
-		setChain2(GameLayer::Instance()->visibleChainTwo(), pos);
+		setChainOne(GameLayer::Instance()->visibleChainOne(), pos);
+		setChainTwo(GameLayer::Instance()->visibleChainTwo(), pos);
 	}
 }
 
-void Player::wispTouchEnded(CCTouch* touch, CCEvent* event, CCNode* tag){
-	if(tag)
+void Player::wispTouchEnded(){
+	CCTouch* touch = _game->getEndedTouch();
+	CCNode* wisp = _game->getWispTag();
+
+	if(wisp)
 	{
 		//鎖を削除
 		GameLayer::Instance()->removeChain();
-		tag->setPosition(processingPosition(touch->getLocation()));
+		wisp->setPosition(processingPosition(touch->getLocation()));
 
 		//ウィスプに力を加える
-		addForceToWisp(tag);
+		addForceToWisp(wisp);
 	}
 }
 
-void Player::setChain1(CCNode* chain1, CCPoint pos){
+void Player::setChainOne(CCNode* chain1, CCPoint pos){
 	chain1->setPosition(CROSS_POS1 - (CROSS_POS1 - pos) / 2);
 	chain1->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS1 - pos).getAngle() * -1));
 	chain1->setScaleX(CROSS_POS1.getDistance(pos));
 	chain1->setScaleY(10);
 }
 
-void Player::setChain2(CCNode* chain2, CCPoint pos){
+void Player::setChainTwo(CCNode* chain2, CCPoint pos){
 	chain2->setPosition(CROSS_POS2 - (CROSS_POS2 - pos) / 2);
 	chain2->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS2 - pos).getAngle() * -1));
 	chain2->setScaleX(CROSS_POS2.getDistance(pos));
@@ -118,7 +124,7 @@ CCPoint Player::processingPosition(CCPoint touch){
 	int distance = touch.getDistance(WISP_SET_POS);
 
 	if(distance > WISP_EXTEND)
-		//距離がWISP_STRETCH_LENGTHとなる位置を返す
+		//距離がWISP_EXTENDとなる位置を返す
 		return WISP_SET_POS + (touch - WISP_SET_POS) * WISP_EXTEND / distance;
 	else
 		//タップ位置を返す
@@ -163,10 +169,10 @@ CCSprite* Player::initCrossTwo(){
 void Player::addForceToWisp(CCNode* wisp){
 	//ウィスプを可動出来るようにする
 	Player* will = dynamic_cast<Player*>(wisp);
-	will->m_pBody->SetType(b2_dynamicBody);
+	will->getBody()->SetType(b2_dynamicBody);
 	//ウィスプに力を加える
-	will->m_pBody->ResetMassData();
-	will->m_pBody->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->m_pBody->GetWorldCenter());
+	will->getBody()->ResetMassData();
+	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
 }
 
 void Player::update (float dt) {

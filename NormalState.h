@@ -21,8 +21,9 @@ public:
     virtual void stateUpdate(float dt);
     virtual bool onStateEnter();
     virtual bool onStateExit();
-    virtual void onInputEvent(CCPoint* pts);
-	virtual bool onTouchBeganEvent();
+   virtual bool onTouchBeganEvent();
+	virtual void onTouchMovedEvent();
+	virtual void onTouchEndedEvent();
     
     virtual std::string getStateID() { return s_normalID; }
     

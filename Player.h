@@ -32,10 +32,10 @@ public:
 
 	void addForceToWisp(CCNode* wisp);
 	bool wispTouchBegan();
-	void wispTouchMoved(CCTouch* touch, CCEvent* event, CCNode* tag);
-	void wispTouchEnded(CCTouch* touch, CCEvent* event, CCNode* tag);
-	void setChain1(CCNode* chain1, CCPoint pos);
-	void setChain2(CCNode* chain2, CCPoint pos);
+	void wispTouchMoved();
+	void wispTouchEnded();
+	void setChainOne(CCNode* chain1, CCPoint pos);
+	void setChainTwo(CCNode* chain2, CCPoint pos);
 	CCPoint processingPosition(CCPoint touch);
 
 private:

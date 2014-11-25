@@ -44,7 +44,9 @@ private:
 
 	CCTouch* _beganTouch;
 
-	CCEvent* _beganEvent;
+	CCTouch* _movedTouch;
+
+	CCTouch* _endedTouch;
 
 	void initObstacles();
 
@@ -63,7 +65,8 @@ public:
 	void setWisp(Player* wisp);
 	void setEnemy(Enemy* enemy);
 	CCTouch* getBeganTouch();
-	CCEvent* getBeganEvent();
+	CCTouch* getMovedTouch();
+	CCTouch* getEndedTouch();
 	CCNode* getWispTag();
 	Player* getWisp();
 	

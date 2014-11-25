@@ -13,13 +13,18 @@ USING_NS_CC;
 class RigidSprite : public CCSprite
 {
 public:
-	b2Body* m_pBody;
 
     RigidSprite();
 	~RigidSprite();
     void setRigidBody(b2Body* body);
+	b2Body* getBody();
     
     virtual bool isDirty(void);
+
+private:
+
+	b2Body* m_pBody;
+	
 };
 
 #endif // defined(__RigidSprite__)

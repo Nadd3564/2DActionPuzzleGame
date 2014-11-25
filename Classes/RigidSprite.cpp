@@ -14,8 +14,11 @@ void RigidSprite::setRigidBody(b2Body* body)
     m_pBody = body;
 }
 
-// CCSpriteクラスの関数をオーバーロード
+b2Body* RigidSprite::getBody(){
+	return m_pBody;
+}
 
+// CCSpriteクラスの関数をオーバーロード
 bool RigidSprite::isDirty(void)
 {
     return true;

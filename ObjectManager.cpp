@@ -101,14 +101,17 @@ void ObjectManager::update(float dt)
 }
 
 //GameLayerで呼び出しているインプットの処理
-void ObjectManager::handleEvents(CCPoint* pts)
-{
-    m_pStateMachine->onEvent(pts);
-}
-
 bool ObjectManager::handleBeganEvents()
 {
     return m_pStateMachine->onBeganEvent();
+}
+
+void ObjectManager::handleMovedEvents(){
+	m_pStateMachine->onMovedEvent();
+}
+
+void ObjectManager::handleEndedEvents(){
+	m_pStateMachine->onEndedEvent();
 }
 
 void ObjectManager::clean()

@@ -45,7 +45,7 @@ bool GameLayer::init()
 
     this->initPhysics();
 	Game::Instance()->getStateMachine()->pushState(new NormalState());
-
+	
     //シングルタップモード
     this->setTouchMode(kCCTouchesOneByOne);
 	this->setTouchEnabled(true);
@@ -70,9 +70,9 @@ void GameLayer::onEnter(){
 	CCLayer::onEnter();
 	
 	//背景の設定
-	this->addChild(Game::Instance()->initBackground());
+	this->addChild(_gm->initBackground());
 	//地面の生成
-	this->addChild(Game::Instance()->initGround(_body, _world, getChildByTag(kTag_Background)));
+	this->addChild(_gm->initGround(_body, _world, getChildByTag(kTag_Background)));
 	//発射台生成
 	this->addChild(_wisp->initCrossOne(), kOrder_Cross1);
 	this->addChild(_wisp->initCrossTwo(), kOrder_Cross2);
@@ -105,11 +105,15 @@ void GameLayer::initObstacles(){
 }
 
 CCTouch* GameLayer::getBeganTouch(){
-	return _beganTouch;
+	return this->_beganTouch;
 }
 
-CCEvent* GameLayer::getBeganEvent(){
-	return _beganEvent;
+CCTouch* GameLayer::getMovedTouch(){
+	return this->_movedTouch;
+}
+
+CCTouch* GameLayer::getEndedTouch(){
+	return this->_endedTouch;
 }
 
 CCNode* GameLayer::getWispTag(){
@@ -121,18 +125,18 @@ Player* GameLayer::getWisp(){
 }
 
 bool GameLayer::ccTouchBegan(CCTouch* touch, CCEvent* event){
-	_beganTouch = touch;
-	_beganEvent = event;
-	bool flg = Game::Instance()->handleBeganEvents();
-	return flg;
+	this->_beganTouch = touch;
+	return _gm->handleBeganEvents();
 }
 
 void GameLayer::ccTouchMoved(CCTouch* touch, CCEvent* event){
-	_wisp->wispTouchMoved(touch, event, getChildByTag(kTag_Wisp));
+	this->_movedTouch = touch;
+	_gm->handleMovedEvents();
 }
 
 void GameLayer::ccTouchEnded(CCTouch* touch, CCEvent* event){
-	_wisp->wispTouchEnded(touch, event, getChildByTag(kTag_Wisp));
+	this->_endedTouch = touch;
+	_gm->handleEndedEvents();
 }
 
 void GameLayer::ccTouchCancelled(CCTouch* touch, CCEvent* event){
@@ -169,7 +173,7 @@ CCNode* GameLayer::visibleChainTwo(){
 
 void GameLayer::update(float dt)
 {
-	Game::Instance()->update(dt);
+	_gm->update(dt);
 	//ワールドを更新
 	int32 velocityIterations = 10;
     int32 positionIterations = 10;

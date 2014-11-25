@@ -61,6 +61,7 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 
 void Enemy::stateUpdate(float dt){
     std::cout << "Update for the enemy.";
+	update(dt);
 }
 
 

@@ -55,10 +55,14 @@ void StateMachine::update(float dt) {
     m_gameStates.back()->stateUpdate(dt);
 }
 
-void StateMachine::onEvent(CCPoint* pts) {
-    m_gameStates.back()->onInputEvent(pts);
-}
-
 bool StateMachine::onBeganEvent(){
 	return m_gameStates.back()->onTouchBeganEvent();
+}
+
+void StateMachine::onMovedEvent(){
+	m_gameStates.back()->onTouchMovedEvent();
+}
+
+void StateMachine::onEndedEvent(){
+	m_gameStates.back()->onTouchEndedEvent();
 }
