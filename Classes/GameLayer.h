@@ -60,17 +60,6 @@ public:
         return s_pInstance;
     }
 
-	void setWisp(Player* wisp);
-	void setEnemy(Enemy* enemy);
-	void setStaticSprite(CCSprite* sprite);
-	void setGround(CCNode* node);
-	void setObstacles(Obstacles* obs);
-	CCTouch* getBeganTouch();
-	CCTouch* getMovedTouch();
-	CCTouch* getEndedTouch();
-	CCNode* getWispTag();
-	CCNode* getBgTag();
-	Player* getWisp();
 	
 	enum Status {
         kNormal = 0,
@@ -119,8 +108,20 @@ public:
 	~GameLayer();
 	void update(float dt);
 	void removeChain();
-	CCNode* visibleChainOne();
-	CCNode* visibleChainTwo();
+
+	void setWisp(Player* wisp);
+	void setEnemy(Enemy* enemy);
+	void setStaticSprite(CCSprite* sprite);
+	void setNode(CCNode* node);
+	void setObstacles(Obstacles* obs);
+	CCTouch* getBeganTouch();
+	CCTouch* getMovedTouch();
+	CCTouch* getEndedTouch();
+	CCNode* getWispTag();
+	CCNode* getBgTag();
+	CCNode* getChainOneTag();
+	CCNode* getChainTwoTag();
+	Player* getWisp();
 	
 	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);

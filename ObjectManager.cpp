@@ -151,7 +151,7 @@ CCNode* ObjectManager::initGround(){
 	CCNode* node = CCNode::create();
 	node->setAnchorPoint(ccp(0.5, 0.5));
 	node->setPosition(ccp(_gl->getBgTag()->getContentSize().width / 2, 25));
-	_gl->setGround(node);
+	_gl->setNode(node);
 	return node;
 }
 

@@ -36,6 +36,8 @@ public:
 	void wispTouchEnded();
 	void setChainOne(CCNode* chain1, CCPoint pos);
 	void setChainTwo(CCNode* chain2, CCPoint pos);
+	CCNode* visibleChainOne();
+	CCNode* visibleChainTwo();
 	CCPoint processingPosition(CCPoint touch);
 
 private:

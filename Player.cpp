@@ -86,8 +86,8 @@ void Player::wispTouchMoved(){
 		CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
 
 		//鎖を表示
-		setChainOne(_gl->visibleChainOne(), pos);
-		setChainTwo(_gl->visibleChainTwo(), pos);
+		setChainOne(visibleChainOne(), pos);
+		setChainTwo(visibleChainTwo(), pos);
 	}
 }
 
@@ -106,6 +106,32 @@ void Player::wispTouchEnded(){
 	}
 }
 
+CCNode* Player::visibleChainOne(){
+		//鎖1を表示
+		CCNode* chain1 = _gl->getChainOneTag();
+		if(!chain1)
+		{
+			chain1 = CCSprite::create("iron.png");
+			chain1->setTag(_gl->kTag_Chain1);
+			chain1->setZOrder(_gl->kOrder_Chain1);
+			_gl->setNode(chain1);
+		}
+		return chain1;
+}
+
+CCNode* Player::visibleChainTwo(){
+		//鎖2を表示
+		CCNode* chain2 = _gl->getChainTwoTag();
+		if(!chain2)
+		{
+			chain2 = CCSprite::create("iron.png");
+			chain2->setTag(_gl->kTag_Chain2);
+			chain2->setZOrder(_gl->kOrder_Chain2);
+			_gl->setNode(chain2);
+		}
+		return chain2;
+}
+
 void Player::setChainOne(CCNode* chain1, CCPoint pos){
 	chain1->setPosition(CROSS_POS1 - (CROSS_POS1 - pos) / 2);
 	chain1->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS1 - pos).getAngle() * -1));
@@ -118,6 +144,34 @@ void Player::setChainTwo(CCNode* chain2, CCPoint pos){
 	chain2->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS2 - pos).getAngle() * -1));
 	chain2->setScaleX(CROSS_POS2.getDistance(pos));
 	chain2->setScaleY(10);
+}
+
+//発射台
+CCSprite* Player::initCrossOne(){
+	CCSprite* cross1 = CCSprite::create("Cross1.png");
+	cross1->setScale(0.5);
+	cross1->setPosition(ccp(100, 100));
+	cross1->setZOrder(_gl->kOrder_Cross1);
+	_gl->setStaticSprite(cross1);
+	return cross1;
+}
+
+CCSprite* Player::initCrossTwo(){
+	CCSprite* cross2 = CCSprite::create("Cross2.png");
+	cross2->setScale(0.5);
+	cross2->setPosition(initCrossOne()->getPosition());
+	cross2->setZOrder(_gl->kOrder_Cross2);
+	_gl->setStaticSprite(cross2);
+	return cross2;
+}
+
+void Player::addForceToWisp(CCNode* wisp){
+	//ウィスプを可動出来るようにする
+	Player* will = dynamic_cast<Player*>(wisp);
+	will->getBody()->SetType(b2_dynamicBody);
+	//ウィスプに力を加える
+	will->getBody()->ResetMassData();
+	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
 }
 
 CCPoint Player::processingPosition(CCPoint touch){
@@ -150,34 +204,6 @@ b2FixtureDef Player::wispFixtureDef(b2Shape* shape){
     fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.3;
 	return fixtureDef;
-}
-
-//発射台
-CCSprite* Player::initCrossOne(){
-	CCSprite* cross1 = CCSprite::create("Cross1.png");
-	cross1->setScale(0.5);
-	cross1->setPosition(ccp(100, 100));
-	cross1->setZOrder(_gl->kOrder_Cross1);
-	_gl->setStaticSprite(cross1);
-	return cross1;
-}
-
-CCSprite* Player::initCrossTwo(){
-	CCSprite* cross2 = CCSprite::create("Cross2.png");
-	cross2->setScale(0.5);
-	cross2->setPosition(initCrossOne()->getPosition());
-	cross2->setZOrder(_gl->kOrder_Cross2);
-	_gl->setStaticSprite(cross2);
-	return cross2;
-}
-
-void Player::addForceToWisp(CCNode* wisp){
-	//ウィスプを可動出来るようにする
-	Player* will = dynamic_cast<Player*>(wisp);
-	will->getBody()->SetType(b2_dynamicBody);
-	//ウィスプに力を加える
-	will->getBody()->ResetMassData();
-	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
 }
 
 void Player::update (float dt) {

@@ -21,8 +21,7 @@ Obstacles* Obstacles::create(int obstacle, CCPoint pos, float angle){
 	return NULL;
 }
 
-Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
-{
+std::string Obstacles::fileNameInit(int obstacle){
 	std::string fileName;
 
 	switch (obstacle)
@@ -43,8 +42,37 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 		break;
 	}
 
+	return fileName;
+}
+
+b2BodyDef Obstacles::ObsBodyDef(b2BodyDef bodyDef, b2BodyType BodyType){
+	bodyDef.type = BodyType;
+	bodyDef.position.Set(this->getPositionX() / PTM_RATIO,
+                               this->getPositionY() / PTM_RATIO);
+	bodyDef.userData = this;
+	return bodyDef;
+}
+
+b2PolygonShape Obstacles::ObsShape(float32 width, float32 height){
+	b2PolygonShape spriteShape;
+	spriteShape.SetAsBox(this->getContentSize().width * width/ PTM_RATIO, 
+							this->getContentSize().height * height/ PTM_RATIO);
+	return spriteShape;
+}
+
+b2FixtureDef Obstacles::ObsFixtureDef(float32 density, float32 restitution, float32 friction){
+	b2FixtureDef fixtureDef;
+	fixtureDef.density = density;
+	fixtureDef.restitution = restitution;
+	fixtureDef.friction = friction;
+	return fixtureDef;
+}
+
+Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
+{
+
 	//障害物の生成
-	this->initWithFile(fileName.c_str());
+	this->initWithFile(fileNameInit(obstacle).c_str());
 	this->setPosition(pos);
 	this->setRotation(angle);
 	this->setTag(GameLayer::Instance()->kTag_Obstacles);
@@ -57,76 +85,49 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 	    case GameLayer::ObstacleType::Obstacle1:
 	    case GameLayer::ObstacleType::Obstacle2:
 		{
-			bodyDef.type = b2_dynamicBody;
-			bodyDef.position.Set(this->getPositionX() / PTM_RATIO,
-                               this->getPositionY() / PTM_RATIO);
+			bodyDef = ObsBodyDef(bodyDef, b2_dynamicBody);
 			bodyDef.angle = 50 / PTM_RATIO;
-			bodyDef.userData = this;
 			_body = _gl->getWorld()->CreateBody(&bodyDef);
 
 			//物理エンジン上の物質の形と大きさ
-			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(this->getContentSize().width * 0.49/ PTM_RATIO, 
-										this->getContentSize().height * 0.45/ PTM_RATIO);
+			b2PolygonShape spriteShape = ObsShape(0.49, 0.45);
 			_body->CreateFixture(&spriteShape, 1);
 				
 
 			//物理性質
-			b2FixtureDef fixtureDef;
+			b2FixtureDef fixtureDef = ObsFixtureDef(0.5, 0.5, 0.3);
 			fixtureDef.shape = &spriteShape;
-			fixtureDef.density = 0.5;
-			fixtureDef.restitution = 0.5;
-			fixtureDef.friction = 0.3;
 			_body->CreateFixture(&fixtureDef);
 			break;
 		}
 
 		case GameLayer::ObstacleType::Obstacle3:
 		{
-			b2BodyDef bodyDef;
-			bodyDef.type = b2_dynamicBody;
-			bodyDef.position.Set(this->getPositionX() / PTM_RATIO,
-                               this->getPositionY() / PTM_RATIO);
-			bodyDef.userData = this;
-			_body = _gl->getWorld()->CreateBody(&bodyDef);
+			_body = _gl->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_dynamicBody));
 			
 
 			//物理エンジン上の物質の形と大きさ
-			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(this->getContentSize().width * 0.5 / PTM_RATIO, 
-									this->getContentSize().height * 0.3 / PTM_RATIO);
+			b2PolygonShape spriteShape = ObsShape(0.5, 0.3);
 			_body->CreateFixture(&spriteShape, 2);
 
 			//物理性質
-			b2FixtureDef fixtureDef;
+			b2FixtureDef fixtureDef = ObsFixtureDef(0.5, 0.5, 0.3);
 			fixtureDef.shape = &spriteShape;
-			fixtureDef.density = 0.5;
-			fixtureDef.restitution = 0.5;
-			fixtureDef.friction = 0.3;
 			_body->CreateFixture(&fixtureDef);
 			break; 
 		}
 
 		default:
 		{
-			bodyDef.type = b2_staticBody;
-			bodyDef.position.Set(this->getPositionX() / PTM_RATIO,
-                               this->getPositionY() / PTM_RATIO);
-			bodyDef.userData = this;
-			_body = _gl->getWorld()->CreateBody(&bodyDef);
+			_body = _gl->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_staticBody));
 
 			//物理エンジン上の物質の形と大きさ
-			b2PolygonShape spriteShape;
-			spriteShape.SetAsBox(this->getContentSize().width * 0.5 / PTM_RATIO,
-									this->getContentSize().height * 0.5 / PTM_RATIO);
+			b2PolygonShape spriteShape = ObsShape(0.5, 0.5);
 			_body->CreateFixture(&spriteShape, 3);
 
 			//物理性質
-			b2FixtureDef fixtureDef;
+			b2FixtureDef fixtureDef = ObsFixtureDef(0.5, 0.5, 0.3);
 			fixtureDef.shape = &spriteShape;
-			fixtureDef.density = 0.5;
-			fixtureDef.restitution = 0.5;
-			fixtureDef.friction = 0.3;
 			_body->CreateFixture(&fixtureDef);
 			break;
 		}

@@ -16,8 +16,10 @@ public:
 	virtual void stateUpdate(float dt);
 	static Obstacles* create(int obstacle, CCPoint pos, float angle);
 	void addObstacles();
-    b2BodyDef ObsBodyDef(Obstacles* wisp);
-	b2FixtureDef ObsFixtureDef(b2Shape* shape);
+	std::string fileNameInit(int obstacle);
+    b2BodyDef ObsBodyDef(b2BodyDef bodyDef, b2BodyType bodyType);
+	b2PolygonShape ObsShape(float32 width, float32 height);
+	b2FixtureDef ObsFixtureDef(float32 density, float32 restitution, float32 friction);
 	virtual void update (float dt);
 
 private:

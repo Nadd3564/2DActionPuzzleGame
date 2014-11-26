@@ -92,7 +92,7 @@ void GameLayer::setEnemy(Enemy* enemy){
 	this->addChild(_enemy, kTag_Enemy);
 }
 
-void GameLayer::setGround(CCNode* node){
+void GameLayer::setNode(CCNode* node){
 	this->addChild(node);
 }
 
@@ -143,26 +143,12 @@ void GameLayer::removeChain(){
 	removeChildByTag(kTag_Chain2);
 }
 
-CCNode* GameLayer::visibleChainOne(){
-		//çΩ1Çï\é¶
-		CCNode* chain1 = getChildByTag(kTag_Chain1);
-		if(!chain1)
-		{
-			chain1 = CCSprite::create("iron.png");
-			addChild(chain1, kOrder_Chain1, kTag_Chain1);
-		}
-		return chain1;
+CCNode* GameLayer::getChainOneTag(){
+	return getChildByTag(kTag_Chain1);
 }
 
-CCNode* GameLayer::visibleChainTwo(){
-		//çΩ2Çï\é¶
-		CCNode* chain2 = getChildByTag(kTag_Chain2);
-		if(!chain2)
-		{
-			chain2 = CCSprite::create("iron.png");
-			addChild(chain2, kOrder_Chain2, kTag_Chain2);
-		}
-		return chain2;
+CCNode* GameLayer::getChainTwoTag(){
+	return getChildByTag(kTag_Chain2);
 }
 
 void GameLayer::update(float dt)
