@@ -14,6 +14,7 @@ Obstacles* Obstacles::create(int obstacle, CCPoint pos, float angle){
 	if (obs) {
         obs->initObstacles(obstacle, pos, angle);
 		obs->autorelease();
+		GameLayer::Instance()->setObstacles(obs);
 		return obs;
 	}
 	CC_SAFE_DELETE(obs);
@@ -133,6 +134,16 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
     
 	 this->setRigidBody(_body);
 	return this;
+}
+
+void Obstacles::addObstacles(){
+	create(_gl->Obstacle4, ccp(636, 75), 0);
+	create(_gl->Obstacle4, ccp(736, 75), 0);
+	create(_gl->Obstacle1, ccp(586, 150), 90);
+	create(_gl->Obstacle1, ccp(586, 250), 90);
+	create(_gl->Obstacle1, ccp(686, 150), 90);
+	create(_gl->Obstacle1, ccp(686, 250), 90);
+	create(_gl->Obstacle3, ccp(636, 325), 0);
 }
 
 void Obstacles::stateUpdate(float dt){

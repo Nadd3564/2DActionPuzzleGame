@@ -68,9 +68,6 @@ void GameLayer::initPhysics(){
 
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
-	
-	//障害オブジェクト生成
-	initObstacles();
 }
 
 CCNode* GameLayer::getWispTag(){
@@ -103,18 +100,9 @@ void GameLayer::setStaticSprite(CCSprite* sprite){
 	this->addChild(sprite);
 }
 
-void GameLayer::initObstacles(){
-	
-	//障害物生成
-	addChild(Obstacles::create(ObstacleType::Obstacle4, ccp(536, 75), 0), (int)kOrder::kOrder_Obstacles);
-	addChild(Obstacles::create(ObstacleType::Obstacle4, ccp(636, 75), 0), (int)kOrder::kOrder_Obstacles);
-	addChild(Obstacles::create(ObstacleType::Obstacle4, ccp(736, 75), 0), (int)kOrder::kOrder_Obstacles);
-
-	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(586, 150), 90), (int)kOrder::kOrder_Obstacles);
-	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(586, 250), 90), (int)kOrder::kOrder_Obstacles);
-	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(686, 150), 90), (int)kOrder::kOrder_Obstacles);
-	addChild(Obstacles::create(ObstacleType::Obstacle1, ccp(686, 250), 90), (int)kOrder::kOrder_Obstacles);
-	addChild(Obstacles::create(ObstacleType::Obstacle3, ccp(636, 325), 0), (int)kOrder::kOrder_Obstacles);
+void GameLayer::setObstacles(Obstacles* obs){
+	obs->setZOrder((int)kOrder::kOrder_Obstacles);
+	this->addChild(obs);
 }
 
 CCTouch* GameLayer::getBeganTouch(){

@@ -12,6 +12,8 @@
 #include <cocos2d.h>
 #include "ObjectManager.h"
 #include "Player.h"
+#include "Obstacles.h"
+#include "Enemy.h"
 
 using namespace cocos2d;
 
@@ -36,6 +38,8 @@ private:
     float _mapWidth;
     float _mapHeight;
 	Player* _wisp;
+	Enemy* _enemy;
+	Obstacles* _obs;
 	static const std::string s_normalID;
     
 };

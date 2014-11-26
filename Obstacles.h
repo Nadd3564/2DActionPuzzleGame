@@ -15,6 +15,7 @@ public:
 	~Obstacles();
 	virtual void stateUpdate(float dt);
 	static Obstacles* create(int obstacle, CCPoint pos, float angle);
+	void addObstacles();
     b2BodyDef ObsBodyDef(Obstacles* wisp);
 	b2FixtureDef ObsFixtureDef(b2Shape* shape);
 	virtual void update (float dt);

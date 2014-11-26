@@ -60,6 +60,10 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 	return this;
 }
 
+void Enemy::addEnemy(){
+	create(ccp(636, 335), "enemy1.png");
+}
+
 void Enemy::stateUpdate(float dt){
     std::cout << "Update for the enemy.";
 	update(dt);

@@ -48,8 +48,6 @@ private:
 
 	CCTouch* _endedTouch;
 
-	void initObstacles();
-
 public:
     static GameLayer* Instance()
     {
@@ -66,6 +64,7 @@ public:
 	void setEnemy(Enemy* enemy);
 	void setStaticSprite(CCSprite* sprite);
 	void setGround(CCNode* node);
+	void setObstacles(Obstacles* obs);
 	CCTouch* getBeganTouch();
 	CCTouch* getMovedTouch();
 	CCTouch* getEndedTouch();
