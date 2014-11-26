@@ -33,7 +33,7 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 {
 	this->initWithFile(FileName);
 	this->setPosition(position);
-	this->setTag(_game->kTag_Enemy);
+	this->setTag(_gl->kTag_Enemy);
 
 	//エネミーのアニメーション
 	/*CCAnimation* animation =  CCAnimation::create();
@@ -45,7 +45,7 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 	enemy->runAction(repeat);*/
 
 	//物理ボディ生成
-	_body = _game->getWorld()->CreateBody(&enemyBodyDef(this));
+	_body = _gl->getWorld()->CreateBody(&enemyBodyDef(this));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;

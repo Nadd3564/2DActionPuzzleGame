@@ -127,6 +127,7 @@ CCSprite* ObjectManager::initBackground(){
 	background->setPosition(ccp(0, WINSIZE.height / 2));
 	background->setTag(_gl->kTag_Background);
 	background->setZOrder(_gl->kOrder_Background);
+	_gl->setStaticSprite(background);
 	return background;
 }
 
@@ -150,6 +151,7 @@ CCNode* ObjectManager::initGround(){
 	CCNode* node = CCNode::create();
 	node->setAnchorPoint(ccp(0.5, 0.5));
 	node->setPosition(ccp(_gl->getBgTag()->getContentSize().width / 2, 25));
+	_gl->setGround(node);
 	return node;
 }
 

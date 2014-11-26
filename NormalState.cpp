@@ -33,12 +33,12 @@ bool NormalState::onStateEnter() {
 	Enemy::create(ccp(636, 125), "enemy2.png");
 	Enemy::create(ccp(636, 335), "enemy1.png");
 	//背景生成
-	_gl->setStaticSprite(_gm->initBackground());
+	_gm->initBackground();
 	//地面生成
-	_gl->setGround(_gm->initGround());
+	_gm->initGround();
 	//発射台生成
-	_gl->setStaticSprite(_gl->getWisp()->initCrossOne());
-	_gl->setStaticSprite(_gl->getWisp()->initCrossTwo());
+	_wisp->initCrossOne();
+	_wisp->initCrossTwo();
 
 	_gObjects = _gm->getGameObjects();
 

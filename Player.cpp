@@ -32,12 +32,12 @@ Player* Player::initWisp()
 {
 	this->initWithFile("wisp_1.png");
 	this->setPosition(WISP_SET_POS);
-	this->setTag(_game->kTag_Wisp);
-	this->setZOrder(_game->kOrder_Wisp);
+	this->setTag(_gl->kTag_Wisp);
+	this->setZOrder(_gl->kOrder_Wisp);
 
 
 	//物理ボディ生成
-	_body = _game->getWorld()->CreateBody(&wispBodyDef(this));
+	_body = _gl->getWorld()->CreateBody(&wispBodyDef(this));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
@@ -60,8 +60,8 @@ void Player::stateUpdate(float dt){
 bool Player::wispTouchBegan(){
 	bool flg = false;
 
-	CCTouch* touch = _game->getBeganTouch();
-	CCNode* wisp = _game->getWispTag();
+	CCTouch* touch = _gl->getBeganTouch();
+	CCNode* wisp = _gl->getWispTag();
 
 	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
 	{
@@ -74,8 +74,8 @@ bool Player::wispTouchBegan(){
 }
 
 void Player::wispTouchMoved(){
-	CCTouch* touch = _game->getMovedTouch();
-	CCNode* wisp = _game->getWispTag();
+	CCTouch* touch = _gl->getMovedTouch();
+	CCNode* wisp = _gl->getWispTag();
 
 	if(wisp)
 	{
@@ -86,19 +86,19 @@ void Player::wispTouchMoved(){
 		CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
 
 		//鎖を表示
-		setChainOne(_game->visibleChainOne(), pos);
-		setChainTwo(_game->visibleChainTwo(), pos);
+		setChainOne(_gl->visibleChainOne(), pos);
+		setChainTwo(_gl->visibleChainTwo(), pos);
 	}
 }
 
 void Player::wispTouchEnded(){
-	CCTouch* touch = _game->getEndedTouch();
-	CCNode* wisp = _game->getWispTag();
+	CCTouch* touch = _gl->getEndedTouch();
+	CCNode* wisp = _gl->getWispTag();
 
 	if(wisp)
 	{
 		//鎖を削除
-		_game->removeChain();
+		_gl->removeChain();
 		wisp->setPosition(processingPosition(touch->getLocation()));
 
 		//ウィスプに力を加える
@@ -157,7 +157,8 @@ CCSprite* Player::initCrossOne(){
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);
 	cross1->setPosition(ccp(100, 100));
-	cross1->setZOrder(_game->kOrder_Cross1);
+	cross1->setZOrder(_gl->kOrder_Cross1);
+	_gl->setStaticSprite(cross1);
 	return cross1;
 }
 
@@ -165,7 +166,8 @@ CCSprite* Player::initCrossTwo(){
 	CCSprite* cross2 = CCSprite::create("Cross2.png");
 	cross2->setScale(0.5);
 	cross2->setPosition(initCrossOne()->getPosition());
-	cross2->setZOrder(_game->kOrder_Cross2);
+	cross2->setZOrder(_gl->kOrder_Cross2);
+	_gl->setStaticSprite(cross2);
 	return cross2;
 }
 

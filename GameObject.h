@@ -24,7 +24,7 @@ public:
 	GameObject(GameLayer* game);
 	~GameObject();
 	CC_SYNTHESIZE(b2Body *, _body, Body);
-    CC_SYNTHESIZE(GameLayer *, _game, gGame);
+    CC_SYNTHESIZE(GameLayer *, _gl, gGame);
 	virtual void update(float dt);
 
 private:

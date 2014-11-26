@@ -61,7 +61,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
                                this->getPositionY() / PTM_RATIO);
 			bodyDef.angle = 50 / PTM_RATIO;
 			bodyDef.userData = this;
-			_body = _game->getWorld()->CreateBody(&bodyDef);
+			_body = _gl->getWorld()->CreateBody(&bodyDef);
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape;
@@ -87,7 +87,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 			bodyDef.position.Set(this->getPositionX() / PTM_RATIO,
                                this->getPositionY() / PTM_RATIO);
 			bodyDef.userData = this;
-			_body = _game->getWorld()->CreateBody(&bodyDef);
+			_body = _gl->getWorld()->CreateBody(&bodyDef);
 			
 
 			//物理エンジン上の物質の形と大きさ
@@ -112,7 +112,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 			bodyDef.position.Set(this->getPositionX() / PTM_RATIO,
                                this->getPositionY() / PTM_RATIO);
 			bodyDef.userData = this;
-			_body = _game->getWorld()->CreateBody(&bodyDef);
+			_body = _gl->getWorld()->CreateBody(&bodyDef);
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape;
