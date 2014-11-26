@@ -24,7 +24,7 @@ m_bLevelComplete(false)
 {
     m_pStateMachine = new StateMachine();
     m_currentLevel = 1;
-	_gl = GameLayer::Instance();
+	_gameL = GameLayer::Instance();
 }
 
 ObjectManager::~ObjectManager()
@@ -125,16 +125,16 @@ CCSprite* ObjectManager::initBackground(){
 	CCSprite* background = CCSprite::create("background1.png");
 	background->setAnchorPoint(ccp(0.0, 0.5));
 	background->setPosition(ccp(0, WINSIZE.height / 2));
-	background->setTag(_gl->kTag_Background);
-	background->setZOrder(_gl->kOrder_Background);
-	_gl->setStaticSprite(background);
+	background->setTag(_gameL->kTag_Background);
+	background->setZOrder(_gameL->kOrder_Background);
+	_gameL->setStaticSprite(background);
 	return background;
 }
 
 //地面生成
 CCNode* ObjectManager::initGround(){
 	//物理ボディ生成
-	b2Body* body = _gl->getWorld()->CreateBody(&groundBodyDef());
+	b2Body* body = _gameL->getWorld()->CreateBody(&groundBodyDef());
 	
 	// 地面の形と大きさの定義
     b2EdgeShape groundBox = groundShape();
@@ -150,8 +150,8 @@ CCNode* ObjectManager::initGround(){
 	//地面ノード作成
 	CCNode* node = CCNode::create();
 	node->setAnchorPoint(ccp(0.5, 0.5));
-	node->setPosition(ccp(_gl->getBgTag()->getContentSize().width / 2, 25));
-	_gl->setNode(node);
+	node->setPosition(ccp(_gameL->getBgTag()->getContentSize().width / 2, 25));
+	_gameL->setNode(node);
 	return node;
 }
 

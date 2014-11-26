@@ -9,7 +9,7 @@
 #include "GameObject.h"
 
 GameObject::GameObject(GameLayer* game){
-	_gl = game;
+	_gameL = game;
 }
 
 GameObject::~GameObject(){}

@@ -70,7 +70,7 @@ private:
     
     StateMachine* m_pStateMachine;
     static ObjectManager* s_pInstance;
-	GameLayer* _gl;
+	GameLayer* _gameL;
     
     std::vector<GameObject*> m_gameObjects;
     std::map<std::string, GameObject*> m_gameObjectMap;

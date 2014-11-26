@@ -41,7 +41,7 @@ private:
 	
  
 protected:
-	GameLayer* _gl;
+	GameLayer* _gameL;
 	ObjectManager* _gm;
 	std::vector<GameObject*> _gObjects;
 

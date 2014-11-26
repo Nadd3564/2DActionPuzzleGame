@@ -87,7 +87,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 		{
 			bodyDef = ObsBodyDef(bodyDef, b2_dynamicBody);
 			bodyDef.angle = 50 / PTM_RATIO;
-			_body = _gl->getWorld()->CreateBody(&bodyDef);
+			_body = _gameL->getWorld()->CreateBody(&bodyDef);
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape = ObsShape(0.49, 0.45);
@@ -103,7 +103,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 
 		case GameLayer::ObstacleType::Obstacle3:
 		{
-			_body = _gl->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_dynamicBody));
+			_body = _gameL->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_dynamicBody));
 			
 
 			//物理エンジン上の物質の形と大きさ
@@ -119,7 +119,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 
 		default:
 		{
-			_body = _gl->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_staticBody));
+			_body = _gameL->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_staticBody));
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape = ObsShape(0.5, 0.5);
@@ -138,13 +138,13 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 }
 
 void Obstacles::addObstacles(){
-	create(_gl->Obstacle4, ccp(636, 75), 0);
-	create(_gl->Obstacle4, ccp(736, 75), 0);
-	create(_gl->Obstacle1, ccp(586, 150), 90);
-	create(_gl->Obstacle1, ccp(586, 250), 90);
-	create(_gl->Obstacle1, ccp(686, 150), 90);
-	create(_gl->Obstacle1, ccp(686, 250), 90);
-	create(_gl->Obstacle3, ccp(636, 325), 0);
+	create(_gameL->Obstacle4, ccp(636, 75), 0);
+	create(_gameL->Obstacle4, ccp(736, 75), 0);
+	create(_gameL->Obstacle1, ccp(586, 150), 90);
+	create(_gameL->Obstacle1, ccp(586, 250), 90);
+	create(_gameL->Obstacle1, ccp(686, 150), 90);
+	create(_gameL->Obstacle1, ccp(686, 250), 90);
+	create(_gameL->Obstacle3, ccp(636, 325), 0);
 }
 
 void Obstacles::stateUpdate(float dt){

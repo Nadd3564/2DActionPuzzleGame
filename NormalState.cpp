@@ -17,7 +17,7 @@ const std::string NormalState::s_normalID = "NORMAL";
 
 NormalState::NormalState() {
     std::cout << "NormalState::NormalState() normal state constructor\n";
-	_gl = GameLayer::Instance();
+	_gameL = GameLayer::Instance();
 	_gm = Game::Instance();
 }
 
@@ -40,7 +40,7 @@ bool NormalState::onStateEnter() {
 	_wisp->initCrossOne();
 	_wisp->initCrossTwo();
 	//障害物生成
-	_obs = Obstacles::create(_gl->Obstacle4, ccp(536, 75), 0);
+	_obs = Obstacles::create(_gameL->Obstacle4, ccp(536, 75), 0);
 	_obs->addObstacles();
 
 	_gObjects = _gm->getGameObjects();

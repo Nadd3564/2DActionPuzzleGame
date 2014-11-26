@@ -32,12 +32,12 @@ Player* Player::initWisp()
 {
 	this->initWithFile("wisp_1.png");
 	this->setPosition(WISP_SET_POS);
-	this->setTag(_gl->kTag_Wisp);
-	this->setZOrder(_gl->kOrder_Wisp);
+	this->setTag(_gameL->kTag_Wisp);
+	this->setZOrder(_gameL->kOrder_Wisp);
 
 
 	//物理ボディ生成
-	_body = _gl->getWorld()->CreateBody(&wispBodyDef(this));
+	_body = _gameL->getWorld()->CreateBody(&wispBodyDef(this));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
@@ -60,8 +60,8 @@ void Player::stateUpdate(float dt){
 bool Player::wispTouchBegan(){
 	bool flg = false;
 
-	CCTouch* touch = _gl->getBeganTouch();
-	CCNode* wisp = _gl->getWispTag();
+	CCTouch* touch = _gameL->getBeganTouch();
+	CCNode* wisp = _gameL->getWispTag();
 
 	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
 	{
@@ -74,8 +74,8 @@ bool Player::wispTouchBegan(){
 }
 
 void Player::wispTouchMoved(){
-	CCTouch* touch = _gl->getMovedTouch();
-	CCNode* wisp = _gl->getWispTag();
+	CCTouch* touch = _gameL->getMovedTouch();
+	CCNode* wisp = _gameL->getWispTag();
 
 	if(wisp)
 	{
@@ -92,13 +92,13 @@ void Player::wispTouchMoved(){
 }
 
 void Player::wispTouchEnded(){
-	CCTouch* touch = _gl->getEndedTouch();
-	CCNode* wisp = _gl->getWispTag();
+	CCTouch* touch = _gameL->getEndedTouch();
+	CCNode* wisp = _gameL->getWispTag();
 
 	if(wisp)
 	{
 		//鎖を削除
-		_gl->removeChain();
+		_gameL->removeChain();
 		wisp->setPosition(processingPosition(touch->getLocation()));
 
 		//ウィスプに力を加える
@@ -108,26 +108,26 @@ void Player::wispTouchEnded(){
 
 CCNode* Player::visibleChainOne(){
 		//鎖1を表示
-		CCNode* chain1 = _gl->getChainOneTag();
+		CCNode* chain1 = _gameL->getChainOneTag();
 		if(!chain1)
 		{
 			chain1 = CCSprite::create("iron.png");
-			chain1->setTag(_gl->kTag_Chain1);
-			chain1->setZOrder(_gl->kOrder_Chain1);
-			_gl->setNode(chain1);
+			chain1->setTag(_gameL->kTag_Chain1);
+			chain1->setZOrder(_gameL->kOrder_Chain1);
+			_gameL->setNode(chain1);
 		}
 		return chain1;
 }
 
 CCNode* Player::visibleChainTwo(){
 		//鎖2を表示
-		CCNode* chain2 = _gl->getChainTwoTag();
+		CCNode* chain2 = _gameL->getChainTwoTag();
 		if(!chain2)
 		{
 			chain2 = CCSprite::create("iron.png");
-			chain2->setTag(_gl->kTag_Chain2);
-			chain2->setZOrder(_gl->kOrder_Chain2);
-			_gl->setNode(chain2);
+			chain2->setTag(_gameL->kTag_Chain2);
+			chain2->setZOrder(_gameL->kOrder_Chain2);
+			_gameL->setNode(chain2);
 		}
 		return chain2;
 }
@@ -151,8 +151,8 @@ CCSprite* Player::initCrossOne(){
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);
 	cross1->setPosition(ccp(100, 100));
-	cross1->setZOrder(_gl->kOrder_Cross1);
-	_gl->setStaticSprite(cross1);
+	cross1->setZOrder(_gameL->kOrder_Cross1);
+	_gameL->setStaticSprite(cross1);
 	return cross1;
 }
 
@@ -160,8 +160,8 @@ CCSprite* Player::initCrossTwo(){
 	CCSprite* cross2 = CCSprite::create("Cross2.png");
 	cross2->setScale(0.5);
 	cross2->setPosition(initCrossOne()->getPosition());
-	cross2->setZOrder(_gl->kOrder_Cross2);
-	_gl->setStaticSprite(cross2);
+	cross2->setZOrder(_gameL->kOrder_Cross2);
+	_gameL->setStaticSprite(cross2);
 	return cross2;
 }
 
