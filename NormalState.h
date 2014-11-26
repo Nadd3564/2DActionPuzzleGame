@@ -35,6 +35,7 @@ private:
     float _tileHeight;
     float _mapWidth;
     float _mapHeight;
+	Player* _wisp;
 	static const std::string s_normalID;
     
 };

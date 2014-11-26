@@ -21,6 +21,7 @@ Player* Player::create(){
 	if (wisp) {
         wisp->initWisp();
 		wisp->autorelease();
+		GameLayer::Instance()->setWisp(wisp);
 		return wisp;
 	}
 	CC_SAFE_DELETE(wisp);
@@ -85,8 +86,8 @@ void Player::wispTouchMoved(){
 		CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
 
 		//鎖を表示
-		setChainOne(GameLayer::Instance()->visibleChainOne(), pos);
-		setChainTwo(GameLayer::Instance()->visibleChainTwo(), pos);
+		setChainOne(_game->visibleChainOne(), pos);
+		setChainTwo(_game->visibleChainTwo(), pos);
 	}
 }
 
@@ -97,7 +98,7 @@ void Player::wispTouchEnded(){
 	if(wisp)
 	{
 		//鎖を削除
-		GameLayer::Instance()->removeChain();
+		_game->removeChain();
 		wisp->setPosition(processingPosition(touch->getLocation()));
 
 		//ウィスプに力を加える
@@ -156,7 +157,7 @@ CCSprite* Player::initCrossOne(){
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);
 	cross1->setPosition(ccp(100, 100));
-	cross1->setZOrder(GameLayer::Instance()->kOrder_Cross1);
+	cross1->setZOrder(_game->kOrder_Cross1);
 	return cross1;
 }
 
@@ -164,7 +165,7 @@ CCSprite* Player::initCrossTwo(){
 	CCSprite* cross2 = CCSprite::create("Cross2.png");
 	cross2->setScale(0.5);
 	cross2->setPosition(initCrossOne()->getPosition());
-	cross2->setZOrder(GameLayer::Instance()->kOrder_Cross2);
+	cross2->setZOrder(_game->kOrder_Cross2);
 	return cross2;
 }
 

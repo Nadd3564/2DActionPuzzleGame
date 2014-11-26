@@ -22,6 +22,7 @@ Enemy* Enemy::create(CCPoint position, const char* fileName)
 	if (enemy) {
         enemy->initEnemy(position, fileName);
 		enemy->autorelease();
+		GameLayer::Instance()->setEnemy(enemy);
 		return enemy;
 	}
 	CC_SAFE_DELETE(enemy);
@@ -63,7 +64,6 @@ void Enemy::stateUpdate(float dt){
     std::cout << "Update for the enemy.";
 	update(dt);
 }
-
 
 //•¨—ƒ{ƒfƒB¶¬
 b2BodyDef Enemy::enemyBodyDef(Enemy* enemy){

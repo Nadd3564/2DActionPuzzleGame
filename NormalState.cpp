@@ -28,9 +28,10 @@ NormalState::~NormalState() {
 bool NormalState::onStateEnter() {
     std::cout << "NormalState::onStateEnter()\n";
 	//ウィスプ生成
-	_gl->setWisp(Player::create());
+	_wisp = Player::create();
 	//エネミー生成
-	_gl->setEnemy(Enemy::create(ccp(636, 125), "enemy2.png"));
+	Enemy::create(ccp(636, 125), "enemy2.png");
+	Enemy::create(ccp(636, 335), "enemy1.png");
 	//背景生成
 	_gl->setStaticSprite(_gm->initBackground());
 	//地面生成
@@ -38,27 +39,29 @@ bool NormalState::onStateEnter() {
 	//発射台生成
 	_gl->setStaticSprite(_gl->getWisp()->initCrossOne());
 	_gl->setStaticSprite(_gl->getWisp()->initCrossTwo());
+
+	_gObjects = _gm->getGameObjects();
+
     return true;
 }
 
 void NormalState::stateUpdate(float dt) {
-    std::vector<GameObject*> gameObjects = Game::Instance()->getGameObjects();
-	for (std::vector<GameObject*>::iterator it = gameObjects.begin() ; it != gameObjects.end(); ++it){
+    for (std::vector<GameObject*>::iterator it = _gObjects.begin() ; it != _gObjects.end(); ++it){
         // Game::Instance()->getStateMachine()->changeState(new AlarmState());
 		(*it)->stateUpdate(dt);
 	}
 }
 
 bool NormalState::onTouchBeganEvent(){
-	return _gl->getWisp()->wispTouchBegan();
+	return _wisp->wispTouchBegan();
 }
 
 void NormalState::onTouchMovedEvent(){
-	_gl->getWisp()->wispTouchMoved();
+	_wisp->wispTouchMoved();
 }
 
 void NormalState::onTouchEndedEvent(){
-	_gl->getWisp()->wispTouchEnded();
+	_wisp->wispTouchEnded();
 }
 
 
