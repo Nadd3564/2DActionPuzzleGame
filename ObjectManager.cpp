@@ -127,7 +127,7 @@ CCSprite* ObjectManager::initBackground(){
 	background->setPosition(ccp(0, WINSIZE.height / 2));
 	background->setTag(_gameL->kTag_Background);
 	background->setZOrder(_gameL->kOrder_Background);
-	_gameL->setStaticSprite(background);
+	_gameL->setSprite(background);
 	return background;
 }
 

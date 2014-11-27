@@ -152,7 +152,7 @@ CCSprite* Player::initCrossOne(){
 	cross1->setScale(0.5);
 	cross1->setPosition(ccp(100, 100));
 	cross1->setZOrder(_gameL->kOrder_Cross1);
-	_gameL->setStaticSprite(cross1);
+	_gameL->setSprite(cross1);
 	return cross1;
 }
 
@@ -161,7 +161,7 @@ CCSprite* Player::initCrossTwo(){
 	cross2->setScale(0.5);
 	cross2->setPosition(initCrossOne()->getPosition());
 	cross2->setZOrder(_gameL->kOrder_Cross2);
-	_gameL->setStaticSprite(cross2);
+	_gameL->setSprite(cross2);
 	return cross2;
 }
 

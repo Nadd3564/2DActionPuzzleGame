@@ -111,7 +111,7 @@ public:
 
 	void setWisp(Player* wisp);
 	void setEnemy(Enemy* enemy);
-	void setStaticSprite(CCSprite* sprite);
+	void setSprite(CCSprite* sprite);
 	void setNode(CCNode* node);
 	void setObstacles(Obstacles* obs);
 	CCTouch* getBeganTouch();

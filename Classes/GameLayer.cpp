@@ -96,7 +96,7 @@ void GameLayer::setNode(CCNode* node){
 	this->addChild(node);
 }
 
-void GameLayer::setStaticSprite(CCSprite* sprite){
+void GameLayer::setSprite(CCSprite* sprite){
 	this->addChild(sprite);
 }
 
