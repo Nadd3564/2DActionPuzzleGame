@@ -30,8 +30,7 @@ bool NormalState::onStateEnter() {
 	//ウィスプ生成
 	_wisp = Player::create();
 	//エネミー生成
-	_enemy = Enemy::create(ccp(636, 125), "enemy2.png");
-	_enemy->addEnemy();
+	Enemy::create(ccp(636, 125), "enemy2.png")->addEnemy();
 	//背景生成
 	_gm->initBackground();
 	//地面生成
@@ -40,8 +39,8 @@ bool NormalState::onStateEnter() {
 	_wisp->initCrossOne();
 	_wisp->initCrossTwo();
 	//障害物生成
-	_obs = Obstacles::create(_gameL->Obstacle4, ccp(536, 75), 0);
-	_obs->addObstacles();
+	Obstacles::create(_gameL->Obstacle4, ccp(536, 75), 0)->addObstacles();
+	
 
 	_gObjects = _gm->getGameObjects();
 

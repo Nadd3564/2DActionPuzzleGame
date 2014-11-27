@@ -35,15 +35,6 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 	this->setPosition(position);
 	this->setTag(_gameL->kTag_Enemy);
 
-	//エネミーのアニメーション
-	/*CCAnimation* animation =  CCAnimation::create();
-	animation->addSpriteFrameWithFileName("enemy2.png");
-	animation->addSpriteFrameWithFileName("enemy1.png");
-	animation->setDelayPerUnit(1);
-
-	CCRepeatForever* repeat = CCRepeatForever::create(CCAnimate::create(animation));
-	enemy->runAction(repeat);*/
-
 	//物理ボディ生成
 	_body = _gameL->getWorld()->CreateBody(&enemyBodyDef(this));
     
