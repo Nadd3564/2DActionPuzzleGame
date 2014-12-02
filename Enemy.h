@@ -1,6 +1,5 @@
 //
 //  Enemy.h
-//  TileGame
 //
 //  Created by athenaeum on 2014/11/18.
 //
@@ -31,4 +30,4 @@ private:
 };
 
 
-#endif /* defined(__TileGame__Enemy__) */
+#endif /* defined(__Enemy__) */

@@ -1,13 +1,12 @@
 //
 //  ApproachState.h
-//  TileGame
 //
 //  Created by athenaeum on 2014/11/15.
 //
 //
 
-#ifndef __TileGame__ApproachState__
-#define __TileGame__ApproachState__
+#ifndef __ApproachState__
+#define __ApproachState__
 
 #include "GameState.h"
 #include <cocos2d.h>
@@ -33,4 +32,4 @@ private:
     static void s_approachToIdle();
 };
 
-#endif /* defined(__TileGame__ApproachState__) */
+#endif /* defined(__ApproachState__) */
