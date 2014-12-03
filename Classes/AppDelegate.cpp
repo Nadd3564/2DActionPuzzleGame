@@ -24,8 +24,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);
 
-	//‰æ‘œ‚ª‰æ–Ê‚Ì‚‚³‚ÉƒtƒBƒbƒg‚·‚é‚æ‚¤‚É‰æ‘œ‚ðLk‚³‚¹‚é
-	pEGLView->setDesignResolutionSize(1136, 640, ResolutionPolicy::kResolutionFixedHeight);
+	pEGLView->setDesignResolutionSize(960, 640, ResolutionPolicy::kResolutionFixedHeight);
 
     // create a scene. it's an autorelease object
     CCScene *pScene = GameLayer::createScene();
