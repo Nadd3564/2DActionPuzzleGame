@@ -63,38 +63,67 @@ bool Player::wispTouchBegan(){
 	CCTouch* touch = _gameL->getBeganTouch();
 	CCNode* wisp = _gameL->getWispTag();
 
-	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
-	{
-		//ウィスプの位置を計算
-		wisp->setPosition(processingPosition(touch->getLocation()));
-		flg = true;
-	}
-
+	//ウィスプの位置を計算
+	flg = touchWithProcess(wisp, touch, flg);
 	return flg;
 }
+
+
 
 void Player::wispTouchMoved(){
 	CCTouch* touch = _gameL->getMovedTouch();
 	CCNode* wisp = _gameL->getWispTag();
-
-	if(wisp)
-	{
-		wisp->setPosition(processingPosition(touch->getLocation()));
-
-		//鎖を引くポイント
-		float angle = ((WISP_SET_POS - wisp->getPosition()).getAngle());
-		CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(angle));
-
-		//鎖を表示
-		setChainOne(visibleChainOne(), pos);
-		setChainTwo(visibleChainTwo(), pos);
-	}
+	//鎖を引くポイントと鎖を表示
+	chain(wisp, touch);
 }
+
+
 
 void Player::wispTouchEnded(){
 	CCTouch* touch = _gameL->getEndedTouch();
 	CCNode* wisp = _gameL->getWispTag();
+	//鎖を削除し、ウィスプに力を加える
+	removeAndAdd(wisp, touch);
+}
 
+bool Player::wispRectTouch(CCNode* wisp, CCTouch* touch){
+	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
+		return true;
+	return false;
+}
+
+bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg){
+	if(wispRectTouch(wisp, touch))
+	{
+		//ウィスプの位置を計算
+		wisp->setPosition(processingPosition(touch->getLocation()));
+		flg = true;
+		return flg;
+	}
+}
+
+void Player::chain(CCNode* wisp, CCTouch* touch){
+	if(wisp)
+	{
+		wisp->setPosition(processingPosition(touch->getLocation()));
+
+		//鎖を引くポイントと鎖を表示
+		setChainOne(initChainOne(_gameL->getChainOneTag()), extendPos(wisp));
+		setChainTwo(initChainTwo(_gameL->getChainTwoTag()), extendPos(wisp));
+	}
+}
+
+float Player::extendAngle(CCNode* wisp){
+	float angle = ((WISP_SET_POS - wisp->getPosition()).getAngle());
+	return angle;
+}
+
+CCPoint Player::extendPos(CCNode* wisp){
+	CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(extendAngle(wisp)));
+	return pos;
+}
+
+void Player::removeAndAdd(CCNode* wisp, CCTouch* touch){
 	if(wisp)
 	{
 		//鎖を削除
@@ -106,30 +135,28 @@ void Player::wispTouchEnded(){
 	}
 }
 
-CCNode* Player::visibleChainOne(){
-		//鎖1を表示
-		CCNode* chain1 = _gameL->getChainOneTag();
-		if(!chain1)
+CCNode* Player::initChainOne(CCNode* chain1){
+	//鎖1を表示
+	if(!chain1)
 		{
 			chain1 = CCSprite::create("iron.png");
 			chain1->setTag(_gameL->kTag_Chain1);
 			chain1->setZOrder(_gameL->kOrder_Chain1);
 			_gameL->setNode(chain1);
 		}
-		return chain1;
+	return chain1;
 }
 
-CCNode* Player::visibleChainTwo(){
-		//鎖2を表示
-		CCNode* chain2 = _gameL->getChainTwoTag();
-		if(!chain2)
+CCNode* Player::initChainTwo(CCNode* chain2){
+	//鎖1を表示
+	if(!chain2)
 		{
 			chain2 = CCSprite::create("iron.png");
 			chain2->setTag(_gameL->kTag_Chain2);
 			chain2->setZOrder(_gameL->kOrder_Chain2);
 			_gameL->setNode(chain2);
 		}
-		return chain2;
+	return chain2;
 }
 
 void Player::setChainOne(CCNode* chain1, CCPoint pos){

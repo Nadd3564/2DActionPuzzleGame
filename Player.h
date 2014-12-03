@@ -33,10 +33,16 @@ public:
 	bool wispTouchBegan();
 	void wispTouchMoved();
 	void wispTouchEnded();
+	bool wispRectTouch(CCNode* wisp, CCTouch* touch);
+	bool touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg);
+	void chain(CCNode* wisp, CCTouch* touch);
+	float extendAngle(CCNode* wisp);
+	CCPoint extendPos(CCNode* wisp);
+	void removeAndAdd(CCNode* wisp, CCTouch* touch);
 	void setChainOne(CCNode* chain1, CCPoint pos);
 	void setChainTwo(CCNode* chain2, CCPoint pos);
-	CCNode* visibleChainOne();
-	CCNode* visibleChainTwo();
+	CCNode* initChainOne(CCNode* chain1);
+	CCNode* initChainTwo(CCNode* chain2);
 	CCPoint processingPosition(CCPoint touch);
 
 private:
