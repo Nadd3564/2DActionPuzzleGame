@@ -19,8 +19,6 @@ public:
     void setRigidBody(b2Body* body);
 	b2Body* getBody();
     
-    virtual bool isDirty(void);
-
 private:
 
 	b2Body* m_pBody;
