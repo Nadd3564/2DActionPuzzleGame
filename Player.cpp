@@ -64,8 +64,7 @@ bool Player::wispTouchBegan(){
 	CCNode* wisp = _gameL->getWispTag();
 
 	//ウィスプの位置を計算
-	flg = touchWithProcess(wisp, touch, flg);
-	return flg;
+	return touchWithProcess(wisp, touch, flg);
 }
 
 
@@ -98,8 +97,8 @@ bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg){
 		//ウィスプの位置を計算
 		wisp->setPosition(processingPosition(touch->getLocation()));
 		flg = true;
-		return flg;
 	}
+	return flg;
 }
 
 void Player::chain(CCNode* wisp, CCTouch* touch){
