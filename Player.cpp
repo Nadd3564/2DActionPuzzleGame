@@ -95,7 +95,7 @@ bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg){
 	if(wispRectTouch(wisp, touch))
 	{
 		//ウィスプの位置を計算
-		wisp->setPosition(CalcPos(touch->getLocation()));
+		wisp->setPosition(calcPos(touch->getLocation()));
 		flg = true;
 	}
 	return flg;
@@ -104,7 +104,7 @@ bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg){
 void Player::chain(CCNode* wisp, CCTouch* touch){
 	if(wisp)
 	{
-		wisp->setPosition(CalcPos(touch->getLocation()));
+		wisp->setPosition(calcPos(touch->getLocation()));
 
 		//鎖を引くポイントと鎖を表示
 		setChainOne(initChainOne(_gameL->getChainOneTag()), extendPos(wisp));
@@ -127,7 +127,7 @@ void Player::removeAndAdd(CCNode* wisp, CCTouch* touch){
 	{
 		//鎖を削除
 		_gameL->removeChain();
-		wisp->setPosition(CalcPos(touch->getLocation()));
+		wisp->setPosition(calcPos(touch->getLocation()));
 
 		//ウィスプに力を加える
 		addForceToWisp(wisp);
@@ -200,16 +200,28 @@ void Player::addForceToWisp(CCNode* wisp){
 	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
 }
 
-CCPoint Player::CalcPos(CCPoint touch){
+CCPoint Player::calcPos(CCPoint touch){
 	//ウィスプの初期位置とタップ位置の距離
-	int distance = touch.getDistance(WISP_SET_POS);
+	int dist = touch.getDistance(WISP_SET_POS);
 
-	if(distance > WISP_EXTEND)
+	if(gThanPos(dist))
 		//距離がWISP_EXTENDとなる位置を返す
-		return WISP_SET_POS + (touch - WISP_SET_POS) * WISP_EXTEND / distance;
+		return calcRetPos(touch, dist);
 	else
 		//タップ位置を返す
 		return touch;
+}
+
+
+bool Player::gThanPos(int dist){
+	if(dist > WISP_EXTEND)
+		return true;
+	return false;
+}
+
+
+CCPoint Player::calcRetPos(CCPoint touch, int dist){
+	return WISP_SET_POS + (touch - WISP_SET_POS) * WISP_EXTEND / dist;
 }
 
 //物理ボディ生成

@@ -43,7 +43,9 @@ public:
 	void setChainTwo(CCNode* chain2, CCPoint pos);
 	CCNode* initChainOne(CCNode* chain1);
 	CCNode* initChainTwo(CCNode* chain2);
-	CCPoint CalcPos(CCPoint touch);
+	CCPoint calcPos(CCPoint touch);
+	bool gThanPos(int dist);
+	CCPoint calcRetPos(CCPoint touch, int dist);
 
 private:
 	Player* initWisp();
