@@ -95,7 +95,7 @@ bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg){
 	if(wispRectTouch(wisp, touch))
 	{
 		//ウィスプの位置を計算
-		wisp->setPosition(processingPosition(touch->getLocation()));
+		wisp->setPosition(CalcPos(touch->getLocation()));
 		flg = true;
 	}
 	return flg;
@@ -104,7 +104,7 @@ bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg){
 void Player::chain(CCNode* wisp, CCTouch* touch){
 	if(wisp)
 	{
-		wisp->setPosition(processingPosition(touch->getLocation()));
+		wisp->setPosition(CalcPos(touch->getLocation()));
 
 		//鎖を引くポイントと鎖を表示
 		setChainOne(initChainOne(_gameL->getChainOneTag()), extendPos(wisp));
@@ -127,7 +127,7 @@ void Player::removeAndAdd(CCNode* wisp, CCTouch* touch){
 	{
 		//鎖を削除
 		_gameL->removeChain();
-		wisp->setPosition(processingPosition(touch->getLocation()));
+		wisp->setPosition(CalcPos(touch->getLocation()));
 
 		//ウィスプに力を加える
 		addForceToWisp(wisp);
@@ -147,7 +147,7 @@ CCNode* Player::initChainOne(CCNode* chain1){
 }
 
 CCNode* Player::initChainTwo(CCNode* chain2){
-	//鎖1を表示
+	//鎖2を表示
 	if(!chain2)
 		{
 			chain2 = CCSprite::create("iron.png");
@@ -200,7 +200,7 @@ void Player::addForceToWisp(CCNode* wisp){
 	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
 }
 
-CCPoint Player::processingPosition(CCPoint touch){
+CCPoint Player::CalcPos(CCPoint touch){
 	//ウィスプの初期位置とタップ位置の距離
 	int distance = touch.getDistance(WISP_SET_POS);
 
