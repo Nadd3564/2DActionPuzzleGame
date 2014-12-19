@@ -122,7 +122,6 @@ public:
 	CCNode* getBgTag();
 	CCNode* getChainOneTag();
 	CCNode* getChainTwoTag();
-	Player* getWisp();
 	
 	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);

@@ -78,10 +78,6 @@ CCNode* GameLayer::getBgTag(){
 	return getChildByTag(kTag_Background);
 }
 
-Player* GameLayer::getWisp(){
-	return this->_wisp;
-}
-
 void GameLayer::setWisp(Player* wisp){
 	assert(wisp != NULL);
 	_wisp = wisp;
