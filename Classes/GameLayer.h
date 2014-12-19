@@ -57,7 +57,7 @@ public:
             return s_pInstance;
         }
         
-        return s_pInstance;
+		return s_pInstance;
     }
 
 	

@@ -1,4 +1,6 @@
+#undef NDEBUG
 #include "GameLayer.h"
+#include <cassert>
 
 USING_NS_CC;
 
@@ -83,24 +85,29 @@ Player* GameLayer::getWisp(){
 }
 
 void GameLayer::setWisp(Player* wisp){
+	assert(wisp != NULL);
 	_wisp = wisp;
 	this->addChild(_wisp);
 }
 
 void GameLayer::setEnemy(Enemy* enemy){
+	assert(enemy != NULL);
 	_enemy = enemy;
 	this->addChild(_enemy, kTag_Enemy);
 }
 
 void GameLayer::setNode(CCNode* node){
+	assert(node != NULL);
 	this->addChild(node);
 }
 
 void GameLayer::setSprite(CCSprite* sprite){
+	assert(sprite != NULL);
 	this->addChild(sprite);
 }
 
 void GameLayer::setObstacles(Obstacles* obs){
+	assert(obs != NULL);
 	obs->setZOrder((int)kOrder::kOrder_Obstacles);
 	this->addChild(obs);
 }
