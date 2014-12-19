@@ -1,6 +1,4 @@
-#undef NDEBUG
 #include "GameLayer.h"
-#include <cassert>
 
 USING_NS_CC;
 

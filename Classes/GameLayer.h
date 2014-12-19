@@ -57,6 +57,7 @@ public:
             return s_pInstance;
         }
         
+		assert(s_pInstance != NULL);
 		return s_pInstance;
     }
 
