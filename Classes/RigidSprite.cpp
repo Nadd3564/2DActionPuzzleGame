@@ -11,7 +11,8 @@ RigidSprite::~RigidSprite()
 
 void RigidSprite::setRigidBody(b2Body* body)
 {
-    m_pBody = body;
+	assert(body != NULL);
+	m_pBody = body;
 }
 
 b2Body* RigidSprite::getBody(){

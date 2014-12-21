@@ -11,7 +11,7 @@
 #include "ObjectManager.h"
 #include "GameLayer.h"
 
-Player::Player(GameLayer* game) : GameObject(game){}
+Player::Player(GameLayer* game) : GameObject(game){ assert(game != NULL); }
 
 Player::~Player(){}
 
@@ -30,6 +30,7 @@ Player* Player::create(){
 
 Player* Player::initWisp()
 {
+	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
 	this->initWithFile("wisp_1.png");
 	this->setPosition(WISP_SET_POS);
 	this->setTag(_gameL->kTag_Wisp);
@@ -113,11 +114,13 @@ void Player::chain(CCNode* wisp, CCTouch* touch){
 }
 
 float Player::extendAngle(CCNode* wisp){
+	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
 	float angle = ((WISP_SET_POS - wisp->getPosition()).getAngle());
 	return angle;
 }
 
 CCPoint Player::extendPos(CCNode* wisp){
+	assert(extendAngle(wisp) != NULL);
 	CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(extendAngle(wisp)));
 	return pos;
 }
@@ -143,6 +146,7 @@ CCNode* Player::initChainOne(CCNode* chain1){
 			chain1->setZOrder(_gameL->kOrder_Chain1);
 			_gameL->setNode(chain1);
 		}
+	assert(chain1 != NULL);
 	return chain1;
 }
 
@@ -155,10 +159,12 @@ CCNode* Player::initChainTwo(CCNode* chain2){
 			chain2->setZOrder(_gameL->kOrder_Chain2);
 			_gameL->setNode(chain2);
 		}
+	assert(chain2 != NULL);
 	return chain2;
 }
 
 void Player::setChainOne(CCNode* chain1, CCPoint pos){
+	assert( (float)(0, 0) <= (CROSS_POS1.x, CROSS_POS1.y) );
 	chain1->setPosition(CROSS_POS1 - (CROSS_POS1 - pos) / 2);
 	chain1->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS1 - pos).getAngle() * -1));
 	chain1->setScaleX(CROSS_POS1.getDistance(pos));
@@ -166,6 +172,7 @@ void Player::setChainOne(CCNode* chain1, CCPoint pos){
 }
 
 void Player::setChainTwo(CCNode* chain2, CCPoint pos){
+	assert( (float)(0, 0) <= (CROSS_POS2.x, CROSS_POS2.y) );
 	chain2->setPosition(CROSS_POS2 - (CROSS_POS2 - pos) / 2);
 	chain2->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS2 - pos).getAngle() * -1));
 	chain2->setScaleX(CROSS_POS2.getDistance(pos));
@@ -201,6 +208,7 @@ void Player::addForceToWisp(CCNode* wisp){
 }
 
 CCPoint Player::calcPos(CCPoint touch){
+	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
 	//ウィスプの初期位置とタップ位置の距離
 	int dist = touch.getDistance(WISP_SET_POS);
 
@@ -214,6 +222,7 @@ CCPoint Player::calcPos(CCPoint touch){
 
 
 bool Player::gThanPos(int dist){
+	assert(dist != NULL);
 	if(dist > WISP_EXTEND)
 		return true;
 	return false;
@@ -221,6 +230,8 @@ bool Player::gThanPos(int dist){
 
 
 CCPoint Player::calcRetPos(CCPoint touch, int dist){
+	assert(dist != NULL);
+	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
 	return WISP_SET_POS + (touch - WISP_SET_POS) * WISP_EXTEND / dist;
 }
 
@@ -236,6 +247,7 @@ b2BodyDef Player::wispBodyDef(Player* wisp){
 
 //物理性質
 b2FixtureDef Player::wispFixtureDef(b2Shape* shape){
+	assert(shape != NULL);
 	b2FixtureDef fixtureDef;
     fixtureDef.shape = shape;
     fixtureDef.density = 0.5;
