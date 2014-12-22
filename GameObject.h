@@ -5,8 +5,8 @@
 //
 //
 
-#ifndef __TileGame__GameObject__
-#define __TileGame__GameObject__
+#ifndef __GameObject__
+#define __GameObject__
 
 #include <iostream>
 #include <cocos2d.h>

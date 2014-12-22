@@ -34,8 +34,10 @@ ObjectManager::~ObjectManager()
 bool ObjectManager::init()
 {
 	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
-	m_pStateMachine->changeState(new NormalState());
-    return true;
+	//初期状態を追加し、更に初期化
+	m_pStateMachine->pushState(new NormalState());
+	//m_pStateMachine->changeState(new NormalState());
+	return true;
 }
 
 void ObjectManager::setGameObjectPosition(const cocos2d::CCPoint &pts)

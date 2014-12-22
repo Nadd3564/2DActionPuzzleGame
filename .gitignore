@@ -40,5 +40,10 @@ proj.mac/
 proj.marmalade/
 proj.tizen/
 proj.win32/
+proj.winrt/
+proj.wp8-xaml/
+proj.ios/
+proj.wp8/
+proj.android/
 Debug.win32/
 ipch/

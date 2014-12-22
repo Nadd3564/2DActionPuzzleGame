@@ -24,6 +24,7 @@ NormalState::~NormalState() {
     
 }
 
+	//初期化
 bool NormalState::onStateEnter() {
     std::cout << "NormalState::onStateEnter()\n";
 	//ウィスプ生成
@@ -40,13 +41,14 @@ bool NormalState::onStateEnter() {
 	//障害物生成
 	Obstacles::create(_gameL->Obstacle4, ccp(536, 75), 0)->addObstacles();
 	
-
+	//コンテナにゲームオブジェクトを代入
 	_gObjects = _gm->getGameObjects();
 
     return true;
 }
 
 void NormalState::stateUpdate(float dt) {
+	//_gObjectsに追加されたゲームオブジェクトから関数を呼び出す
     for (std::vector<GameObject*>::iterator it = _gObjects.begin() ; it != _gObjects.end(); ++it){
         // Game::Instance()->getStateMachine()->changeState(new AlarmState());
 		(*it)->stateUpdate(dt);
@@ -66,7 +68,7 @@ void NormalState::onTouchEndedEvent(){
 }
 
 
-
+	//状態遷移時の処理
 bool NormalState::onStateExit() {
     return true;
 }

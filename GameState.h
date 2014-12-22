@@ -21,10 +21,8 @@ class GameState : public CCNode
 {
 public:
     virtual void stateUpdate(float dt) = 0;
-    
     virtual bool onStateEnter() = 0;
     virtual bool onStateExit() = 0;
-    
     virtual bool onTouchBeganEvent() = 0;
 	virtual void onTouchMovedEvent() = 0;
 	virtual void onTouchEndedEvent() = 0;

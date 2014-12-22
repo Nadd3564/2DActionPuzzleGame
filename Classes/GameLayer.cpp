@@ -44,7 +44,6 @@ bool GameLayer::init()
 	GameLayer::s_pInstance = this;
 
     this->initPhysics();
-	Game::Instance()->getStateMachine()->pushState(new NormalState());
 	
     //シングルタップモード
     this->setTouchMode(kCCTouchesOneByOne);
