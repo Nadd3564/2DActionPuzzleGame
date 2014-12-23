@@ -22,6 +22,7 @@ m_pStateMachine(0),
 m_playerLives(3),
 m_bLevelComplete(false)
 {
+	//状態マシーンの初期化
     m_pStateMachine = new StateMachine();
     m_currentLevel = 1;
 	_gameL = GameLayer::Instance();
@@ -34,7 +35,7 @@ ObjectManager::~ObjectManager()
 bool ObjectManager::init()
 {
 	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
-	//初期状態を追加し、更に初期化
+	//初期状態を追加し、状態を初期化
 	m_pStateMachine->pushState(new NormalState());
 	//m_pStateMachine->changeState(new NormalState());
 	return true;
