@@ -105,19 +105,6 @@ void GameLayer::setObstacles(Obstacles* obs){
 	this->addChild(obs);
 }
 
-CCTouch* GameLayer::getBeganTouch(){
-	return this->_beganTouch;
-}
-
-CCTouch* GameLayer::getMovedTouch(){
-	return this->_movedTouch;
-}
-
-CCTouch* GameLayer::getEndedTouch(){
-	return this->_endedTouch;
-}
-
-
 bool GameLayer::ccTouchBegan(CCTouch* touch, CCEvent* event){
 	this->_beganTouch = touch;
 	return _gm->handleBeganEvents();

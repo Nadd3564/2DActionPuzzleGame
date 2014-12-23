@@ -115,9 +115,9 @@ public:
 	void setSprite(CCSprite* sprite);
 	void setNode(CCNode* node);
 	void setObstacles(Obstacles* obs);
-	CCTouch* getBeganTouch();
-	CCTouch* getMovedTouch();
-	CCTouch* getEndedTouch();
+	CCTouch* getBeganTouch(){ return this->_beganTouch; };
+	CCTouch* getMovedTouch(){ return this->_movedTouch; };
+	CCTouch* getEndedTouch(){ return this->_endedTouch; };
 	CCNode* getWispTag();
 	CCNode* getBgTag();
 	CCNode* getChainOneTag();
