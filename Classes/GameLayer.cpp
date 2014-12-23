@@ -29,7 +29,7 @@ CCScene* GameLayer::createScene()
 	gm->init();
     scene->addChild(gm);
     layer->_gm = gm;
-
+   
 	return scene; 
 }
 

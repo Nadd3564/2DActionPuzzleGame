@@ -87,6 +87,7 @@ void Player::wispTouchEnded(){
 }
 
 bool Player::wispRectTouch(CCNode* wisp, CCTouch* touch){
+	//タッチした位置がウィスプ上なら、以降の処理を行なう
 	if(wisp && wisp->boundingBox().containsPoint(touch->getLocation()))
 		return true;
 	return false;
@@ -115,12 +116,14 @@ void Player::chain(CCNode* wisp, CCTouch* touch){
 
 float Player::extendAngle(CCNode* wisp){
 	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
+	//鎖の角度を計算
 	float angle = ((WISP_SET_POS - wisp->getPosition()).getAngle());
 	return angle;
 }
 
 CCPoint Player::extendPos(CCNode* wisp){
 	assert(extendAngle(wisp) != NULL);
+	//鎖の終点を計算
 	CCPoint pos = wisp->getPosition() + ccp(-25, 0).rotate(CCPoint::forAngle(extendAngle(wisp)));
 	return pos;
 }
@@ -130,6 +133,7 @@ void Player::removeAndAdd(CCNode* wisp, CCTouch* touch){
 	{
 		//鎖を削除
 		_gameL->removeChain();
+		//ウィスプの位置を計算
 		wisp->setPosition(calcPos(touch->getLocation()));
 
 		//ウィスプに力を加える
@@ -207,13 +211,15 @@ void Player::addForceToWisp(CCNode* wisp){
 	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
 }
 
+//発射前のウィスプの移動範囲を制御
 CCPoint Player::calcPos(CCPoint touch){
 	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
 	//ウィスプの初期位置とタップ位置の距離
 	int dist = touch.getDistance(WISP_SET_POS);
 
+	//distがWISP_EXTEND以上になったら
 	if(gThanPos(dist))
-		//距離がWISP_EXTENDとなる位置を返す
+		//距離がWISP_EXTENDとなる位置を返す（範囲制限）
 		return calcRetPos(touch, dist);
 	else
 		//タップ位置を返す
@@ -232,6 +238,7 @@ bool Player::gThanPos(int dist){
 CCPoint Player::calcRetPos(CCPoint touch, int dist){
 	assert(dist != NULL);
 	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
+	//タップ位置がWISP_EXTEND外であれば、その範囲内に位置するように処理
 	return WISP_SET_POS + (touch - WISP_SET_POS) * WISP_EXTEND / dist;
 }
 
