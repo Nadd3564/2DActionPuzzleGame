@@ -17,6 +17,7 @@ Obstacles* Obstacles::create(int obstacle, CCPoint pos, float angle){
 		GameLayer::Instance()->setObstacles(obs);
 		return obs;
 	}
+	//‰½“x‚à¶¬‚µ‚È‚¢‚æ‚¤ƒK[ƒh‚ğ‚©‚¯‚é
 	CC_SAFE_DELETE(obs);
 	return NULL;
 }

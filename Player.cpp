@@ -24,6 +24,7 @@ Player* Player::create(){
 		GameLayer::Instance()->setWisp(wisp);
 		return wisp;
 	}
+	//‰½“x‚à¶¬‚µ‚È‚¢‚æ‚¤ƒK[ƒh‚ğ‚©‚¯‚é
 	CC_SAFE_DELETE(wisp);
 	return NULL;
 }

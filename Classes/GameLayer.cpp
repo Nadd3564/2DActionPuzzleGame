@@ -9,6 +9,7 @@ GameLayer::GameLayer() {
 }
 
 GameLayer::~GameLayer() {
+	//•s—v‚É‚È‚Á‚½‚çƒƒ‚ƒŠ‚ğŠJ•ú
     delete _world;
     _world = NULL;
 }

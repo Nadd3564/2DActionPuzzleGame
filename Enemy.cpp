@@ -24,6 +24,7 @@ Enemy* Enemy::create(CCPoint position, const char* fileName)
 		GameLayer::Instance()->setEnemy(enemy);
 		return enemy;
 	}
+	//‰½“x‚à¶¬‚µ‚È‚¢‚æ‚¤ƒK[ƒh‚ğ‚©‚¯‚é
 	CC_SAFE_DELETE(enemy);
 	return NULL;
 }
