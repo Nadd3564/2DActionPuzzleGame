@@ -17,7 +17,7 @@ Obstacles* Obstacles::create(int obstacle, CCPoint pos, float angle){
 		GameLayer::Instance()->setObstacles(obs);
 		return obs;
 	}
-	//何度も生成しないようガードをかける
+	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
 	CC_SAFE_DELETE(obs);
 	return NULL;
 }

@@ -24,7 +24,7 @@ Player* Player::create(){
 		GameLayer::Instance()->setWisp(wisp);
 		return wisp;
 	}
-	//何度も生成しないようガードをかける
+	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
 	CC_SAFE_DELETE(wisp);
 	return NULL;
 }

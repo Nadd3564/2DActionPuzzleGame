@@ -24,7 +24,7 @@ Enemy* Enemy::create(CCPoint position, const char* fileName)
 		GameLayer::Instance()->setEnemy(enemy);
 		return enemy;
 	}
-	//何度も生成しないようガードをかける
+	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
 	CC_SAFE_DELETE(enemy);
 	return NULL;
 }
