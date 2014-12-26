@@ -25,6 +25,7 @@ Player* Player::create(){
 		return wisp;
 	}
 	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
+	//何度も生成しないようにガードをかける
 	CC_SAFE_DELETE(wisp);
 	return NULL;
 }
@@ -207,8 +208,9 @@ void Player::addForceToWisp(CCNode* wisp){
 	//ウィスプを可動出来るようにする
 	Player* will = dynamic_cast<Player*>(wisp);
 	will->getBody()->SetType(b2_dynamicBody);
-	//ウィスプに力を加える
+	//質量をセット
 	will->getBody()->ResetMassData();
+	//ウィスプに力を加える
 	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
 }
 

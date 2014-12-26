@@ -18,6 +18,7 @@ Obstacles* Obstacles::create(int obstacle, CCPoint pos, float angle){
 		return obs;
 	}
 	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
+	//何度も生成しないようにガードをかける
 	CC_SAFE_DELETE(obs);
 	return NULL;
 }

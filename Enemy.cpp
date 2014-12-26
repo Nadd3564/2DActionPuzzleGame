@@ -25,6 +25,7 @@ Enemy* Enemy::create(CCPoint position, const char* fileName)
 		return enemy;
 	}
 	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
+	//何度も生成しないようにガードをかける
 	CC_SAFE_DELETE(enemy);
 	return NULL;
 }
