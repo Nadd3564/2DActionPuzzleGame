@@ -10,8 +10,8 @@ void CollisionListener::BeginContact(b2Contact* contact) {
 
 	GameLayer* gameL = GameLayer::Instance();
 
-    RigidSprite * spriteA = (RigidSprite *)bodyA->GetUserData();
-	RigidSprite * spriteB = (RigidSprite *)bodyB->GetUserData();
+    RigidSprite *spriteA = static_cast<RigidSprite *>(bodyA->GetUserData());
+	RigidSprite *spriteB = static_cast<RigidSprite *>(bodyB->GetUserData());
 
 	if (spriteA && spriteB) {
 
