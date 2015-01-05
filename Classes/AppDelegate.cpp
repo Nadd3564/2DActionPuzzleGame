@@ -26,6 +26,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	pEGLView->setDesignResolutionSize(960, 640, ResolutionPolicy::kResolutionFixedHeight);
 
+	CCFileUtils::sharedFileUtils()->addSearchPath("Resources");
+
     // create a scene. it's an autorelease object
     CCScene *pScene = GameLayer::createScene();
 
