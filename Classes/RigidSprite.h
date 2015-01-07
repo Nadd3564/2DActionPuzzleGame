@@ -18,6 +18,7 @@ public:
 	~RigidSprite();
     void setRigidBody(b2Body* body);
 	b2Body* getBody();
+	float getPow();
     
 private:
 
