@@ -12,7 +12,9 @@
 
 Enemy::Enemy(GameLayer * game) : GameObject(game){}
 
-Enemy::~Enemy(){}
+Enemy::~Enemy(){
+	CC_SAFE_RELEASE(this);
+}
 
 Enemy* Enemy::create(CCPoint position, const char* fileName)
 {
@@ -38,6 +40,9 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 
 	//物理ボディ生成
 	_body = _gameL->getWorld()->CreateBody(&enemyBodyDef(this));
+	_body->SetSleepingAllowed(true);
+	_body->SetLinearDamping(0.2);
+	_body->SetAngularDamping(0.8);
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
@@ -54,11 +59,16 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 
 void Enemy::addEnemy(){
 	create(ccp(636, 335), "enemy1.png");
+	create(ccp(536, 125), "enemy1.png");
 }
 
 void Enemy::stateUpdate(float dt){
+	if (this == NULL)
+		return;
     std::cout << "Update for the enemy.";
-	update(dt);
+	setPositionX(_body->GetPosition().x * PTM_RATIO);
+	setPositionY(_body->GetPosition().y * PTM_RATIO);
+	setRotation(CC_RADIANS_TO_DEGREES(-1 * _body->GetAngle()));
 }
 
 //物理ボディ生成
@@ -75,6 +85,7 @@ b2BodyDef Enemy::enemyBodyDef(Enemy* enemy){
 b2FixtureDef Enemy::enemyFixtureDef(b2Shape* shape){
 	b2FixtureDef fixtureDef;
     fixtureDef.shape = shape;
+	fixtureDef.filter.categoryBits = 0x0010;
     fixtureDef.density = 0.5;
     fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.3;
@@ -84,7 +95,8 @@ b2FixtureDef Enemy::enemyFixtureDef(b2Shape* shape){
 void Enemy::update (float dt) {
     
     if (_body && isVisible()) {
-        setPositionX(_body->GetPosition().x * PTM_RATIO);
-        setPositionY(_body->GetPosition().y * PTM_RATIO);
+		setPositionX(_body->GetPosition().x * PTM_RATIO);
+		setPositionY(_body->GetPosition().y * PTM_RATIO);
+		setRotation(CC_RADIANS_TO_DEGREES(-1 * _body->GetAngle()));
     }
 }
