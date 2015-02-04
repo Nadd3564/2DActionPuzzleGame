@@ -5,6 +5,8 @@
 //
 //
 
+#define SCREENSIZE CCDirector::sharedDirector()->getWinSize()
+
 #include "ObjectManager.h"
 #include "NormalState.h"
 #include "ApproachState.h"
@@ -97,7 +99,7 @@ void ObjectManager::setCurrentLevel(int currentLevel)
 
 void ObjectManager::update(float dt)
 {
-    m_pStateMachine->update(dt);
+		m_pStateMachine->update(dt);
 }
 
 //GameLayerで呼び出しているインプットの処理
@@ -127,7 +129,7 @@ CCSprite* ObjectManager::initBackground(){
 	//背景の設定
 	CCSprite* background = CCSprite::create("background1.png");
 	background->setAnchorPoint(ccp(0.0, 0.5));
-	background->setPosition(ccp(0, WINSIZE.height / 2));
+	background->setPosition(ccp(0, SCREENSIZE.height / 2));
 	background->setTag(_gameL->kTag_Background);
 	background->setZOrder(_gameL->kOrder_Background);
 	_gameL->setSprite(background);
@@ -146,7 +148,7 @@ CCNode* ObjectManager::initGround(){
 	b2FixtureDef fixtureDef;
     fixtureDef.shape = &groundBox;
     fixtureDef.density = 0.5;
-    fixtureDef.restitution = 0.5;
+	fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.8;
 	body->CreateFixture(&fixtureDef);
 	
@@ -163,13 +165,14 @@ b2BodyDef ObjectManager::groundBodyDef(){
 	 b2BodyDef groundBodyDef;
 	groundBodyDef.type = b2_staticBody;
     groundBodyDef.position.Set(0.0f, 0.0f);
+	groundBodyDef.userData = this;
 	return groundBodyDef;
 }
 
 // 地面の形と大きさの定義
 b2EdgeShape ObjectManager::groundShape(){
 	b2EdgeShape groundBox;
-    groundBox.Set(b2Vec2(0, WINSIZE.height * 0.1 / PTM_RATIO),
-                  b2Vec2(WINSIZE.width / PTM_RATIO, WINSIZE.height * 0.1 / PTM_RATIO));
+	groundBox.Set(b2Vec2(0, SCREENSIZE.height * 0.1 / PTM_RATIO),
+                  b2Vec2(SCREENSIZE.width / PTM_RATIO, SCREENSIZE.height * 0.1 / PTM_RATIO));
 	return groundBox;
 }
