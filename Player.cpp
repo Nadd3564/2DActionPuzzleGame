@@ -4,12 +4,14 @@
 //  Created by athenaeum on 2014/11/18.
 //
 //
-#define CROSS_POS1 ccp(80, 135)
-#define CROSS_POS2 ccp(125, 140)
+
 
 #include "Player.h"
 #include "ObjectManager.h"
 #include "GameLayer.h"
+
+const CCPoint CROSS_ONE_POS = ccp(80, 135);
+const CCPoint CROSS_TWO_POS = ccp(125, 140);
 
 Player::Player(GameLayer* game) : GameObject(game){ assert(game != NULL); }
 
@@ -170,18 +172,18 @@ CCNode* Player::initChainTwo(CCNode* chain2){
 }
 
 void Player::setChainOne(CCNode* chain1, CCPoint pos){
-	assert( (float)(0, 0) <= (CROSS_POS1.x, CROSS_POS1.y) );
-	chain1->setPosition(CROSS_POS1 - (CROSS_POS1 - pos) / 2);
-	chain1->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS1 - pos).getAngle() * -1));
-	chain1->setScaleX(CROSS_POS1.getDistance(pos));
+	assert((float)(0, 0) <= (CROSS_ONE_POS.x, CROSS_ONE_POS.y));
+	chain1->setPosition(CROSS_ONE_POS - (CROSS_ONE_POS - pos) / 2);
+	chain1->setRotation(CC_RADIANS_TO_DEGREES((CROSS_ONE_POS - pos).getAngle() * -1));
+	chain1->setScaleX(CROSS_ONE_POS.getDistance(pos));
 	chain1->setScaleY(10);
 }
 
 void Player::setChainTwo(CCNode* chain2, CCPoint pos){
-	assert( (float)(0, 0) <= (CROSS_POS2.x, CROSS_POS2.y) );
-	chain2->setPosition(CROSS_POS2 - (CROSS_POS2 - pos) / 2);
-	chain2->setRotation(CC_RADIANS_TO_DEGREES((CROSS_POS2 - pos).getAngle() * -1));
-	chain2->setScaleX(CROSS_POS2.getDistance(pos));
+	assert((float)(0, 0) <= (CROSS_TWO_POS.x, CROSS_TWO_POS.y));
+	chain2->setPosition(CROSS_TWO_POS - (CROSS_TWO_POS - pos) / 2);
+	chain2->setRotation(CC_RADIANS_TO_DEGREES((CROSS_TWO_POS - pos).getAngle() * -1));
+	chain2->setScaleX(CROSS_TWO_POS.getDistance(pos));
 	chain2->setScaleY(10);
 }
 

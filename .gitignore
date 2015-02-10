@@ -34,6 +34,7 @@
 *.sdf
 
 Resources/Resources/
+backup_20150210/
 proj.blackberry/
 proj.linux/
 proj.mac/
