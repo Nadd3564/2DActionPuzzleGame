@@ -33,7 +33,7 @@
 *.app
 *.sdf
 
-Resources/Resources/
+Resources/
 backup_20150210/
 proj.blackberry/
 proj.linux/
