@@ -19,7 +19,7 @@ b2Body* RigidSprite::getBody(){
 	return m_pBody;
 }
 
-//ƒXƒvƒ‰ƒCƒg‚ÌˆÚ“®—Ê‚Ì‚Qæ‚ðŽæ“¾
+//ƒXƒvƒ‰ƒCƒg‚Ìc‰¡ˆÚ“®—Ê‚Ì‚Qæ‚Ì˜a‚ðŽæ“¾
 float RigidSprite::getPow() {
 	if (m_pBody) {
 		return pow(m_pBody->GetLinearVelocity().x, 2) +
