@@ -42,7 +42,6 @@ protected:
 	GameLayer* _gameL;
 	ObjectManager* _gm;
 	std::vector<GameObject*> _gObjects;
-
 };
 
 #endif /* defined(__GameState__) */
