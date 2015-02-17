@@ -29,7 +29,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	CCFileUtils::sharedFileUtils()->addSearchPath("Resources");
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = GameLayer::createScene();
+    CCScene *pScene = GameLayer::createScene(3, 1);
 
     // run
     pDirector->runWithScene(pScene);
