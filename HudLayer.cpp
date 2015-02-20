@@ -4,7 +4,8 @@ using namespace cocos2d;
 
 bool HudLayer::init()
 {
-    if (CCLayer::init()) {
+    if (CCLayer::init())
+	{
         CCSize winSize = CCDirector::sharedDirector()->getWinSize();
         
         _label = new CCLabelTTF();
