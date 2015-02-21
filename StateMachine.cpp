@@ -7,13 +7,9 @@
 
 #include "StateMachine.h"
 
-StateMachine::StateMachine() {
-    
-}
+StateMachine::StateMachine(){}
 
-StateMachine::~StateMachine() {
-    
-}
+StateMachine::~StateMachine(){}
 
 void StateMachine::pushState(GameState* pState) {
 	//コンテナの最後に新しい状態を追加
@@ -26,7 +22,7 @@ void StateMachine::changeState(GameState* pState) {
 	//ステートが存在する場合
     if(!m_gameStates.empty())
     {
-		//現在の状態と引数の状態が同一の場合、抜ける
+		//現在の状態と引数の状態が同一の場合、以降の処理を行なわない
         if(m_gameStates.back()->getStateID() == pState->getStateID())
         {
             return;
@@ -36,11 +32,11 @@ void StateMachine::changeState(GameState* pState) {
         if(m_gameStates.back()->onStateExit())
         {
             delete m_gameStates.back();
-			//現在状態を削除（m_gameStates）
+			//現在状態を削除
             m_gameStates.pop_back();
         }
         
-		////コンテナの最後に新しい状態を追加
+		//コンテナの最後に新しい状態を追加
         m_gameStates.push_back(pState);
 		//追加した状態（コンテナの最後）を取り出す。更に、その状態の初期化
         m_gameStates.back()->onStateEnter();
@@ -54,25 +50,30 @@ void StateMachine::popState() {
 		//状態終了の処理を実行し、現在の状態を削除
         if(m_gameStates.back()->onStateExit())
         {
-            delete m_gameStates.back();
 			//現在の状態を削除（m_gameStates）
+            delete m_gameStates.back();
+			//前の状態へ戻る
             m_gameStates.pop_back();
         }
     }
 }
 
-void StateMachine::update(float dt) {
+void StateMachine::update(float dt)
+{
     m_gameStates.back()->stateUpdate(dt);
 }
 
-bool StateMachine::onBeganEvent(){
+bool StateMachine::onBeganEvent()
+{
 	return m_gameStates.back()->onTouchBeganEvent();
 }
 
-void StateMachine::onMovedEvent(){
+void StateMachine::onMovedEvent()
+{
 	m_gameStates.back()->onTouchMovedEvent();
 }
 
-void StateMachine::onEndedEvent(){
+void StateMachine::onEndedEvent()
+{
 	m_gameStates.back()->onTouchEndedEvent();
 }

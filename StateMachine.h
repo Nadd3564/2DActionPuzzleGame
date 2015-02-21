@@ -14,6 +14,7 @@
 class StateMachine
 {
 public:
+
     StateMachine();
     ~StateMachine();
     
@@ -24,10 +25,11 @@ public:
     bool onBeganEvent();
 	void onMovedEvent();
 	void onEndedEvent();
-    
-protected:
+ 
 private:
+
     std::vector<GameState*> m_gameStates;
+
 };
 
 typedef StateMachine theStateMachine;
