@@ -20,28 +20,31 @@ using namespace cocos2d;
 class NormalState : public GameState
 {
 public:
-    virtual void stateUpdate(float dt);
-    virtual bool onStateEnter();
-    virtual bool onStateExit();
-    virtual bool onTouchBeganEvent();
-	virtual void onTouchMovedEvent();
-	virtual void onTouchEndedEvent();
+
+	void stateUpdate(float dt) override;
+	bool onStateEnter() override;
+    bool onStateExit() override;
+    bool onTouchBeganEvent() override;
+	void onTouchMovedEvent() override;
+	void onTouchEndedEvent() override;
     
-    virtual std::string getStateID() { return s_normalID; }
+    std::string getStateID() override { return s_normalID; }
     
     NormalState();
     ~NormalState();
     
 private:
-    float _tileWidth;
-    float _tileHeight;
-    float _mapWidth;
-    float _mapHeight;
+
 	Player* _wisp;
 	Enemy* _enemy;
 	Obstacles* _obs;
 	static const std::string s_normalID;
-    
+
+    float _tileWidth;
+    float _tileHeight;
+    float _mapWidth;
+    float _mapHeight;
+	  
 };
 
 
