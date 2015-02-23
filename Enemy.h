@@ -18,7 +18,7 @@ class Enemy : public GameObject
 public:
 	Enemy(GameLayer * game);
 	~Enemy();
-	virtual void stateUpdate(float dt);
+	void stateUpdate(float dt) override;
     static Enemy* create(CCPoint position, const char* fileName);
 	void addEnemy();
     b2BodyDef enemyBodyDef(Enemy* enemy);

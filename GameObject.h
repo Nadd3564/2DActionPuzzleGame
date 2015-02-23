@@ -12,22 +12,20 @@
 #include <cocos2d.h>
 #include "RigidSprite.h"
 
-
 class GameLayer;
 
 class GameObject : public RigidSprite
 {
 public:
-    //virtual void setStrategy();
-	virtual void stateUpdate(float dt) = 0;
+
+	CC_SYNTHESIZE(b2Body *, _body, Body);
+	CC_SYNTHESIZE(GameLayer *, _gameL, gGame);
+
 	GameObject(GameLayer* game);
 	~GameObject();
-	CC_SYNTHESIZE(b2Body *, _body, Body);
-    CC_SYNTHESIZE(GameLayer *, _gameL, gGame);
-	virtual void update(float dt);
 
-private:
-    //std::string strategy;
+    virtual void stateUpdate(float dt) = 0;
+	virtual void update(float dt);
     
 };
 
