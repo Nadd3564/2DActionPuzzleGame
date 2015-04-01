@@ -42,7 +42,7 @@ Player* Player::initWisp()
 
 
 	//物理ボディ生成
-	_body = _gameL->getWorld()->CreateBody(&wispBodyDef(this));
+	this->_body = this->_gameL->getWorld()->CreateBody(&wispBodyDef(this));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
