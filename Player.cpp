@@ -10,6 +10,7 @@
 #include "ObjectManager.h"
 #include "GameLayer.h"
 
+const float ACCELERATION = 0.11;
 const CCPoint CROSS_ONE_POS = ccp(80, 135);
 const CCPoint CROSS_TWO_POS = ccp(125, 140);
 
@@ -190,7 +191,7 @@ void Player::addForceToWisp(CCNode* wisp){
 	b2Body *willBody = will->getBody();
 	willBody->SetType(b2_dynamicBody);
 	//ウィスプに力を加える
-	CCPoint force = (will->getPosition() - WISP_SET_POS) * -0.11;
+	CCPoint force = (will->getPosition() - WISP_SET_POS) * -ACCELERATION;
 	willBody->ApplyLinearImpulse(b2Vec2(force.x, force.y), willBody->GetWorldCenter());
 }
 

@@ -66,7 +66,7 @@ b2BodyDef Enemy::enemyBodyDef(Enemy* enemy)
     bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(enemy->getPositionX() / PTM_RATIO,
                                enemy->getPositionY() / PTM_RATIO);
-	bodyDef.userData = enemy; 
+	bodyDef.userData = this; 
 	return bodyDef;
 }
 

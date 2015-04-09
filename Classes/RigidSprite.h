@@ -19,7 +19,7 @@ public:
 
     void setRigidBody(b2Body* body);
 	b2Body* getBody();
-	float getPow();
+	float getVelocitySum();
     
 protected:
 

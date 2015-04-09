@@ -1,5 +1,5 @@
 #include "AppDelegate.h"
-#include "GameLayer.h"
+#include "TitleLayer.h"
 
 USING_NS_CC;
 
@@ -19,7 +19,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setOpenGLView(pEGLView);
 	
     // turn on display FPS
-    pDirector->setDisplayStats(true);
+    pDirector->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     pDirector->setAnimationInterval(1.0 / 60);
@@ -29,7 +29,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	CCFileUtils::sharedFileUtils()->addSearchPath("Resources");
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = GameLayer::createScene(3, 1);
+    CCScene *pScene = TitleLayer::createScene();
 
     // run
     pDirector->runWithScene(pScene);

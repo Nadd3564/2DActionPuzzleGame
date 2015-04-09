@@ -9,6 +9,8 @@
 #include "cocos2d.h"
 #include "Player.h"
 #include "GameLayer.h"
+#include "TitleLayer.h"
+
 
 using namespace cocos2d;
 
@@ -28,7 +30,7 @@ bool NormalState::onStateEnter() {
 	//ウィスプ生成
 	_wisp = Player::create();
 	//エネミー生成
-	Enemy::create(ccp(436, 125), "enemy2.png")->addEnemy();
+	Enemy::create(ccp(636, 125), "enemy2.png")->addEnemy();
 	//背景生成
 	OM::getInstance()->initBackground();
 	//地面生成
@@ -53,18 +55,15 @@ void NormalState::stateUpdate(float dt)
 	int32 positionIterations = 10;
 	b2World *world = GAME::getInstance()->getWorld();
 	world->Step(dt, velocityIterations, positionIterations);
-
+	
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		if (b->GetUserData() != NULL) {
-			Enemy* myActor = (Enemy *)b->GetUserData();
-			if (myActor->getIsDead()){
-				world->DestroyBody(b);
-				myActor->removeFromParent();
-				//OM::getInstance()->removeFromParent();
-				//CCScene *hello = HelloWorld::scene();
-				//CCDirector::sharedDirector()->replaceScene(hello);
-				continue;
+			RigidSprite* myActor = (RigidSprite *)b->GetUserData();
+			if ((myActor->getTag() == kTag_Enemy) && (myActor->getIsDead())){
+					world->DestroyBody(b);
+					myActor->removeFromParent();
+					continue;
 			}
 			myActor->setPosition(ccp(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO));
 			myActor->setRotation(-1 * CC_RADIANS_TO_DEGREES(b->GetAngle()));

@@ -14,7 +14,7 @@ Obstacles* Obstacles::create(int obstacle, CCPoint pos, float angle){
 	if (obs) {
         obs->initObstacles(obstacle, pos, angle);
 		obs->autorelease();
-		GameLayer::getInstance()->addChild(obs, kTag_Obstacles, (int)kOrder_Obstacles);
+		GameLayer::getInstance()->addChild(obs, (int)kOrder_Obstacles, kTag_Obstacles);
 		return obs;
 	}
 	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
@@ -136,8 +136,7 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 	 }
     
 	 this->setRigidBody(m_pBody);
-	 OM::getInstance()->addGameObject(this);
-	return this;
+	 return this;
 }
 
 void Obstacles::addObstacles(){

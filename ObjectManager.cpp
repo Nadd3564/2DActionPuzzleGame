@@ -113,7 +113,7 @@ b2BodyDef ObjectManager::groundBodyDef(){
 	 b2BodyDef groundBodyDef;
 	groundBodyDef.type = b2_staticBody;
     groundBodyDef.position.Set(0.0f, 0.0f);
-	//groundBodyDef.userData = this;
+	groundBodyDef.userData = this;
 	return groundBodyDef;
 }
 
