@@ -188,10 +188,9 @@ void Player::addForceToWisp(CCNode* wisp){
 	//ウィスプを可動出来るようにする
 	Player* will = dynamic_cast<Player*>(wisp);
 	will->getBody()->SetType(b2_dynamicBody);
-	//質量をセット
-	will->getBody()->ResetMassData();
 	//ウィスプに力を加える
-	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 1.0f), will->getBody()->GetWorldCenter());
+	CCPoint force = (will->getPosition() - WISP_SET_POS) * -0.11;
+	will->getBody()->ApplyLinearImpulse(b2Vec2(force.x, force.y), will->getBody()->GetWorldCenter());
 }
 
 //発射前のウィスプの移動範囲を制御
