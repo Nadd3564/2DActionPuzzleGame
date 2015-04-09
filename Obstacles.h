@@ -8,12 +8,21 @@
 
 USING_NS_CC;
 
+enum ObstacleType
+{
+	Obstacle1,
+	Obstacle2,
+	Obstacle3,
+	Obstacle4,
+};
+
 class Obstacles : public GameObject
 {
 public:
-	Obstacles(GameLayer* game);
+
+	Obstacles();
 	~Obstacles();
-	virtual void stateUpdate(float dt);
+	
 	static Obstacles* create(int obstacle, CCPoint pos, float angle);
 	void addObstacles();
 	std::string fileNameInit(int obstacle);

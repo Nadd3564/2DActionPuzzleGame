@@ -10,19 +10,19 @@
 #include "GameLayer.h"
 
 
-Enemy::Enemy(GameLayer * game) : GameObject(game){}
+Enemy::Enemy(){}
 
 Enemy::~Enemy(){}
 
 Enemy* Enemy::create(CCPoint position, const char* fileName)
 {
 	//エネミー生成
-	Enemy* enemy = new Enemy(GameLayer::Instance());
+	Enemy* enemy = new Enemy();
 	if (enemy)
 	{
         enemy->initEnemy(position, fileName);
 		enemy->autorelease();
-		GameLayer::Instance()->addChild(enemy);
+		GAME::getInstance()->addChild(enemy, kTag_Enemy, kOrder_Enemy);
 		return enemy;
 	}
 	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
@@ -35,25 +35,21 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 {
 	this->initWithFile(FileName);
 	this->setPosition(position);
-	this->setTag(_gameL->kTag_Enemy);
-	this->setZOrder(_gameL->kOrder_Enemy);
-
+	
 	//物理ボディ生成
-	_body = _gameL->getWorld()->CreateBody(&enemyBodyDef(this));
-	_body->SetSleepingAllowed(true);
-	_body->SetLinearDamping(0.2);
-	_body->SetAngularDamping(0.8);
+	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&enemyBodyDef(this));
+	this->m_pBody->SetSleepingAllowed(true);
+	this->m_pBody->SetLinearDamping(0.2);
+	this->m_pBody->SetAngularDamping(0.8);
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
-   spriteShape.m_radius = this->getContentSize().width * 0.4 / PTM_RATIO;
+	spriteShape.m_radius = this->getContentSize().width * 0.4 / PTM_RATIO;
 
     //物理性質
-	_body->CreateFixture(&enemyFixtureDef(&spriteShape));
-	
-	this->setRigidBody(_body);
-	Game::Instance()->addGameObjectMap("enemy", this);
-	Game::Instance()->addGameObject(this);
+	this->m_pBody->CreateFixture(&enemyFixtureDef(&spriteShape));
+	this->setRigidBody(this->m_pBody);
+	this->scheduleUpdate();
 	return this;
 }
 
@@ -61,16 +57,6 @@ void Enemy::addEnemy()
 {
 	create(ccp(636, 335), "enemy1.png");
 	create(ccp(536, 125), "enemy1.png");
-}
-
-void Enemy::stateUpdate(float dt)
-{
-	if (this == NULL)
-		return;
-    std::cout << "Update for the enemy.";
-	setPositionX(_body->GetPosition().x * PTM_RATIO);
-	setPositionY(_body->GetPosition().y * PTM_RATIO);
-	setRotation(CC_RADIANS_TO_DEGREES(-1 * _body->GetAngle()));
 }
 
 //物理ボディ生成
@@ -96,12 +82,4 @@ b2FixtureDef Enemy::enemyFixtureDef(b2Shape* shape)
 	return fixtureDef;
 }
 
-void Enemy::update (float dt)
-{
-    if (_body && isVisible())
-	{
-		setPositionX(_body->GetPosition().x * PTM_RATIO);
-		setPositionY(_body->GetPosition().y * PTM_RATIO);
-		setRotation(CC_RADIANS_TO_DEGREES(-1 * _body->GetAngle()));
-    }
-}
+void Enemy::update (float dt){}

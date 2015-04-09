@@ -12,7 +12,7 @@
 const std::string ApproachState::s_approachID = "APPROACH";
 
 void ApproachState::s_approachToNormal() {
-    Game::Instance()->getStateMachine()->changeState(new NormalState());
+	OM::getInstance()->getStateMachine()->changeState(new NormalState());
 }
 
 void ApproachState::s_approachToIdle() {

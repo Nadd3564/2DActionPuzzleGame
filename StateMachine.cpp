@@ -63,17 +63,17 @@ void StateMachine::update(float dt)
     m_gameStates.back()->stateUpdate(dt);
 }
 
-bool StateMachine::onBeganEvent()
+bool StateMachine::onBeganEvent(CCTouch* pTouch, CCEvent* pEvent)
 {
-	return m_gameStates.back()->onTouchBeganEvent();
+	return m_gameStates.back()->onTouchBeganEvent(pTouch, pEvent);
 }
 
-void StateMachine::onMovedEvent()
+void StateMachine::onMovedEvent(CCTouch* pTouch, CCEvent* pEvent)
 {
-	m_gameStates.back()->onTouchMovedEvent();
+	m_gameStates.back()->onTouchMovedEvent(pTouch, pEvent);
 }
 
-void StateMachine::onEndedEvent()
+void StateMachine::onEndedEvent(CCTouch* pTouch, CCEvent* pEvent)
 {
-	m_gameStates.back()->onTouchEndedEvent();
+	m_gameStates.back()->onTouchEndedEvent(pTouch, pEvent);
 }

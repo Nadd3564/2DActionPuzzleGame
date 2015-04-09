@@ -1,46 +1,64 @@
 #include "GameLayer.h"
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
 
 GameLayer* GameLayer::s_pInstance = 0;
 
-GameLayer::GameLayer() {
+GameLayer::GameLayer():
+m_pullBack(NULL),
+m_startPoint(ccp(NULL, NULL)),
+m_canFire(true),
+m_pWisp(NULL)
+{
 
 }
 
-GameLayer::~GameLayer() {
-	//不要になったらメモリを開放
-    delete _world;
-    _world = NULL;
+GameLayer::~GameLayer()
+{
+	delete m_pWorld;
+	m_pWorld = NULL;
+
+	delete m_pCollisionListener;
+	m_pCollisionListener = NULL;
 }
 
 //シーン生成
-CCScene* GameLayer::createScene()
+CCScene* GameLayer::createScene(int zanki, int level)
 {
 	CCScene* scene = CCScene::create();
-	GameLayer* layer = GameLayer::create();
+	GameLayer* layer = GameLayer::create(zanki, level);
 	scene->addChild(layer);
 
-	HudLayer *hud = new HudLayer();
-    hud->init();
-    scene->addChild(hud);
-    layer->_hud = hud;
-
-	ObjectManager *gm = ObjectManager::Instance();
+	ObjectManager *gm = OM::getInstance();
 	gm->init();
     scene->addChild(gm);
-    layer->_gm = gm;
    
+	HudLayer *hud = new HudLayer();
+	hud->init();
+	scene->addChild(hud);
+	layer->m_pHud = hud;
+
 	return scene; 
 }
 
+GameLayer* GameLayer::create(int zanki, int level){
+	GameLayer *layer = new GameLayer();
+	layer->init(zanki, level);
+	layer->autorelease();
 
-bool GameLayer::init()
+	return layer;
+}
+
+bool GameLayer::init(int zanki, int level)
 {
     if ( !CCLayer::init() )
     {
         return false;
     }
+
+	m_zanki = zanki;
+	m_level = level;
 
 	GameLayer::s_pInstance = this;
 
@@ -50,7 +68,7 @@ bool GameLayer::init()
     this->setTouchMode(kCCTouchesOneByOne);
 	this->setTouchEnabled(true);
 
-    scheduleUpdate();
+    this->scheduleUpdate();
 	
     return true;
 }
@@ -59,70 +77,45 @@ void GameLayer::initPhysics(){
 	//重力
 	b2Vec2 gravity;
     gravity.Set(0.0f, -9.8f);
-    _world = new b2World(gravity);
+	m_pWorld = new b2World(gravity);
 	//動きが止まった物体について、計算を省略
-    _world->SetAllowSleeping(true);
+	m_pWorld->SetAllowSleeping(true);
 	//オブジェクトの衝突判定をする時にすり抜けないように調整して計算する。
-    _world->SetContinuousPhysics(true);	
+	m_pWorld->SetContinuousPhysics(true);
+	//衝突イベントハンドラー
+	m_pCollisionListener = new CollisionListener();
+	m_pWorld->SetContactListener(m_pCollisionListener);
 }
 
 void GameLayer::onEnter(){
 	CCLayer::onEnter();
+	this->m_pWisp = dynamic_cast<Player *>(this->getChildByTag(kTag_Wisp));
 }
 
-CCNode* GameLayer::getWispTag(){
-	return getChildByTag(kTag_Wisp);
+bool GameLayer::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent){
+	/*CCPoint tap = pTouch->getLocation();
+	CCPoint playerPos = m_pWisp->getPosition();
+	float diffx = tap.x - playerPos.x;
+	float diffy = tap.y - playerPos.y;
+	float diff = pow(diffx, 2) + pow(diffy, 2);
+	float angle = atan2(diffy, diffx);
+	m_startPoint = ccp(
+		playerPos.x + BALL_RADIUS * 0.8f * cos(angle),
+		playerPos.y + BALL_RADIUS * 0.8f * sin(angle)
+		);*/
+	return OM::getInstance()->handleBeganEvents(pTouch, pEvent);
 }
 
-CCNode* GameLayer::getBgTag(){
-	return getChildByTag(kTag_Background);
+void GameLayer::ccTouchMoved(CCTouch* pTouch, CCEvent* pEvent){
+	OM::getInstance()->handleMovedEvents(pTouch, pEvent);
 }
 
-void GameLayer::setWisp(Player* wisp){
-	assert(wisp != NULL);
-	_wisp = wisp;
-	this->addChild(_wisp);
+void GameLayer::ccTouchEnded(CCTouch* pTouch, CCEvent* pEvent){
+	OM::getInstance()->handleEndedEvents(pTouch, pEvent);
 }
 
-void GameLayer::setEnemy(Enemy* enemy){
-	assert(enemy != NULL);
-	_enemy = enemy;
-	this->addChild(_enemy, kTag_Enemy);
-}
-
-void GameLayer::setNode(CCNode* node){
-	assert(node != NULL);
-	this->addChild(node);
-}
-
-void GameLayer::setSprite(CCSprite* sprite){
-	assert(sprite != NULL);
-	this->addChild(sprite);
-}
-
-void GameLayer::setObstacles(Obstacles* obs){
-	assert(obs != NULL);
-	obs->setZOrder((int)kOrder::kOrder_Obstacles);
-	this->addChild(obs);
-}
-
-bool GameLayer::ccTouchBegan(CCTouch* touch, CCEvent* event){
-	this->_beganTouch = touch;
-	return _gm->handleBeganEvents();
-}
-
-void GameLayer::ccTouchMoved(CCTouch* touch, CCEvent* event){
-	this->_movedTouch = touch;
-	_gm->handleMovedEvents();
-}
-
-void GameLayer::ccTouchEnded(CCTouch* touch, CCEvent* event){
-	this->_endedTouch = touch;
-	_gm->handleEndedEvents();
-}
-
-void GameLayer::ccTouchCancelled(CCTouch* touch, CCEvent* event){
-	ccTouchEnded(touch, event);
+void GameLayer::ccTouchCancelled(CCTouch* pTouch, CCEvent* pEvent){
+	ccTouchEnded(pTouch, pEvent);
 }
 
 void GameLayer::removeChain(){
@@ -131,29 +124,73 @@ void GameLayer::removeChain(){
 	removeChildByTag(kTag_Chain2);
 }
 
-CCNode* GameLayer::getChainOneTag(){
-	return getChildByTag(kTag_Chain1);
+void GameLayer::collisionWisp(){
+	CCSprite *star = CCSprite::create("star.png");
+	star->setPosition(getChildByTag(kTag_Wisp)->getPosition());
+	star->setScale(0);
+	star->setOpacity(127);
+	addChild(star, kOrder_Star);
+
+	//animation
+	CCScaleTo *scale = CCScaleTo::create(0.1, 1);
+	CCFadeOut *fadeout = CCFadeOut::create(0.1);
+	CCRemoveSelf *remove = CCRemoveSelf::create();
+	CCSequence *sequence = CCSequence::create(scale, fadeout, remove, nullptr);
+	star->runAction(sequence);
 }
 
-CCNode* GameLayer::getChainTwoTag(){
-	return getChildByTag(kTag_Chain2);
+void GameLayer::destroyEnemy(CCNode *enemy){
+	if (!enemy){
+		return;
+	}
+		CCSprite *destEnemy = CCSprite::create("enemy1.png");
+		destEnemy->setPosition(enemy->getPosition());
+		addChild(destEnemy, kOrder_Enemy);
+
+		CCSequence *sequence = CCSequence::create(CCScaleTo::create(0.3, 0), CCRemoveSelf::create(), nullptr);
+		destEnemy->runAction(sequence);
+
+		CCSprite *smoke = CCSprite::create("fog1.png");
+		smoke->setPosition(destEnemy->getPosition());
+		addChild(smoke, kOrder_Smoke);
+
+		CCAnimation *animation = CCAnimation::create();
+		animation->addSpriteFrameWithFileName("fog1.png");
+		animation->addSpriteFrameWithFileName("fog2.png");
+		animation->addSpriteFrameWithFileName("fog3.png");
+		animation->setDelayPerUnit(0.15);
+
+		CCSpawn *spawn = CCSpawn::create(CCAnimate::create(animation), CCFadeOut::create(0.45), nullptr);
+		CCSequence *smokeSequence = CCSequence::create(spawn, CCRemoveSelf::create(), nullptr);
+
+		smoke->runAction(smokeSequence);
+
+		Enemy *enemys = dynamic_cast<Enemy *>(enemy);
+		enemys->setIsDead();
 }
 
 void GameLayer::update(float dt)
 {
-	_gm->update(dt);
 	//ワールドを更新
 	int32 velocityIterations = 10;
     int32 positionIterations = 10;
-	_world->Step(dt, velocityIterations, positionIterations);
+	m_pWorld->Step(dt, velocityIterations, positionIterations);
  
-	for (b2Body* b = _world->GetBodyList(); b; b = b->GetNext())
+	for (b2Body* b = m_pWorld->GetBodyList(); b; b = b->GetNext())
     {
         if (b->GetUserData() != NULL) {
-			CCSprite* myActor = (CCSprite*)b->GetUserData();
+			Enemy* myActor = (Enemy *)b->GetUserData();
+			if (myActor->getIsDead()){
+				this->m_pWorld->DestroyBody(b);
+				this->removeChild(myActor);
+				//OM::getInstance()->removeFromParent();
+				//CCScene *hello = HelloWorld::scene();
+				//CCDirector::sharedDirector()->replaceScene(hello);
+				continue;
+			}
             myActor->setPosition(ccp( b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO) );
 			myActor->setRotation( -1 * CC_RADIANS_TO_DEGREES(b->GetAngle()) );
         }
-    }
+	}
 }
 

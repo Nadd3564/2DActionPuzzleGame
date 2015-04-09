@@ -20,28 +20,23 @@ class ObjectManager;
 class GameState : public CCNode
 {
 public:
+
+	GameState();
+	virtual ~GameState();
+
     virtual void stateUpdate(float dt) = 0;
     virtual bool onStateEnter() = 0;
     virtual bool onStateExit() = 0;
-    virtual bool onTouchBeganEvent() = 0;
-	virtual void onTouchMovedEvent() = 0;
-	virtual void onTouchEndedEvent() = 0;
+	virtual bool onTouchBeganEvent(CCTouch* pTouch, CCEvent* pEvent) = 0;
+	virtual void onTouchMovedEvent(CCTouch* pTouch, CCEvent* pEvent) = 0;
+	virtual void onTouchEndedEvent(CCTouch* pTouch, CCEvent* pEvent) = 0;
 
     virtual std::string getStateID() = 0;
     
-    GameState();
-    ~GameState();
-    
-private:
-    
-    bool m_loadingComplete;
-    bool m_exiting;
-	
- 
 protected:
-	GameLayer* _gameL;
-	ObjectManager* _gm;
-	std::vector<GameObject*> _gObjects;
+
+	std::vector<GameObject*> m_gObjects;
+
 };
 
 #endif /* defined(__GameState__) */

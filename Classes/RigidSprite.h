@@ -16,11 +16,14 @@ public:
 	~RigidSprite();
 
     void setRigidBody(b2Body* body);
+	bool getIsDead(){ return m_isdead; }
+	void setIsDead(){ m_isdead = true; }
 	b2Body* getBody();
 	float getPow();
     
-private:
+protected:
 
+	bool m_isdead;
 	b2Body* m_pBody;
 	
 };

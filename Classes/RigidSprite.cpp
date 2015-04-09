@@ -1,7 +1,8 @@
 #include "RigidSprite.h"
 
-RigidSprite::RigidSprite():
-m_pBody(NULL)
+RigidSprite::RigidSprite() :
+m_pBody(NULL),
+m_isdead(false)
 {}
 
 RigidSprite::~RigidSprite(){}

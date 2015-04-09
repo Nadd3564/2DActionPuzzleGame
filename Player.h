@@ -19,20 +19,29 @@ USING_NS_CC;
 class Player : public GameObject
 {
 public:
-	Player(GameLayer* game);
+
+	Player();
 	~Player();
-	virtual void stateUpdate(float dt);
+	
 	static Player* create();
-    b2BodyDef wispBodyDef(Player* wisp);
-	b2FixtureDef wispFixtureDef(b2Shape* shape);
+    
 	CCSprite* initCrossOne();
 	CCSprite* initCrossTwo();
-	virtual void update (float dt);
+	
+	bool wispTouchBegan(CCTouch* pTouch, CCEvent* pEvent);
+	void wispTouchMoved(CCTouch* pTouch, CCEvent* pEvent);
+	void wispTouchEnded(CCTouch* pTouch, CCEvent* pEvent);
+	
+private:
+
+	Player* initWisp();
+
+	b2BodyDef wispBodyDef(Player* wisp);
+	b2FixtureDef wispFixtureDef(b2Shape* shape);
+	
+	virtual void update(float dt);
 
 	void addForceToWisp(CCNode* wisp);
-	bool wispTouchBegan();
-	void wispTouchMoved();
-	void wispTouchEnded();
 	bool wispRectTouch(CCNode* wisp, CCTouch* touch);
 	bool touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg);
 	void chain(CCNode* wisp, CCTouch* touch);
@@ -47,8 +56,6 @@ public:
 	bool gThanPos(int dist);
 	CCPoint calcRetPos(CCPoint touch, int dist);
 
-private:
-	Player* initWisp();
 };
 
 #endif /* defined(__Player__) */

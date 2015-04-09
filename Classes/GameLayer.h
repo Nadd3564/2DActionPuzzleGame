@@ -14,42 +14,72 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Obstacles.h"
+#include "CollisionListener.h"
 
 USING_NS_CC;
+
+enum kTag
+{
+	kTag_Background = 1,
+	kTag_Enemy,
+	kTag_Wisp,
+	kTag_Chain1,
+	kTag_Chain2,
+	kTag_Obstacles,
+};
+
+enum kOrder
+{
+	kOrder_Background = 1,
+	kOrder_Enemy,
+	kOrder_Cross2,
+	kOrder_Chain2,
+	kOrder_Wisp,
+	kOrder_Chain1,
+	kOrder_Cross1,
+	kOrder_Obstacles,
+	kOrder_Smoke,
+	kOrder_Star,
+	kOrder_Result
+};
 
 class GameLayer : public CCLayer
 {
 private:
-    static GameLayer* s_pInstance;
+   
+	static GameLayer* s_pInstance;
 
-    CCTMXTiledMap *_tileMap;
-    
-    CCTMXLayer *_background;
+    Player * m_pWisp;
 
-    Player * _wisp;
-    Enemy * _enemy;
+    Enemy * m_pEnemy;
 	
-    NormalState *_normalState;
-    ApproachState *_approachState;
+	HudLayer *m_pHud;
+     
+    int m_numCollected;
 
-    CCTMXLayer *_meta;
-    
-    CCTMXLayer *_foreground;
-    
-    HudLayer *_hud;
-    
-    ObjectManager* _gm;
-    
-    int _numCollected;
-
-	CCTouch* _beganTouch;
-
-	CCTouch* _movedTouch;
-
-	CCTouch* _endedTouch;
+	b2ContactListener *m_pCollisionListener;
 
 public:
-    static GameLayer* Instance()
+
+	enum Status {
+		kNormal = 0,
+		kAlarm,
+		kEnegyDrink,
+	};
+
+	CCPoint m_startPoint;
+	float m_pullBack;
+	int m_zanki;
+	int m_level;
+
+	CC_SYNTHESIZE(bool, m_canFire, CanFire);
+	CC_SYNTHESIZE(b2World *, m_pWorld, World);
+	CC_SYNTHESIZE(b2Body *, m_pBody, Body);
+
+	GameLayer();
+	virtual ~GameLayer();
+
+    static GameLayer* getInstance()
     {
         if(s_pInstance == 0)
         {
@@ -61,72 +91,28 @@ public:
 		return s_pInstance;
     }
 
-	
-	enum Status {
-        kNormal = 0,
-        kAlarm,
-        kEnegyDrink,
-    };
-
-	enum kTag
-	{
-		kTag_Background = 1,
-		kTag_Enemy,
-		kTag_Wisp,
-		kTag_Chain1,
-		kTag_Chain2,
-		kTag_Obstacles,
-	};
-
-	enum kOrder
-	{
-		kOrder_Background = 1,
-		kOrder_Enemy,
-		kOrder_Cross2,
-		kOrder_Chain2,
-		kOrder_Wisp,
-		kOrder_Chain1,
-		kOrder_Cross1,
-		kOrder_Obstacles,
-	};
-
-	enum ObstacleType
-	{
-		Obstacle1,
-		Obstacle2,
-		Obstacle3,
-		Obstacle4,
-	};
-
-	static cocos2d::CCScene* createScene(); 
+	static cocos2d::CCScene* createScene(int zanki, int level);
 	void initPhysics();
-	virtual bool init();
-	CREATE_FUNC(GameLayer); 
-	CC_SYNTHESIZE(b2World *, _world, World);
-	CC_SYNTHESIZE(b2Body *, _body, Body);
+	virtual bool init(int zanki, int level);
+	static GameLayer* create(int zanki, int level);
+	virtual void update(float dt);
+	
     virtual void onEnter();
-	GameLayer();
-	~GameLayer();
-	void update(float dt);
 	void removeChain();
 
-	void setWisp(Player* wisp);
-	void setEnemy(Enemy* enemy);
-	void setSprite(CCSprite* sprite);
-	void setNode(CCNode* node);
-	void setObstacles(Obstacles* obs);
-	CCTouch* getBeganTouch(){ return _beganTouch; }
-	CCTouch* getMovedTouch(){ return _movedTouch; }
-	CCTouch* getEndedTouch(){ return _endedTouch; }
-	CCNode* getWispTag();
-	CCNode* getBgTag();
-	CCNode* getChainOneTag();
-	CCNode* getChainTwoTag();
+	void collisionWisp();
+	void destroyEnemy(CCNode *enemy);
+	void level(int level);
+	void StageClear();
+	void StageFailed();
 	
 	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchCancelled(CCTouch* touch, CCEvent* event);
+
 };
+
+typedef GameLayer GAME;
 
 #endif /* defined(_EN_GameLayer_) */

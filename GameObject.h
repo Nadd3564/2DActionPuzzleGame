@@ -18,14 +18,10 @@ class GameObject : public RigidSprite
 {
 public:
 
-	CC_SYNTHESIZE(b2Body *, _body, Body);
-	CC_SYNTHESIZE(GameLayer *, _gameL, gGame);
-
-	GameObject(GameLayer* game);
+	GameObject();
 	~GameObject();
 
-    virtual void stateUpdate(float dt) = 0;
-	virtual void update(float dt);
+    virtual void update(float dt);
     
 };
 

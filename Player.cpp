@@ -13,17 +13,17 @@
 const CCPoint CROSS_ONE_POS = ccp(80, 135);
 const CCPoint CROSS_TWO_POS = ccp(125, 140);
 
-Player::Player(GameLayer* game) : GameObject(game){ assert(game != NULL); }
+Player::Player(){}
 
 Player::~Player(){}
 
 Player* Player::create(){
 	//ウィスプ生成
-	Player* wisp = new Player(GameLayer::Instance());
+	Player* wisp = new Player();
 	if (wisp) {
         wisp->initWisp();
 		wisp->autorelease();
-		GameLayer::Instance()->setWisp(wisp);
+		GAME::getInstance()->addChild(wisp, kOrder_Wisp, kTag_Wisp);
 		return wisp;
 	}
 	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
@@ -37,57 +37,41 @@ Player* Player::initWisp()
 	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
 	this->initWithFile("wisp_1.png");
 	this->setPosition(WISP_SET_POS);
-	this->setTag(_gameL->kTag_Wisp);
-	this->setZOrder(_gameL->kOrder_Wisp);
-
-
+	
 	//物理ボディ生成
-	this->_body = this->_gameL->getWorld()->CreateBody(&wispBodyDef(this));
+	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&wispBodyDef(this));
     
 	//物理エンジン上の物質の形と大きさ
     b2CircleShape spriteShape;
     spriteShape.m_radius = this->getContentSize().width * 0.3 / PTM_RATIO;
 
     //物理性質
-	_body->CreateFixture(&wispFixtureDef(&spriteShape));
+	this->m_pBody->CreateFixture(&wispFixtureDef(&spriteShape));
 	
-	this->setRigidBody(_body);
-	Game::Instance()->addGameObjectMap("wisp", this);
-	Game::Instance()->addGameObject(this);
+	this->setRigidBody(this->m_pBody);
+	
 	return this;
 }
 
-void Player::stateUpdate(float dt){
-    std::cout << "Update for the player.";
-	update(dt);
-}
-
-bool Player::wispTouchBegan(){
+bool Player::wispTouchBegan(CCTouch* pTouch, CCEvent* pEvent){
 	bool flg = false;
-
-	CCTouch* touch = _gameL->getBeganTouch();
-	CCNode* wisp = _gameL->getWispTag();
-
+	
 	//ウィスプの位置を計算
-	return touchWithProcess(wisp, touch, flg);
+	return touchWithProcess(this, pTouch, flg);
 }
 
 
 
-void Player::wispTouchMoved(){
-	CCTouch* touch = _gameL->getMovedTouch();
-	CCNode* wisp = _gameL->getWispTag();
+void Player::wispTouchMoved(CCTouch* pTouch, CCEvent* pEvent){
 	//鎖を引くポイントと鎖を表示
-	chain(wisp, touch);
+	chain(this, pTouch);
 }
 
 
 
-void Player::wispTouchEnded(){
-	CCTouch* touch = _gameL->getEndedTouch();
-	CCNode* wisp = _gameL->getWispTag();
+void Player::wispTouchEnded(CCTouch* pTouch, CCEvent* pEvent){
 	//鎖を削除し、ウィスプに力を加える
-	removeAndAdd(wisp, touch);
+	removeAndAdd(this, pTouch);
 }
 
 bool Player::wispRectTouch(CCNode* wisp, CCTouch* touch){
@@ -113,8 +97,8 @@ void Player::chain(CCNode* wisp, CCTouch* touch){
 		wisp->setPosition(calcPos(touch->getLocation()));
 
 		//鎖を引くポイントと鎖を表示
-		setChainOne(initChainOne(_gameL->getChainOneTag()), extendPos(wisp));
-		setChainTwo(initChainTwo(_gameL->getChainTwoTag()), extendPos(wisp));
+		setChainOne(initChainOne(GAME::getInstance()->getChildByTag(kTag_Chain1)), extendPos(wisp));
+		setChainTwo(initChainTwo(GAME::getInstance()->getChildByTag(kTag_Chain2)), extendPos(wisp));
 	}
 }
 
@@ -136,7 +120,7 @@ void Player::removeAndAdd(CCNode* wisp, CCTouch* touch){
 	if(wisp)
 	{
 		//鎖を削除
-		_gameL->removeChain();
+		GAME::getInstance()->removeChain();
 		//ウィスプの位置を計算
 		wisp->setPosition(calcPos(touch->getLocation()));
 
@@ -150,9 +134,7 @@ CCNode* Player::initChainOne(CCNode* chain1){
 	if(!chain1)
 		{
 			chain1 = CCSprite::create("iron.png");
-			chain1->setTag(_gameL->kTag_Chain1);
-			chain1->setZOrder(_gameL->kOrder_Chain1);
-			_gameL->setNode(chain1);
+			GAME::getInstance()->addChild(chain1, kOrder_Chain1, kTag_Chain1);
 		}
 	assert(chain1 != NULL);
 	return chain1;
@@ -163,9 +145,7 @@ CCNode* Player::initChainTwo(CCNode* chain2){
 	if(!chain2)
 		{
 			chain2 = CCSprite::create("iron.png");
-			chain2->setTag(_gameL->kTag_Chain2);
-			chain2->setZOrder(_gameL->kOrder_Chain2);
-			_gameL->setNode(chain2);
+			GAME::getInstance()->addChild(chain2, kOrder_Chain2, kTag_Chain2);
 		}
 	assert(chain2 != NULL);
 	return chain2;
@@ -192,8 +172,7 @@ CCSprite* Player::initCrossOne(){
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);
 	cross1->setPosition(ccp(100, 100));
-	cross1->setZOrder(_gameL->kOrder_Cross1);
-	_gameL->setSprite(cross1);
+	GAME::getInstance()->addChild(cross1, kOrder_Cross1);
 	return cross1;
 }
 
@@ -201,8 +180,7 @@ CCSprite* Player::initCrossTwo(){
 	CCSprite* cross2 = CCSprite::create("Cross2.png");
 	cross2->setScale(0.5);
 	cross2->setPosition(initCrossOne()->getPosition());
-	cross2->setZOrder(_gameL->kOrder_Cross2);
-	_gameL->setSprite(cross2);
+	GAME::getInstance()->addChild(cross2, kOrder_Cross2);
 	return cross2;
 }
 
@@ -213,7 +191,7 @@ void Player::addForceToWisp(CCNode* wisp){
 	//質量をセット
 	will->getBody()->ResetMassData();
 	//ウィスプに力を加える
-	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 3.0f), will->getBody()->GetWorldCenter());
+	will->getBody()->ApplyLinearImpulse(b2Vec2(8.0f, 1.0f), will->getBody()->GetWorldCenter());
 }
 
 //発射前のウィスプの移動範囲を制御
@@ -270,8 +248,4 @@ b2FixtureDef Player::wispFixtureDef(b2Shape* shape){
 
 void Player::update (float dt) {
     
-    if (_body && isVisible()) {
-        setPositionX(_body->GetPosition().x * PTM_RATIO);
-        setPositionY(_body->GetPosition().y * PTM_RATIO);
-    }
 }

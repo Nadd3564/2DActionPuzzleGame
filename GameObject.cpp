@@ -7,19 +7,18 @@
 
 #include "GameObject.h"
 
-GameObject::GameObject(GameLayer* game)
+GameObject::GameObject()
 {
-	_gameL = game;
 }
 
 GameObject::~GameObject(){}
 
 void GameObject::update(float dt)
 {
-    if (_body && isVisible())
+    if (this->m_pBody && isVisible())
 	{
-        setPositionX(_body->GetPosition().x * PTM_RATIO);
-        setPositionY(_body->GetPosition().y * PTM_RATIO);
-        setRotation(CC_RADIANS_TO_DEGREES(-1 * _body->GetAngle()));
+		setPositionX(m_pBody->GetPosition().x * PTM_RATIO);
+		setPositionY(m_pBody->GetPosition().y * PTM_RATIO);
+		setRotation(CC_RADIANS_TO_DEGREES(-1 * m_pBody->GetAngle()));
     }
 }

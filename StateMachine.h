@@ -22,9 +22,9 @@ public:
     void changeState(GameState* pState);
     void popState();
     void update(float dt);
-    bool onBeganEvent();
-	void onMovedEvent();
-	void onEndedEvent();
+	bool onBeganEvent(CCTouch* pTouch, CCEvent* pEvent);
+	void onMovedEvent(CCTouch* pTouch, CCEvent* pEvent);
+	void onEndedEvent(CCTouch* pTouch, CCEvent* pEvent);
  
 private:
 

@@ -16,10 +16,10 @@ USING_NS_CC;
 class Enemy : public GameObject
 {
 public:
-	Enemy(GameLayer * game);
+	Enemy();
 	~Enemy();
-	void stateUpdate(float dt) override;
-    static Enemy* create(CCPoint position, const char* fileName);
+	
+	static Enemy* create(CCPoint position, const char* fileName);
 	void addEnemy();
     b2BodyDef enemyBodyDef(Enemy* enemy);
 	b2FixtureDef enemyFixtureDef(b2Shape* shape);

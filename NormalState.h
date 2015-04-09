@@ -24,9 +24,9 @@ public:
 	void stateUpdate(float dt) override;
 	bool onStateEnter() override;
     bool onStateExit() override;
-    bool onTouchBeganEvent() override;
-	void onTouchMovedEvent() override;
-	void onTouchEndedEvent() override;
+	bool onTouchBeganEvent(CCTouch* pTouch, CCEvent* pEvent) override;
+	void onTouchMovedEvent(CCTouch* pTouch, CCEvent* pEvent) override;
+	void onTouchEndedEvent(CCTouch* pTouch, CCEvent* pEvent) override;
     
     std::string getStateID() override { return s_normalID; }
     
