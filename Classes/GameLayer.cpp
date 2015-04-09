@@ -161,27 +161,5 @@ void GameLayer::destroyEnemy(CCNode *enemy){
 }
 
 void GameLayer::update(float dt)
-{
-	//ワールドを更新
-	int32 velocityIterations = 10;
-    int32 positionIterations = 10;
-	m_pWorld->Step(dt, velocityIterations, positionIterations);
- 
-	for (b2Body* b = m_pWorld->GetBodyList(); b; b = b->GetNext())
-    {
-        if (b->GetUserData() != NULL) {
-			Enemy* myActor = (Enemy *)b->GetUserData();
-			if (myActor->getIsDead()){
-				this->m_pWorld->DestroyBody(b);
-				this->removeChild(myActor);
-				//OM::getInstance()->removeFromParent();
-				//CCScene *hello = HelloWorld::scene();
-				//CCDirector::sharedDirector()->replaceScene(hello);
-				continue;
-			}
-            myActor->setPosition(ccp( b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO) );
-			myActor->setRotation( -1 * CC_RADIANS_TO_DEGREES(b->GetAngle()) );
-        }
-	}
-}
+{}
 
