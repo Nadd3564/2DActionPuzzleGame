@@ -12,18 +12,17 @@ class RigidSprite : public CCSprite
 {
 public:
 
+	CC_SYNTHESIZE(bool, m_isDead, IsDead);
+
     RigidSprite();
-	~RigidSprite();
+	virtual ~RigidSprite();
 
     void setRigidBody(b2Body* body);
-	bool getIsDead(){ return m_isdead; }
-	void setIsDead(){ m_isdead = true; }
 	b2Body* getBody();
 	float getPow();
     
 protected:
 
-	bool m_isdead;
 	b2Body* m_pBody;
 	
 };

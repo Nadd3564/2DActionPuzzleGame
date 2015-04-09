@@ -2,7 +2,7 @@
 
 RigidSprite::RigidSprite() :
 m_pBody(NULL),
-m_isdead(false)
+m_isDead(false)
 {}
 
 RigidSprite::~RigidSprite(){}

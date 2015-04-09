@@ -21,7 +21,7 @@ class Player : public GameObject
 public:
 
 	Player();
-	~Player();
+	virtual ~Player();
 	
 	static Player* create();
     
