@@ -67,12 +67,9 @@ public:
 		kEnegyDrink,
 	};
 
-	CCPoint m_startPoint;
-	float m_pullBack;
 	int m_zanki;
 	int m_level;
 
-	CC_SYNTHESIZE(bool, m_canFire, CanFire);
 	CC_SYNTHESIZE(b2World *, m_pWorld, World);
 	CC_SYNTHESIZE(b2Body *, m_pBody, Body);
 

@@ -186,11 +186,12 @@ CCSprite* Player::initCrossTwo(){
 
 void Player::addForceToWisp(CCNode* wisp){
 	//ウィスプを可動出来るようにする
-	Player* will = dynamic_cast<Player*>(wisp);
-	will->getBody()->SetType(b2_dynamicBody);
+	Player *will = dynamic_cast<Player*>(wisp);
+	b2Body *willBody = will->getBody();
+	willBody->SetType(b2_dynamicBody);
 	//ウィスプに力を加える
 	CCPoint force = (will->getPosition() - WISP_SET_POS) * -0.11;
-	will->getBody()->ApplyLinearImpulse(b2Vec2(force.x, force.y), will->getBody()->GetWorldCenter());
+	willBody->ApplyLinearImpulse(b2Vec2(force.x, force.y), willBody->GetWorldCenter());
 }
 
 //発射前のウィスプの移動範囲を制御

@@ -6,9 +6,6 @@ USING_NS_CC;
 GameLayer* GameLayer::s_pInstance = 0;
 
 GameLayer::GameLayer():
-m_pullBack(NULL),
-m_startPoint(ccp(NULL, NULL)),
-m_canFire(true),
 m_pWisp(NULL)
 {
 
@@ -92,29 +89,23 @@ void GameLayer::onEnter(){
 	this->m_pWisp = dynamic_cast<Player *>(this->getChildByTag(kTag_Wisp));
 }
 
-bool GameLayer::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent){
-	/*CCPoint tap = pTouch->getLocation();
-	CCPoint playerPos = m_pWisp->getPosition();
-	float diffx = tap.x - playerPos.x;
-	float diffy = tap.y - playerPos.y;
-	float diff = pow(diffx, 2) + pow(diffy, 2);
-	float angle = atan2(diffy, diffx);
-	m_startPoint = ccp(
-		playerPos.x + BALL_RADIUS * 0.8f * cos(angle),
-		playerPos.y + BALL_RADIUS * 0.8f * sin(angle)
-		);*/
+bool GameLayer::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
+{
 	return OM::getInstance()->handleBeganEvents(pTouch, pEvent);
 }
 
-void GameLayer::ccTouchMoved(CCTouch* pTouch, CCEvent* pEvent){
+void GameLayer::ccTouchMoved(CCTouch* pTouch, CCEvent* pEvent)
+{
 	OM::getInstance()->handleMovedEvents(pTouch, pEvent);
 }
 
-void GameLayer::ccTouchEnded(CCTouch* pTouch, CCEvent* pEvent){
+void GameLayer::ccTouchEnded(CCTouch* pTouch, CCEvent* pEvent)
+{
 	OM::getInstance()->handleEndedEvents(pTouch, pEvent);
 }
 
-void GameLayer::ccTouchCancelled(CCTouch* pTouch, CCEvent* pEvent){
+void GameLayer::ccTouchCancelled(CCTouch* pTouch, CCEvent* pEvent)
+{
 	ccTouchEnded(pTouch, pEvent);
 }
 
