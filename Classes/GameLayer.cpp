@@ -156,7 +156,7 @@ void GameLayer::destroyEnemy(CCNode *enemy){
 		smoke->runAction(smokeSequence);
 
 		Enemy *enemys = dynamic_cast<Enemy *>(enemy);
-		if (enemys)
+	
 		enemys->setIsDead(true);
 }
 

@@ -22,8 +22,8 @@ b2Body* RigidSprite::getBody()
 float RigidSprite::getVelocitySum()
 {
 	if (!m_pBody)
-		return 0.0;
-	
+		return NULL;
+
 	return pow(m_pBody->GetLinearVelocity().x, 2) +
 		pow(m_pBody->GetLinearVelocity().y, 2);
 }

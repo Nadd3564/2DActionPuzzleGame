@@ -13,7 +13,7 @@ class RigidSprite : public CCSprite
 public:
 
 	CC_SYNTHESIZE(bool, m_isDead, IsDead);
-
+	
     RigidSprite();
 	virtual ~RigidSprite();
 

@@ -26,6 +26,7 @@ enum kTag
 	kTag_Chain1,
 	kTag_Chain2,
 	kTag_Obstacles,
+	kTag_ObstaclesB,
 };
 
 enum kOrder

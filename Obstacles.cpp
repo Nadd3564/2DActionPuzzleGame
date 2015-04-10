@@ -78,7 +78,6 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 	this->initWithFile(fileNameInit(obstacle).c_str());
 	this->setPosition(pos);
 	this->setRotation(angle);
-	
 	//物理ボディ生成
 	 b2BodyDef bodyDef;
 
@@ -107,7 +106,6 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 		{
 			this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_dynamicBody));
 			
-
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape = ObsShape(0.5, 0.3);
 			m_pBody->CreateFixture(&spriteShape, 2);

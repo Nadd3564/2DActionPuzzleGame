@@ -21,13 +21,11 @@ void CollisionListener::BeginContact(b2Contact* contact)
 
 		if ((tagB == kTag_Enemy) && (tagA == kTag_Wisp))
 		{
-			if (velocitySumA > 10 || velocitySumB > 10) {
 				//火花が散るアクション
 				GAME::getInstance()->collisionWisp();
 				//敵NPC消滅アクション
 				GAME::getInstance()->destroyEnemy(spriteB);
 				SimpleAudioEngine::sharedEngine()->playEffect("hit.mp3");
-			}
 		}
 		else if ((tagA == kTag_Enemy) && (tagB == kTag_Enemy)){
 				GAME::getInstance()->destroyEnemy(spriteA);
