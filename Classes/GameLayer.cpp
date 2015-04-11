@@ -114,51 +114,6 @@ void GameLayer::removeChain(){
 	removeChildByTag(kTag_Chain2);
 }
 
-void GameLayer::collisionWisp(){
-	CCSprite *star = CCSprite::create("star.png");
-	star->setPosition(getChildByTag(kTag_Wisp)->getPosition());
-	star->setScale(0);
-	star->setOpacity(127);
-	addChild(star, kOrder_Star);
-
-	//animation
-	CCScaleTo *scale = CCScaleTo::create(0.1, 1);
-	CCFadeOut *fadeout = CCFadeOut::create(0.1);
-	CCRemoveSelf *remove = CCRemoveSelf::create();
-	CCSequence *sequence = CCSequence::create(scale, fadeout, remove, nullptr);
-	star->runAction(sequence);
-}
-
-void GameLayer::destroyEnemy(CCNode *enemy){
-	if (!enemy){
-		return;
-	}
-		CCSprite *destEnemy = CCSprite::create("enemy1.png");
-		destEnemy->setPosition(enemy->getPosition());
-		addChild(destEnemy, kOrder_Enemy);
-
-		CCSequence *sequence = CCSequence::create(CCScaleTo::create(0.3, 0), CCRemoveSelf::create(), nullptr);
-		destEnemy->runAction(sequence);
-
-		CCSprite *smoke = CCSprite::create("fog1.png");
-		smoke->setPosition(destEnemy->getPosition());
-		addChild(smoke, kOrder_Smoke);
-
-		CCAnimation *animation = CCAnimation::create();
-		animation->addSpriteFrameWithFileName("fog1.png");
-		animation->addSpriteFrameWithFileName("fog2.png");
-		animation->addSpriteFrameWithFileName("fog3.png");
-		animation->setDelayPerUnit(0.15);
-
-		CCSpawn *spawn = CCSpawn::create(CCAnimate::create(animation), CCFadeOut::create(0.45), nullptr);
-		CCSequence *smokeSequence = CCSequence::create(spawn, CCRemoveSelf::create(), nullptr);
-
-		smoke->runAction(smokeSequence);
-
-		Enemy *enemys = dynamic_cast<Enemy *>(enemy);
-		enemys->setIsDead(true);
-}
-
 void GameLayer::update(float dt)
 {}
 

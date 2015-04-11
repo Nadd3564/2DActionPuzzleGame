@@ -98,8 +98,6 @@ public:
     virtual void onEnter();
 	void removeChain();
 
-	void collisionWisp();
-	void destroyEnemy(CCNode *enemy);
 	void level(int level);
 	void StageClear();
 	void StageFailed();

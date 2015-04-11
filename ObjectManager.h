@@ -46,6 +46,9 @@ public:
 	b2BodyDef groundBodyDef();
 	b2EdgeShape groundShape();
 
+	void collisionWisp();
+	void destroyEnemy(CCNode *enemy);
+
 private:
     
 	ObjectManager();

@@ -1,8 +1,7 @@
 #include "CollisionListener.h"
 #include "GameLayer.h"
-#include "SimpleAudioEngine.h"
+#include "ObjectManager.h"
 
-using namespace CocosDenshion;
 
 void CollisionListener::BeginContact(b2Contact* contact)
 {
@@ -17,46 +16,45 @@ void CollisionListener::BeginContact(b2Contact* contact)
 		int tagA = spriteA->getTag();
 		int tagB = spriteB->getTag();
 		
-		if (IsEqualsTag(tagB, kTag_Enemy) && IsEqualsTag(tagA, kTag_Wisp))
+		if (isEqualsTag(tagB, kTag_Enemy) && isEqualsTag(tagA, kTag_Wisp))
 		{
 				//火花が散るアクション
-				GAME::getInstance()->collisionWisp();
+				OM::getInstance()->collisionWisp();
 				//敵NPC消滅アクション
-				GAME::getInstance()->destroyEnemy(spriteB);
-				SimpleAudioEngine::sharedEngine()->playEffect("hit.mp3");
+				OM::getInstance()->destroyEnemy(spriteB);
 		}
 		
 		RigidSprite *enemy = NULL;
 		b2Body *obstacles = NULL;
 
-		if (IsEqualsTag(tagA, kTag_Enemy))
+		if (isEqualsTag(tagA, kTag_Enemy))
 		{
 			enemy = spriteA;
 			obstacles = bodyB;
 		}
-		else if (IsEqualsTag(tagB, kTag_Enemy))
+		else if (isEqualsTag(tagB, kTag_Enemy))
 		{
 			enemy = spriteB;
 			obstacles = bodyA;
 		}
 
-		if (enemy && IsOver(obstacles)){
-			GAME::getInstance()->destroyEnemy(enemy);
-			SimpleAudioEngine::sharedEngine()->playEffect("hit.mp3");
+		if (enemy && isOver(obstacles)){
+			OM::getInstance()->destroyEnemy(enemy);
 		}
 	}
 }
 
-bool CollisionListener::IsEqualsTag(int tag, int type)
+bool CollisionListener::isEqualsTag(int tag, int type)
 {
 	if (tag == type)
 		return true;
 	return false;
 }
 
-bool CollisionListener::IsOver(b2Body *obstacles)
+bool CollisionListener::isOver(b2Body *obstacles)
 {
-	if (obstacles->GetLinearVelocity().Length() > 3.0)
+	float32 len = obstacles->GetLinearVelocity().Length();
+	if (len > 3.0)
 		return true;
 	return false;
 }
