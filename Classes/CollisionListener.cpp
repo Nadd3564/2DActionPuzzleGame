@@ -16,10 +16,8 @@ void CollisionListener::BeginContact(b2Contact* contact)
 		
 		int tagA = spriteA->getTag();
 		int tagB = spriteB->getTag();
-		float velocitySumA = spriteA->getVelocitySum();
-		float velocitySumB = spriteB->getVelocitySum();
-
-		if ((tagB == kTag_Enemy) && (tagA == kTag_Wisp))
+		
+		if (IsEqualsTag(tagB, kTag_Enemy) && IsEqualsTag(tagA, kTag_Wisp))
 		{
 				//‰Î‰Ô‚ªU‚éƒAƒNƒVƒ‡ƒ“
 				GAME::getInstance()->collisionWisp();
@@ -27,10 +25,38 @@ void CollisionListener::BeginContact(b2Contact* contact)
 				GAME::getInstance()->destroyEnemy(spriteB);
 				SimpleAudioEngine::sharedEngine()->playEffect("hit.mp3");
 		}
-		else if ((tagA == kTag_Enemy) && (tagB == kTag_Enemy)){
-				GAME::getInstance()->destroyEnemy(spriteA);
-				GAME::getInstance()->destroyEnemy(spriteB);
-				SimpleAudioEngine::sharedEngine()->playEffect("hit.mp3");
+		
+		RigidSprite *enemy = NULL;
+		b2Body *obstacles = NULL;
+
+		if (IsEqualsTag(tagA, kTag_Enemy))
+		{
+			enemy = spriteA;
+			obstacles = bodyB;
+		}
+		else if (IsEqualsTag(tagB, kTag_Enemy))
+		{
+			enemy = spriteB;
+			obstacles = bodyA;
+		}
+
+		if (enemy && IsOver(obstacles)){
+			GAME::getInstance()->destroyEnemy(enemy);
+			SimpleAudioEngine::sharedEngine()->playEffect("hit.mp3");
 		}
 	}
+}
+
+bool CollisionListener::IsEqualsTag(int tag, int type)
+{
+	if (tag == type)
+		return true;
+	return false;
+}
+
+bool CollisionListener::IsOver(b2Body *obstacles)
+{
+	if (obstacles->GetLinearVelocity().Length() > 3.0)
+		return true;
+	return false;
 }
