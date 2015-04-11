@@ -1,4 +1,12 @@
-#pragma once
+/*
+* GameLayer.h
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
 
 #ifndef _EN_GameLayer_
 #define _EN_GameLayer_
@@ -6,14 +14,8 @@
 
 #include "cocos2d.h"
 #include <Box2D\Box2D.h>
-#include "RigidSprite.h"
 #include "HudLayer.h"
 #include "ObjectManager.h"
-#include "NormalState.h"
-#include "ApproachState.h"
-#include "Player.h"
-#include "Enemy.h"
-#include "Obstacles.h"
 #include "CollisionListener.h"
 
 USING_NS_CC;
@@ -46,30 +48,7 @@ enum kOrder
 
 class GameLayer : public CCLayer
 {
-private:
-   
-	static GameLayer* s_pInstance;
-
-    Player * m_pWisp;
-
-    Enemy * m_pEnemy;
-	
-	HudLayer *m_pHud;
-     
-    int m_numCollected;
-
-	b2ContactListener *m_pCollisionListener;
-
 public:
-
-	enum Status {
-		kNormal = 0,
-		kAlarm,
-		kEnegyDrink,
-	};
-
-	int m_zanki;
-	int m_level;
 
 	CC_SYNTHESIZE(b2World *, m_pWorld, World);
 	CC_SYNTHESIZE(b2Body *, m_pBody, Body);
@@ -89,23 +68,28 @@ public:
 		return s_pInstance;
     }
 
-	static cocos2d::CCScene* createScene(int zanki, int level);
+	static cocos2d::CCScene* createScene(int remaining, int level);
+	static GameLayer* create();
+	virtual bool init();
 	void initPhysics();
-	virtual bool init(int zanki, int level);
-	static GameLayer* create(int zanki, int level);
-	virtual void update(float dt);
-	
-    virtual void onEnter();
-	void removeChain();
-
-	void level(int level);
-	void StageClear();
-	void StageFailed();
 	
 	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchCancelled(CCTouch* touch, CCEvent* event);
+
+	virtual void update(float dt);
+    void removeChain();
+	
+private:
+
+	static GameLayer* s_pInstance;
+
+	HudLayer *m_pHud;
+
+	int m_numCollected;
+
+	b2ContactListener *m_pCollisionListener;
 
 };
 

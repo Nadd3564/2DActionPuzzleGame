@@ -1,14 +1,20 @@
+/*
+* GameLayer.cpp
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #include "GameLayer.h"
 
 USING_NS_CC;
 
 GameLayer* GameLayer::s_pInstance = 0;
 
-GameLayer::GameLayer():
-m_pWisp(NULL)
-{
-
-}
+GameLayer::GameLayer(){}
 
 GameLayer::~GameLayer()
 {
@@ -20,15 +26,15 @@ GameLayer::~GameLayer()
 }
 
 //シーン生成
-CCScene* GameLayer::createScene(int zanki, int level)
+CCScene* GameLayer::createScene(int remaining, int level)
 {
 	CCScene* scene = CCScene::create();
-	GameLayer* layer = GameLayer::create(zanki, level);
+	GameLayer* layer = GameLayer::create();
 	scene->addChild(layer);
 
 	ObjectManager *gm = OM::getInstance();
-	gm->init();
-    scene->addChild(gm);
+	gm->init(remaining, level);
+	scene->addChild(gm);
    
 	HudLayer *hud = new HudLayer();
 	hud->init();
@@ -38,23 +44,23 @@ CCScene* GameLayer::createScene(int zanki, int level)
 	return scene; 
 }
 
-GameLayer* GameLayer::create(int zanki, int level){
+GameLayer* GameLayer::create(){
 	GameLayer *layer = new GameLayer();
-	layer->init(zanki, level);
-	layer->autorelease();
-
-	return layer;
+	if (layer && layer->init()){
+		layer->autorelease();
+		return layer;
+	}
+	
+	CC_SAFE_DELETE(layer);
+	return NULL;
 }
 
-bool GameLayer::init(int zanki, int level)
+bool GameLayer::init()
 {
     if ( !CCLayer::init() )
     {
         return false;
     }
-
-	m_zanki = zanki;
-	m_level = level;
 
 	GameLayer::s_pInstance = this;
 
@@ -81,11 +87,6 @@ void GameLayer::initPhysics(){
 	//衝突イベントハンドラー
 	m_pCollisionListener = new CollisionListener();
 	m_pWorld->SetContactListener(m_pCollisionListener);
-}
-
-void GameLayer::onEnter(){
-	CCLayer::onEnter();
-	this->m_pWisp = dynamic_cast<Player *>(this->getChildByTag(kTag_Wisp));
 }
 
 bool GameLayer::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
