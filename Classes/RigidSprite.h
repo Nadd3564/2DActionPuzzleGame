@@ -1,3 +1,13 @@
+/*
+* RigidSprite.h
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #ifndef __RigidSprite__
 #define __RigidSprite__
 

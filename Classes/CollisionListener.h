@@ -1,3 +1,13 @@
+/*
+* CollisionListener.h
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #ifndef _EN_CollisionListener_
 #define _EN_CollisionListener_
 

@@ -1,4 +1,12 @@
-#pragma once
+/*
+* Obstacles.h
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
 
 #ifndef __Obstacles__
 #define __Obstacles__
@@ -14,6 +22,7 @@ enum ObstacleType
 	Obstacle2,
 	Obstacle3,
 	Obstacle4,
+	length,
 };
 
 class Obstacles : public GameObject
@@ -24,7 +33,7 @@ public:
 	~Obstacles();
 	
 	static Obstacles* create(int obstacle, CCPoint pos, float angle);
-	void addObstacles();
+	void addObstacles(int level);
 	std::string fileNameInit(int obstacle);
     b2BodyDef ObsBodyDef(b2BodyDef bodyDef, b2BodyType bodyType);
 	b2PolygonShape ObsShape(float32 width, float32 height);

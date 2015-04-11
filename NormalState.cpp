@@ -10,7 +10,8 @@
 #include "Player.h"
 #include "GameLayer.h"
 #include "TitleLayer.h"
-
+#include "JudgeState.h"
+#include "ApproachState.h"
 
 using namespace cocos2d;
 
@@ -21,66 +22,49 @@ NormalState::NormalState() {
 }
 
 NormalState::~NormalState() {
-	CC_SAFE_RELEASE(_enemy);
+}
+
+void NormalState::s_normalToJudge() {
+	OM::getInstance()->getStateMachine()->changeState(new JudgeState());
 }
 
 	//初期化
 bool NormalState::onStateEnter() {
     std::cout << "NormalState::onStateEnter()\n";
+	int level = OM::getInstance()->getLevel();
 	//ウィスプ生成
-	_wisp = Player::create();
+	m_pWisp = Player::create();
+	if (OM::getInstance()->getRemaining() != 3)
+		return false;
 	//エネミー生成
-	Enemy::create(ccp(636, 125), "enemy2.png")->addEnemy();
+	Enemy::create(ccp(736, 325), "enemy2.png")->addEnemy();
 	//背景生成
 	OM::getInstance()->initBackground();
 	//地面生成
 	OM::getInstance()->initGround();
 	//発射台生成
-	_wisp->initCrossOne();
-	_wisp->initCrossTwo();
+	m_pWisp->initCrossOne();
+	m_pWisp->initCrossTwo();
 	//障害物生成
-	Obstacles::create(Obstacle4, ccp(536, 75), 0)->addObstacles();
-	
-	
-	//コンテナにゲームオブジェクトを代入
-	m_gObjects = OM::getInstance()->getGameObjects();
+	Obstacles::create(length, ccp(-100, -100), 0)->addObstacles(level);
 	
 	return true;
 }
 
 void NormalState::stateUpdate(float dt)
-{
-	//ワールドを更新
-	int32 velocityIterations = 10;
-	int32 positionIterations = 10;
-	b2World *world = GAME::getInstance()->getWorld();
-	world->Step(dt, velocityIterations, positionIterations);
-	
-	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
-	{
-		if (b->GetUserData() != NULL) {
-			RigidSprite* myActor = (RigidSprite *)b->GetUserData();
-			if ((myActor->getTag() == kTag_Enemy) && (myActor->getIsDead())){
-					world->DestroyBody(b);
-					myActor->removeFromParent();
-					continue;
-			}
-			myActor->setPosition(ccp(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO));
-			myActor->setRotation(-1 * CC_RADIANS_TO_DEGREES(b->GetAngle()));
-		}
-	}
-}
+{}
 
 bool NormalState::onTouchBeganEvent(CCTouch* pTouch, CCEvent* pEvent){
-	return _wisp->wispTouchBegan(pTouch, pEvent);
+	return m_pWisp->wispTouchBegan(pTouch, pEvent);
 }
 
 void NormalState::onTouchMovedEvent(CCTouch* pTouch, CCEvent* pEvent){
-	_wisp->wispTouchMoved(pTouch, pEvent);
+	m_pWisp->wispTouchMoved(pTouch, pEvent);
 }
 
 void NormalState::onTouchEndedEvent(CCTouch* pTouch, CCEvent* pEvent){
-	_wisp->wispTouchEnded(pTouch, pEvent);
+	m_pWisp->wispTouchEnded(pTouch, pEvent);
+	s_normalToJudge();
 }
 
 

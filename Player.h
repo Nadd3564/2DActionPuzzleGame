@@ -34,7 +34,9 @@ public:
 	
 private:
 
-	Player* initWisp();
+	bool initWisp();
+
+	void reloadAction();
 
 	b2BodyDef wispBodyDef(Player* wisp);
 	b2FixtureDef wispFixtureDef(b2Shape* shape);
@@ -43,7 +45,7 @@ private:
 
 	void addForceToWisp(CCNode* wisp);
 	bool wispRectTouch(CCNode* wisp, CCTouch* touch);
-	bool touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg);
+	bool touchWithProcess(CCNode* wisp, CCTouch* touch);
 	void chain(CCNode* wisp, CCTouch* touch);
 	float extendAngle(CCNode* wisp);
 	CCPoint extendPos(CCNode* wisp);
@@ -55,6 +57,7 @@ private:
 	CCPoint calcPos(CCPoint touch);
 	bool gThanPos(int dist);
 	CCPoint calcRetPos(CCPoint touch, int dist);
+	void physicsOnEnable();
 
 };
 

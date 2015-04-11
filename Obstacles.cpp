@@ -1,3 +1,13 @@
+/*
+* Obstacles.cpp
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #include "Obstacles.h"
 #include "ObjectManager.h"
 #include "GameLayer.h"
@@ -32,12 +42,15 @@ std::string Obstacles::fileNameInit(int obstacle){
 		fileName = "stone1.png";
 		break;
 	case Obstacle2:
-		fileName = "isi.png";
+		fileName = "headStone.png";
 		break;
 	case Obstacle3:
 		fileName = "pumpkin.png";
 		break;
 	case Obstacle4:
+		fileName = "baseStone1.png";
+		break;
+	case length:
 		fileName = "baseStone1.png";
 		break;
 	default:
@@ -111,12 +124,27 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 			m_pBody->CreateFixture(&spriteShape, 2);
 
 			//•¨—«Ž¿
-			b2FixtureDef fixtureDef = ObsFixtureDef(0.5, 0.5, 0.3);
+			b2FixtureDef fixtureDef = ObsFixtureDef(0.1, 0.5, 0.3);
 			fixtureDef.shape = &spriteShape;
 			m_pBody->CreateFixture(&fixtureDef);
 			break; 
 		}
 
+		case length:
+		{
+			this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_kinematicBody));
+
+			//•¨—ƒGƒ“ƒWƒ“ã‚Ì•¨Ž¿‚ÌŒ`‚Æ‘å‚«‚³
+			b2PolygonShape spriteShape = ObsShape(0.5, 0.3);
+			m_pBody->CreateFixture(&spriteShape, 2);
+
+			//•¨—«Ž¿
+			b2FixtureDef fixtureDef = ObsFixtureDef(0.5, 0.5, 0.3);
+			fixtureDef.shape = &spriteShape;
+			m_pBody->CreateFixture(&fixtureDef);
+			break;
+		}
+			
 		default:
 		{
 			m_pBody = GAME::getInstance()->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_staticBody));
@@ -137,14 +165,62 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 	 return this;
 }
 
-void Obstacles::addObstacles(){
-	create(Obstacle4, ccp(636, 75), 0);
-	create(Obstacle4, ccp(736, 75), 0);
-	create(Obstacle1, ccp(586, 150), 90);
-	create(Obstacle1, ccp(586, 250), 90);
-	create(Obstacle1, ccp(686, 150), 90);
-	create(Obstacle1, ccp(686, 250), 90);
-	create(Obstacle3, ccp(636, 325), 0);
+void Obstacles::addObstacles(int level){
+	switch (level)
+	{
+		case 1:
+		{
+			create(Obstacle4, ccp(536, 75), 0);
+			create(Obstacle4, ccp(636, 75), 0);
+			create(Obstacle4, ccp(736, 75), 0);
+			create(Obstacle1, ccp(586, 150), 90);
+			create(Obstacle1, ccp(586, 250), 90);
+			create(Obstacle1, ccp(686, 150), 90);
+			create(Obstacle1, ccp(686, 250), 90);
+			create(Obstacle3, ccp(636, 325), 0);
+			break;
+		}
+		case 2:
+		{
+			create(Obstacle4, ccp(436, 75), 0);
+			create(Obstacle4, ccp(536, 75), 0);
+			create(Obstacle4, ccp(636, 75), 0);
+			create(Obstacle4, ccp(736, 75), 0);
+			create(Obstacle4, ccp(836, 75), 0);
+			create(Obstacle1, ccp(486, 150), 90);
+			create(Obstacle1, ccp(586, 150), 90);
+			create(Obstacle1, ccp(686, 150), 90);
+			create(Obstacle1, ccp(786, 150), 90);
+			create(Obstacle3, ccp(536, 225), 0);
+			create(Obstacle3, ccp(636, 225), 0);
+			create(Obstacle3, ccp(736, 225), 0);
+			break;
+		}
+		default:
+		{
+			create(Obstacle4, ccp(436, 75), 0);
+			create(Obstacle4, ccp(536, 75), 0);
+			create(Obstacle4, ccp(636, 75), 0);
+			create(Obstacle4, ccp(736, 75), 0);
+			create(Obstacle4, ccp(836, 75), 0);
+			create(Obstacle1, ccp(486, 150), 90);
+			create(Obstacle1, ccp(586, 150), 90);
+			create(Obstacle1, ccp(686, 150), 90);
+			create(Obstacle1, ccp(586, 300), 90);
+			create(Obstacle1, ccp(686, 300), 90);
+			create(Obstacle1, ccp(786, 150), 90);
+			create(Obstacle3, ccp(536, 225), 0);
+			create(Obstacle3, ccp(636, 225), 0);
+			create(Obstacle3, ccp(636, 375), 0);
+			create(Obstacle2, ccp(636, 450), 0);
+			create(Obstacle3, ccp(736, 225), 0);
+			break;
+		}
+		
+	}
+
+	
 }
+
 
 void Obstacles::update(float dt){}

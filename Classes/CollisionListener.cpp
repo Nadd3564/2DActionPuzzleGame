@@ -1,3 +1,13 @@
+/*
+* CollisionListener.cpp
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #include "CollisionListener.h"
 #include "GameLayer.h"
 #include "ObjectManager.h"
@@ -22,6 +32,13 @@ void CollisionListener::BeginContact(b2Contact* contact)
 				OM::getInstance()->collisionWisp();
 				//敵NPC消滅アクション
 				OM::getInstance()->destroyEnemy(spriteB);
+		}
+		else if (isEqualsTag(tagB, kTag_Wisp) && isEqualsTag(tagA, kTag_Enemy))
+		{
+			//火花が散るアクション
+			OM::getInstance()->collisionWisp();
+			//敵NPC消滅アクション
+			OM::getInstance()->destroyEnemy(spriteA);
 		}
 		
 		RigidSprite *enemy = NULL;
@@ -54,7 +71,7 @@ bool CollisionListener::isEqualsTag(int tag, int type)
 bool CollisionListener::isOver(b2Body *obstacles)
 {
 	float32 len = obstacles->GetLinearVelocity().Length();
-	if (len > 3.0)
+	if (len > 1.0)
 		return true;
 	return false;
 }

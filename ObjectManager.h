@@ -19,6 +19,9 @@ class ObjectManager : public cocos2d::CCLayer
 {
 public:
     
+	CC_SYNTHESIZE(int, m_remaining, Remaining);
+	CC_SYNTHESIZE(int, m_level, Level);
+
     static ObjectManager* getInstance()
     {
         if(s_pInstance == 0)
@@ -30,16 +33,14 @@ public:
         return s_pInstance;
     }
     
-    bool init();
+    bool init(int remining, int level);
     virtual void update(float dt);
 	
 	bool handleBeganEvents(CCTouch* pTouch, CCEvent* pEvent);
 	void handleMovedEvents(CCTouch* pTouch, CCEvent* pEvent);
 	void handleEndedEvents(CCTouch* pTouch, CCEvent* pEvent);
 
-    void addGameObject(GameObject* sprite);
-    std::vector<GameObject*> getGameObjects();
-	StateMachine* getStateMachine() { return m_pStateMachine; }
+   StateMachine* getStateMachine() { return m_pStateMachine; }
     
 	CCSprite* initBackground();
 	CCNode* initGround();
@@ -48,6 +49,19 @@ public:
 
 	void collisionWisp();
 	void destroyEnemy(CCNode *enemy);
+	void destroyWisp();
+
+	void shotSE();
+
+	void reloadSE();
+
+	bool isFailed();
+
+	void onTitle(CCObject *pSender);
+
+	void remainingCount();
+
+	void removeRemaining();
 
 private:
     
@@ -56,13 +70,10 @@ private:
 
     StateMachine* m_pStateMachine;
     static ObjectManager* s_pInstance;
-	
     std::vector<GameObject*> m_gameObjects;
+
+	
     
-    ObjectManager(const ObjectManager&);
-	ObjectManager& operator=(const ObjectManager&);
-    
-    ObjectManager(const cocos2d::CCSprite*);
 };
 
 typedef ObjectManager OM;

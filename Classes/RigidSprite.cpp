@@ -1,3 +1,13 @@
+/*
+* RigidSprite.cpp
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #include "RigidSprite.h"
 
 RigidSprite::RigidSprite() :

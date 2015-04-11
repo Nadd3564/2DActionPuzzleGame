@@ -20,6 +20,8 @@ using namespace CocosDenshion;
 ObjectManager* ObjectManager::s_pInstance = 0;
 
 ObjectManager::ObjectManager():
+m_remaining(3),
+m_level(1),
 m_pStateMachine(0)
 {
 	//状態マシーンの初期化
@@ -30,33 +32,49 @@ ObjectManager::~ObjectManager()
 {
 }
 
-bool ObjectManager::init()
+bool ObjectManager::init(int remaining, int level)
 {
 	if (!CCLayer::init()){
 		return false;
 	}
-	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("Resources/BGM1.mp3", true);
+	
+	setRemaining(remaining);
+	setLevel(level);
+	SimpleAudioEngine *engine = SimpleAudioEngine::sharedEngine();
+	if (!engine->isBackgroundMusicPlaying())
+	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("homura.mp3", true);
 	//初期状態を追加し、状態を初期化
 	m_pStateMachine->pushState(new NormalState());
-	//m_pStateMachine->changeState(new NormalState());
+	
+	remainingCount();
 
 	this->scheduleUpdate();
 
 	return true;
 }
 
-void ObjectManager::addGameObject(GameObject* sprite)
-{
-    m_gameObjects.push_back(sprite);
-}
-
-std::vector<GameObject*> ObjectManager::getGameObjects()
-{
-    return m_gameObjects;
-}
-
 void ObjectManager::update(float dt)
 {
+	//ワールドを更新
+	int32 velocityIterations = 10;
+	int32 positionIterations = 10;
+	b2World *world = GAME::getInstance()->getWorld();
+	world->Step(dt, velocityIterations, positionIterations);
+
+	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
+	{
+		if (b->GetUserData() != NULL) {
+			RigidSprite* myActor = (RigidSprite *)b->GetUserData();
+			if ((myActor->getTag() == kTag_Enemy) && (myActor->getIsDead())){
+				world->DestroyBody(b);
+				myActor->removeFromParent();
+				continue;
+			}
+			myActor->setPosition(ccp(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO));
+			myActor->setRotation(-1 * CC_RADIANS_TO_DEGREES(b->GetAngle()));
+		}
+	}
+
 	m_pStateMachine->update(dt);
 }
 
@@ -126,11 +144,11 @@ b2EdgeShape ObjectManager::groundShape(){
 }
 
 void ObjectManager::collisionWisp(){
-	CCSprite *star = CCSprite::create("star.png");
-	star->setPosition(getChildByTag(kTag_Wisp)->getPosition());
+	CCSprite *star = CCSprite::create("star2.png");
+	star->setPosition(GAME::getInstance()->getChildByTag(kTag_Wisp)->getPosition());
 	star->setScale(0);
 	star->setOpacity(127);
-	addChild(star, kOrder_Star);
+	GAME::getInstance()->addChild(star, kOrder_Star);
 
 	//animation
 	CCScaleTo *scale = CCScaleTo::create(0.1, 1);
@@ -144,7 +162,7 @@ void ObjectManager::destroyEnemy(CCNode *enemy){
 	if (!enemy){
 		return;
 	}
-	SimpleAudioEngine::sharedEngine()->playEffect("hit.mp3");
+	SimpleAudioEngine::sharedEngine()->playEffect("se_maoudamashii_system45.mp3");
 
 	CCSprite *destEnemy = CCSprite::create("enemy1.png");
 	destEnemy->setPosition(enemy->getPosition());
@@ -153,21 +171,91 @@ void ObjectManager::destroyEnemy(CCNode *enemy){
 	CCSequence *sequence = CCSequence::create(CCScaleTo::create(0.3, 0), CCRemoveSelf::create(), nullptr);
 	destEnemy->runAction(sequence);
 
-	CCSprite *smoke = CCSprite::create("fog1.png");
-	smoke->setPosition(destEnemy->getPosition());
-	addChild(smoke, kOrder_Smoke);
+	CCSprite *dying = CCSprite::create("dying1.png");
+	dying->setPosition(destEnemy->getPosition());
+	addChild(dying, kOrder_dying);
 
 	CCAnimation *animation = CCAnimation::create();
-	animation->addSpriteFrameWithFileName("fog1.png");
-	animation->addSpriteFrameWithFileName("fog2.png");
-	animation->addSpriteFrameWithFileName("fog3.png");
+	animation->addSpriteFrameWithFileName("dying1.png");
+	animation->addSpriteFrameWithFileName("dying2.png");
+	animation->addSpriteFrameWithFileName("dying3.png");
 	animation->setDelayPerUnit(0.15);
 
 	CCSpawn *spawn = CCSpawn::create(CCAnimate::create(animation), CCFadeOut::create(0.45), nullptr);
 	CCSequence *smokeSequence = CCSequence::create(spawn, CCRemoveSelf::create(), nullptr);
 
-	smoke->runAction(smokeSequence);
+	dying->runAction(smokeSequence);
 
 	Enemy *enemys = dynamic_cast<Enemy *>(enemy);
 	enemys->setIsDead(true);
+}
+
+void ObjectManager::shotSE()
+{
+	SimpleAudioEngine::sharedEngine()->playEffect("se_maoudamashii_element_wind02.mp3");
+}
+
+void ObjectManager::reloadSE()
+{
+	SimpleAudioEngine::sharedEngine()->playEffect("se_maoudamashii_element_fire07.mp3");
+}
+
+bool ObjectManager::isFailed()
+{
+	bool ret = false;
+
+	if (--m_remaining <= 0){
+		CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
+		CCSprite *failed = CCSprite::create("failed.png");
+		failed->setPosition(ccp(screenSize.width / 2, screenSize.height / 2));
+		GAME::getInstance()->addChild(failed, kOrder_Result);
+		ret = true;
+	}
+	else
+	{
+		this->removeChildByTag(m_remaining - 1);
+		destroyWisp();
+	}
+	
+	return ret;
+}
+
+void ObjectManager::destroyWisp()
+{
+	b2World *world = GAME::getInstance()->getWorld();
+	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
+	{
+		if (b->GetUserData() != NULL) {
+			RigidSprite* myActor = (RigidSprite *)b->GetUserData();
+			if ((myActor->getTag() == kTag_Wisp))
+			{
+				world->DestroyBody(b);
+				myActor->removeFromParent();
+				continue;
+			}
+		}
+	}
+}
+
+void ObjectManager::onTitle(CCObject *pSender)
+{
+	this->removeFromParent();
+	CCScene *scene = GameLayer::createScene(3, 1);
+	CCDirector::sharedDirector()->replaceScene(scene);
+}
+
+void ObjectManager::remainingCount()
+{
+	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
+	for (int i = 0; i < m_remaining - 1; i++){
+		CCSprite *drawRemaining = CCSprite::create("remaining.png");
+		drawRemaining->setPosition(ccp(((screenSize.width - 100) / 25) + (i * 40), (screenSize.height - 100) / 20));
+		this->addChild(drawRemaining, kOrder_Remaining, i);
+	}
+}
+
+void ObjectManager::removeRemaining()
+{
+	this->removeChildByTag(0);
+	this->removeChildByTag(1);
 }

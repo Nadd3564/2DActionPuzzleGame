@@ -10,7 +10,7 @@
 #include "ObjectManager.h"
 #include "GameLayer.h"
 
-const float ACCELERATION = 0.11;
+const float ACCELERATION = 0.2;
 const CCPoint CROSS_ONE_POS = ccp(80, 135);
 const CCPoint CROSS_TWO_POS = ccp(125, 140);
 
@@ -21,10 +21,10 @@ Player::~Player(){}
 Player* Player::create(){
 	//ウィスプ生成
 	Player* wisp = new Player();
-	if (wisp) {
-        wisp->initWisp();
-		wisp->autorelease();
+	if (wisp && wisp->initWisp()) {
+        wisp->autorelease();
 		GAME::getInstance()->addChild(wisp, kOrder_Wisp, kTag_Wisp);
+		wisp->reloadAction();
 		return wisp;
 	}
 	//autoreleaseを使用しているため、deleteの代わりに使用、メモリを開放
@@ -33,32 +33,41 @@ Player* Player::create(){
 	return NULL;
 }
 
-Player* Player::initWisp()
+bool Player::initWisp()
 {
 	assert( (float)(0, 0) < (WISP_SET_POS.x, WISP_SET_POS.y) );
-	this->initWithFile("wisp_1.png");
-	this->setPosition(WISP_SET_POS);
+	if (this->initWithFile("wisp_1.png")){
+		this->setPosition(WISP_SET_POS);
+		return true;
+	}
 	
-	//物理ボディ生成
-	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&wispBodyDef(this));
-    
-	//物理エンジン上の物質の形と大きさ
-    b2CircleShape spriteShape;
-    spriteShape.m_radius = this->getContentSize().width * 0.3 / PTM_RATIO;
+	return false;
+}
 
-    //物理性質
-	this->m_pBody->CreateFixture(&wispFixtureDef(&spriteShape));
-	
-	this->setRigidBody(this->m_pBody);
-	
-	return this;
+void Player::reloadAction()
+{
+	OM::getInstance()->reloadSE();
+	CCSprite *reload = CCSprite::create("explode1.png");
+	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
+	reload->setPosition(ccp(this->getPositionX(), this->getPositionY() + screenSize.height / 15));
+	GAME::getInstance()->addChild(reload, kOrder_Star);
+	CCAnimation *animation = CCAnimation::create();
+	animation->addSpriteFrameWithFileName("explode1.png");
+	animation->addSpriteFrameWithFileName("explode2.png");
+	animation->addSpriteFrameWithFileName("explode3.png");
+	animation->addSpriteFrameWithFileName("explode4.png");
+	animation->setDelayPerUnit(0.1);
+
+	CCAnimate *animate = CCAnimate::create(animation);
+	CCFadeOut *fadeout = CCFadeOut::create(0.6);
+	CCSpawn *spawn = CCSpawn::create(animate, fadeout, NULL);
+	CCSequence *seq = CCSequence::create(spawn, CCRemoveSelf::create(), NULL);
+	reload->runAction(seq);
 }
 
 bool Player::wispTouchBegan(CCTouch* pTouch, CCEvent* pEvent){
-	bool flg = false;
-	
 	//ウィスプの位置を計算
-	return touchWithProcess(this, pTouch, flg);
+	return touchWithProcess(this, pTouch);
 }
 
 
@@ -67,8 +76,6 @@ void Player::wispTouchMoved(CCTouch* pTouch, CCEvent* pEvent){
 	//鎖を引くポイントと鎖を表示
 	chain(this, pTouch);
 }
-
-
 
 void Player::wispTouchEnded(CCTouch* pTouch, CCEvent* pEvent){
 	//鎖を削除し、ウィスプに力を加える
@@ -82,14 +89,14 @@ bool Player::wispRectTouch(CCNode* wisp, CCTouch* touch){
 	return false;
 }
 
-bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch, bool flg){
+bool Player::touchWithProcess(CCNode* wisp, CCTouch* touch){
 	if(wispRectTouch(wisp, touch))
 	{
 		//ウィスプの位置を計算
 		wisp->setPosition(calcPos(touch->getLocation()));
-		flg = true;
+		return true;
 	}
-	return flg;
+	return false;
 }
 
 void Player::chain(CCNode* wisp, CCTouch* touch){
@@ -124,10 +131,26 @@ void Player::removeAndAdd(CCNode* wisp, CCTouch* touch){
 		GAME::getInstance()->removeChain();
 		//ウィスプの位置を計算
 		wisp->setPosition(calcPos(touch->getLocation()));
-
+		//剛体をセット
+		physicsOnEnable();
 		//ウィスプに力を加える
 		addForceToWisp(wisp);
 	}
+}
+
+void Player::physicsOnEnable()
+{
+	//物理ボディ生成
+	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&wispBodyDef(this));
+
+	//物理エンジン上の物質の形と大きさ
+	b2CircleShape spriteShape;
+	spriteShape.m_radius = this->getContentSize().width * 0.3 / PTM_RATIO;
+
+	//物理性質
+	this->m_pBody->CreateFixture(&wispFixtureDef(&spriteShape));
+
+	this->setRigidBody(this->m_pBody);
 }
 
 CCNode* Player::initChainOne(CCNode* chain1){
@@ -193,6 +216,7 @@ void Player::addForceToWisp(CCNode* wisp){
 	//ウィスプに力を加える
 	CCPoint force = (will->getPosition() - WISP_SET_POS) * -ACCELERATION;
 	willBody->ApplyLinearImpulse(b2Vec2(force.x, force.y), willBody->GetWorldCenter());
+	OM::getInstance()->shotSE();
 }
 
 //発射前のウィスプの移動範囲を制御
@@ -229,7 +253,7 @@ CCPoint Player::calcRetPos(CCPoint touch, int dist){
 //物理ボディ生成
 b2BodyDef Player::wispBodyDef(Player* wisp){
 	b2BodyDef bodyDef;
-    bodyDef.type = b2_kinematicBody;
+    //bodyDef.type = b2_kinematicBody;
 	bodyDef.position.Set(wisp->getPositionX() / PTM_RATIO,
                                wisp->getPositionY() / PTM_RATIO);
 	bodyDef.userData = wisp; 

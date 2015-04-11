@@ -29,6 +29,7 @@ enum kTag
 	kTag_Chain2,
 	kTag_Obstacles,
 	kTag_ObstaclesB,
+	kTag_Clear,
 };
 
 enum kOrder
@@ -41,9 +42,10 @@ enum kOrder
 	kOrder_Chain1,
 	kOrder_Cross1,
 	kOrder_Obstacles,
-	kOrder_Smoke,
+	kOrder_dying,
 	kOrder_Star,
-	kOrder_Result
+	kOrder_Result,
+	kOrder_Remaining,
 };
 
 class GameLayer : public CCLayer

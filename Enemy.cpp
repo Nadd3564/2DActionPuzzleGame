@@ -55,8 +55,8 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 
 void Enemy::addEnemy()
 {
-	create(ccp(636, 335), "enemy1.png");
-	create(ccp(536, 125), "enemy1.png");
+	create(ccp(636, 125), "enemy1.png");
+	create(ccp(536, 325), "enemy1.png");
 }
 
 //•¨—ƒ{ƒfƒB¶¬

@@ -1,3 +1,13 @@
+/*
+* TitleLayer.h
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #ifndef __TITLE_LAYER_H__
 #define __TITLE_LAYER_H__
 
@@ -11,14 +21,17 @@ public:
 	
 	static cocos2d::CCScene* createScene();
     
-	void onGame(CCObject* pSender);
-    
 	CREATE_FUNC(TitleLayer);
+
+	virtual bool ccTouchBegan(cocos2d::CCTouch* touch, cocos2d::CCEvent* event);
 
 private:
 
 	TitleLayer();
 	virtual ~TitleLayer();
+
+	void onGame();
+
 
 };
 

@@ -31,20 +31,17 @@ public:
     std::string getStateID() override { return s_normalID; }
     
     NormalState();
-    ~NormalState();
+    virtual ~NormalState();
     
 private:
 
-	Player* _wisp;
-	Enemy* _enemy;
-	Obstacles* _obs;
+	Player* m_pWisp;
+	Enemy* m_pEnemy;
+	Obstacles* m_pObs;
 	static const std::string s_normalID;
 
-    float _tileWidth;
-    float _tileHeight;
-    float _mapWidth;
-    float _mapHeight;
-	  
+	void s_normalToJudge();
+
 };
 
 

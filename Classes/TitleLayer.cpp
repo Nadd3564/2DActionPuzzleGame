@@ -1,3 +1,13 @@
+/*
+* TitleLayer.cpp
+* EnterNirvana
+*
+* All Rights Reserved by Nadd3564
+*
+* Written by Nadd3564 on 2015/04/10.
+*
+*/
+
 #include "TitleLayer.h"
 #include "GameLayer.h"
 
@@ -23,42 +33,32 @@ bool TitleLayer::init()
         return false;
     }
     
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+	//シングルタップモード
+	this->setTouchMode(kCCTouchesOneByOne);
+	this->setTouchEnabled(true);
+   
+	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
-    CCMenuItemImage *button = CCMenuItemImage::create(
-                                        "CloseNormal.png",
-                                        "CloseSelected.png",
-                                        this,
-										menu_selector(TitleLayer::onGame));
-    
-	button->setPosition(ccp(origin.x + visibleSize.width - button->getContentSize().width / 2,
-		origin.y + button->getContentSize().height / 2));
+    CCSprite *background = CCSprite::create("background1.png");
+	background->setPosition(ccp(screenSize.width / 2, screenSize.height / 2));
+	this->addChild(background, 0);
 
-    CCMenu* pMenu = CCMenu::create(button, NULL);
-    pMenu->setPosition(CCPointZero);
-    this->addChild(pMenu, 1);
+	CCSprite *logo = CCSprite::create("title_text.png");
+	logo->setPosition(ccp(screenSize.width / 2, screenSize.height / 1.5));
+	this->addChild(logo, 1);
 
-    CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Arial", 24);
-    
-    pLabel->setPosition(ccp(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - pLabel->getContentSize().height));
-
-    this->addChild(pLabel, 1);
-
-    CCSprite* pSprite = CCSprite::create("HelloWorld.png");
-
-    pSprite->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    this->addChild(pSprite, 0);
-    
     return true;
 }
 
+bool TitleLayer::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
+{
+	onGame();
+	return true;
+}
 
-void TitleLayer::onGame(CCObject* pSender)
+void TitleLayer::onGame()
 {
 	CCScene *game = GAME::createScene(3, 1);
-	CCTransitionFade *fade = CCTransitionFade::create(0.5, game);
-	CCDirector::sharedDirector()->replaceScene(fade);
+	CCTransitionSplitCols *splitCols = CCTransitionSplitCols::create(1.0, game);
+	CCDirector::sharedDirector()->replaceScene(splitCols);
 }
