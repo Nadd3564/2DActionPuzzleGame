@@ -36,11 +36,6 @@ CCScene* GameLayer::createScene(int remaining, int level)
 	gm->init(remaining, level);
 	scene->addChild(gm);
    
-	HudLayer *hud = new HudLayer();
-	hud->init();
-	scene->addChild(hud);
-	layer->m_pHud = hud;
-
 	return scene; 
 }
 

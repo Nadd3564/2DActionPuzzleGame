@@ -86,11 +86,6 @@ public:
 private:
 
 	static GameLayer* s_pInstance;
-
-	HudLayer *m_pHud;
-
-	int m_numCollected;
-
 	b2ContactListener *m_pCollisionListener;
 
 };

@@ -11,7 +11,6 @@
 #include "GameLayer.h"
 #include "TitleLayer.h"
 #include "JudgeState.h"
-#include "ApproachState.h"
 
 using namespace cocos2d;
 

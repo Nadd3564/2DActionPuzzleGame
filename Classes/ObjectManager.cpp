@@ -9,7 +9,6 @@
 
 #include "ObjectManager.h"
 #include "NormalState.h"
-#include "ApproachState.h"
 #include "SimpleAudioEngine.h"
 #include "GameLayer.h"
 
