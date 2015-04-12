@@ -36,11 +36,11 @@ bool JudgeState::onStateEnter()
 void JudgeState::stateUpdate(float dt)
 {
 	CCNode *enemy = GAME::getInstance()->getChildByTag(kTag_Enemy);
-	if (!enemy && ++m_timer >= 150)
+	if (!enemy && calcTimer(150))
 	{
 		onResult();
 	}
-	else if (++m_timer >= 600)
+	else if (calcTimer(600))
 	{
 		failed();
 	}
@@ -67,6 +67,13 @@ void JudgeState::onTouchEndedEvent(CCTouch* pTouch, CCEvent* pEvent)
 bool JudgeState::onStateExit()
 {
 	return true;
+}
+
+bool JudgeState::calcTimer(float value)
+{
+	if (++m_timer >= value)
+		return true;
+	return false;
 }
 
 void JudgeState::onResult()

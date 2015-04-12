@@ -42,6 +42,7 @@ private:
 	void s_JudgeToNormal();
 	void onResult();
 	void failed();
+	bool calcTimer(float value);
 
 };
 

@@ -31,7 +31,7 @@ private:
 	virtual ~TitleLayer();
 
 	void onGame();
-
+	void exit(cocos2d::CCObject *pSender);
 
 };
 

@@ -12,7 +12,7 @@
 #include "TitleLayer.h"
 #include "JudgeState.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
 const std::string NormalState::s_normalID = "NORMAL";
 

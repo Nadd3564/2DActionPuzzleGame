@@ -172,7 +172,7 @@ void ObjectManager::destroyEnemy(CCNode *enemy){
 
 	CCSprite *dying = CCSprite::create("dying1.png");
 	dying->setPosition(destEnemy->getPosition());
-	addChild(dying, kOrder_dying);
+	this->addChild(dying, kOrder_dying, kTag_Dying);
 
 	CCAnimation *animation = CCAnimation::create();
 	animation->addSpriteFrameWithFileName("dying1.png");
@@ -181,9 +181,9 @@ void ObjectManager::destroyEnemy(CCNode *enemy){
 	animation->setDelayPerUnit(0.15);
 
 	CCSpawn *spawn = CCSpawn::create(CCAnimate::create(animation), CCFadeOut::create(0.45), nullptr);
-	CCSequence *smokeSequence = CCSequence::create(spawn, CCRemoveSelf::create(), nullptr);
+	CCSequence *seq = CCSequence::create(spawn, CCRemoveSelf::create(), nullptr);
 
-	dying->runAction(smokeSequence);
+	dying->runAction(seq);
 
 	Enemy *enemys = dynamic_cast<Enemy *>(enemy);
 	enemys->setIsDead(true);
@@ -255,6 +255,9 @@ void ObjectManager::remainingCount()
 
 void ObjectManager::removeRemaining()
 {
+	if (getChildByTag(kTag_Dying))
+		this->removeChildByTag(kTag_Dying);
+
 	this->removeChildByTag(0);
 	this->removeChildByTag(1);
 }

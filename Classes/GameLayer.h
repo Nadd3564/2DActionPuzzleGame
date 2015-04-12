@@ -10,11 +10,9 @@
 
 #ifndef _EN_GameLayer_
 #define _EN_GameLayer_
-#define BALL_RADIUS 8.0
 
 #include "cocos2d.h"
 #include <Box2D\Box2D.h>
-#include "HudLayer.h"
 #include "ObjectManager.h"
 #include "CollisionListener.h"
 
@@ -29,6 +27,7 @@ enum kTag
 	kTag_Chain2,
 	kTag_Obstacles,
 	kTag_ObstaclesB,
+	kTag_Dying,
 	kTag_Clear,
 };
 
