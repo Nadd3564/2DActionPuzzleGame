@@ -51,7 +51,13 @@ bool NormalState::onStateEnter() {
 }
 
 void NormalState::stateUpdate(float dt)
-{}
+{
+	CCNode *enemy = GAME::getInstance()->getChildByTag(kTag_Enemy);
+	if (!enemy)
+	{
+		s_normalToJudge();
+	}
+}
 
 bool NormalState::onTouchBeganEvent(CCTouch* pTouch, CCEvent* pEvent){
 	return m_pWisp->wispTouchBegan(pTouch, pEvent);
