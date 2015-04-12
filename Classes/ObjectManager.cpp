@@ -103,7 +103,11 @@ CCSprite* ObjectManager::initBackground(){
 //地面生成
 CCNode* ObjectManager::initGround(){
 	//物理ボディ生成
-	b2Body* body = GAME::getInstance()->getWorld()->CreateBody(&groundBodyDef());
+	b2BodyDef groundBodyDef;
+	groundBodyDef.type = b2_staticBody;
+	groundBodyDef.position.Set(0.0f, 0.0f);
+	groundBodyDef.userData = this;
+	b2Body* body = GAME::getInstance()->getWorld()->CreateBody(&groundBodyDef);
 	
 	// 地面の形と大きさの定義
     b2EdgeShape groundBox = groundShape();
@@ -114,6 +118,7 @@ CCNode* ObjectManager::initGround(){
     fixtureDef.density = 0.5;
 	fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.8;
+	fixtureDef.filter.categoryBits = 0x0010;
 	body->CreateFixture(&fixtureDef);
 	
 	//地面ノード作成
@@ -123,15 +128,6 @@ CCNode* ObjectManager::initGround(){
 	node->setPosition(ccp(background->getContentSize().width / 2, 25));
 	GAME::getInstance()->addChild(node);
 	return node;
-}
-
-//物理ボディ生成
-b2BodyDef ObjectManager::groundBodyDef(){
-	 b2BodyDef groundBodyDef;
-	groundBodyDef.type = b2_staticBody;
-    groundBodyDef.position.Set(0.0f, 0.0f);
-	groundBodyDef.userData = this;
-	return groundBodyDef;
 }
 
 // 地面の形と大きさの定義
@@ -153,7 +149,7 @@ void ObjectManager::collisionWisp(){
 	CCScaleTo *scale = CCScaleTo::create(0.1, 1);
 	CCFadeOut *fadeout = CCFadeOut::create(0.1);
 	CCRemoveSelf *remove = CCRemoveSelf::create();
-	CCSequence *sequence = CCSequence::create(scale, fadeout, remove, nullptr);
+	CCSequence *sequence = CCSequence::create(scale, fadeout, remove, NULL);
 	star->runAction(sequence);
 }
 
@@ -165,9 +161,9 @@ void ObjectManager::destroyEnemy(CCNode *enemy){
 
 	CCSprite *destEnemy = CCSprite::create("enemy1.png");
 	destEnemy->setPosition(enemy->getPosition());
-	addChild(destEnemy, kOrder_Enemy);
+	addChild(destEnemy, kOrder_Enemy, kTag_Enemy);
 
-	CCSequence *sequence = CCSequence::create(CCScaleTo::create(0.3, 0), CCRemoveSelf::create(), nullptr);
+	CCSequence *sequence = CCSequence::create(CCScaleTo::create(0.3, 0), CCRemoveSelf::create(), NULL);
 	destEnemy->runAction(sequence);
 
 	CCSprite *dying = CCSprite::create("dying1.png");
@@ -180,8 +176,8 @@ void ObjectManager::destroyEnemy(CCNode *enemy){
 	animation->addSpriteFrameWithFileName("dying3.png");
 	animation->setDelayPerUnit(0.15);
 
-	CCSpawn *spawn = CCSpawn::create(CCAnimate::create(animation), CCFadeOut::create(0.45), nullptr);
-	CCSequence *seq = CCSequence::create(spawn, CCRemoveSelf::create(), nullptr);
+	CCSpawn *spawn = CCSpawn::create(CCAnimate::create(animation), CCFadeOut::create(0.45), NULL);
+	CCSequence *seq = CCSequence::create(spawn, CCRemoveSelf::create(), NULL);
 
 	dying->runAction(seq);
 
@@ -255,9 +251,11 @@ void ObjectManager::remainingCount()
 
 void ObjectManager::removeRemaining()
 {
-	if (getChildByTag(kTag_Dying))
+	if (this->getChildByTag(kTag_Dying) || this->getChildByTag(kTag_Enemy)){
 		this->removeChildByTag(kTag_Dying);
-
+		this->removeChildByTag(kTag_Enemy);
+	}
+		
 	this->removeChildByTag(0);
 	this->removeChildByTag(1);
 }

@@ -117,7 +117,8 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 
 		case Obstacle3:
 		{
-			this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_dynamicBody));
+			bodyDef = ObsBodyDef(bodyDef, b2_dynamicBody);
+			this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&bodyDef);
 			
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape = ObsShape(0.5, 0.3);
@@ -132,7 +133,8 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 
 		case length:
 		{
-			this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_kinematicBody));
+			bodyDef = ObsBodyDef(bodyDef, b2_kinematicBody);
+			this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&bodyDef);
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape = ObsShape(0.5, 0.3);
@@ -147,7 +149,8 @@ Obstacles* Obstacles::initObstacles(int obstacle, CCPoint pos, float angle)
 			
 		default:
 		{
-			m_pBody = GAME::getInstance()->getWorld()->CreateBody(&ObsBodyDef(bodyDef, b2_staticBody));
+			bodyDef = ObsBodyDef(bodyDef, b2_staticBody);
+			m_pBody = GAME::getInstance()->getWorld()->CreateBody(&bodyDef);
 
 			//物理エンジン上の物質の形と大きさ
 			b2PolygonShape spriteShape = ObsShape(0.5, 0.5);
@@ -170,50 +173,50 @@ void Obstacles::addObstacles(int level){
 	{
 		case 1:
 		{
-			create(Obstacle4, ccp(536, 75), 0);
 			create(Obstacle4, ccp(636, 75), 0);
 			create(Obstacle4, ccp(736, 75), 0);
-			create(Obstacle1, ccp(586, 150), 90);
-			create(Obstacle1, ccp(586, 250), 90);
+			create(Obstacle4, ccp(836, 75), 0);
 			create(Obstacle1, ccp(686, 150), 90);
 			create(Obstacle1, ccp(686, 250), 90);
-			create(Obstacle3, ccp(636, 325), 0);
+			create(Obstacle1, ccp(786, 150), 90);
+			create(Obstacle1, ccp(786, 250), 90);
+			create(Obstacle3, ccp(736, 325), 0);
 			break;
 		}
 		case 2:
 		{
-			create(Obstacle4, ccp(436, 75), 0);
 			create(Obstacle4, ccp(536, 75), 0);
 			create(Obstacle4, ccp(636, 75), 0);
 			create(Obstacle4, ccp(736, 75), 0);
 			create(Obstacle4, ccp(836, 75), 0);
-			create(Obstacle1, ccp(486, 150), 90);
+			create(Obstacle4, ccp(936, 75), 0);
 			create(Obstacle1, ccp(586, 150), 90);
 			create(Obstacle1, ccp(686, 150), 90);
 			create(Obstacle1, ccp(786, 150), 90);
-			create(Obstacle3, ccp(536, 225), 0);
+			create(Obstacle1, ccp(886, 150), 90);
 			create(Obstacle3, ccp(636, 225), 0);
 			create(Obstacle3, ccp(736, 225), 0);
+			create(Obstacle3, ccp(836, 225), 0);
 			break;
 		}
 		default:
 		{
-			create(Obstacle4, ccp(436, 75), 0);
 			create(Obstacle4, ccp(536, 75), 0);
 			create(Obstacle4, ccp(636, 75), 0);
 			create(Obstacle4, ccp(736, 75), 0);
 			create(Obstacle4, ccp(836, 75), 0);
-			create(Obstacle1, ccp(486, 150), 90);
+			create(Obstacle4, ccp(936, 75), 0);
 			create(Obstacle1, ccp(586, 150), 90);
 			create(Obstacle1, ccp(686, 150), 90);
-			create(Obstacle1, ccp(586, 300), 90);
-			create(Obstacle1, ccp(686, 300), 90);
 			create(Obstacle1, ccp(786, 150), 90);
-			create(Obstacle3, ccp(536, 225), 0);
+			create(Obstacle1, ccp(686, 300), 90);
+			create(Obstacle1, ccp(786, 300), 90);
+			create(Obstacle1, ccp(886, 150), 90);
 			create(Obstacle3, ccp(636, 225), 0);
-			create(Obstacle3, ccp(636, 375), 0);
-			create(Obstacle2, ccp(636, 450), 0);
 			create(Obstacle3, ccp(736, 225), 0);
+			create(Obstacle3, ccp(736, 375), 0);
+			create(Obstacle2, ccp(736, 450), 0);
+			create(Obstacle3, ccp(836, 225), 0);
 			break;
 		}
 		

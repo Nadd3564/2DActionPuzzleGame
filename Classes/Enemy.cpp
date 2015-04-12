@@ -37,7 +37,9 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 	this->setPosition(position);
 	
 	//物理ボディ生成
-	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&enemyBodyDef(this));
+	b2BodyDef bodyDef = enemyBodyDef(this);
+	
+	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&bodyDef);
 	this->m_pBody->SetSleepingAllowed(true);
 	this->m_pBody->SetLinearDamping(0.2);
 	this->m_pBody->SetAngularDamping(0.8);
@@ -47,39 +49,42 @@ Enemy* Enemy::initEnemy(CCPoint position, const char* FileName)
 	spriteShape.m_radius = this->getContentSize().width * 0.4 / PTM_RATIO;
 
     //物理性質
-	this->m_pBody->CreateFixture(&enemyFixtureDef(&spriteShape));
+	b2FixtureDef fixtureDef = enemyFixtureDef();
+	fixtureDef.shape = &spriteShape;
+	
+	this->m_pBody->CreateFixture(&fixtureDef);
 	this->setRigidBody(this->m_pBody);
 	this->scheduleUpdate();
 	return this;
-}
-
-void Enemy::addEnemy()
-{
-	create(ccp(636, 125), "enemy1.png");
-	create(ccp(536, 325), "enemy1.png");
 }
 
 //物理ボディ生成
 b2BodyDef Enemy::enemyBodyDef(Enemy* enemy)
 {
 	b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(enemy->getPositionX() / PTM_RATIO,
-                               enemy->getPositionY() / PTM_RATIO);
-	bodyDef.userData = this; 
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(
+		enemy->getPositionX() / PTM_RATIO,
+		enemy->getPositionY() / PTM_RATIO);
+	bodyDef.userData = this;
 	return bodyDef;
 }
 
 //物理性質
-b2FixtureDef Enemy::enemyFixtureDef(b2Shape* shape)
+b2FixtureDef Enemy::enemyFixtureDef()
 {
 	b2FixtureDef fixtureDef;
-    fixtureDef.shape = shape;
 	fixtureDef.filter.categoryBits = 0x0010;
-    fixtureDef.density = 0.5;
-    fixtureDef.restitution = 0.5;
+	fixtureDef.density = 0.5;
+	fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.3;
 	return fixtureDef;
+}
+
+void Enemy::addEnemy()
+{
+	create(ccp(736, 125), "enemy1.png");
+	create(ccp(636, 325), "enemy1.png");
 }
 
 void Enemy::update (float dt){}

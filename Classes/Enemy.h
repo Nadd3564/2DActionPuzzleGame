@@ -21,9 +21,9 @@ public:
 	
 	static Enemy* create(CCPoint position, const char* fileName);
 	void addEnemy();
-    b2BodyDef enemyBodyDef(Enemy* enemy);
-	b2FixtureDef enemyFixtureDef(b2Shape* shape);
-	virtual void update (float dt);
+	b2BodyDef enemyBodyDef(Enemy* enemy);
+	b2FixtureDef enemyFixtureDef();
+    virtual void update (float dt);
 
 private:
 	Enemy* initEnemy(CCPoint position, const char* fileName);

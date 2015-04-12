@@ -44,7 +44,6 @@ public:
     
 	CCSprite* initBackground();
 	CCNode* initGround();
-	b2BodyDef groundBodyDef();
 	b2EdgeShape groundShape();
 
 	void collisionWisp();

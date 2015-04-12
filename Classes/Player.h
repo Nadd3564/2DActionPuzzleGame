@@ -8,9 +8,6 @@
 #ifndef __Player__
 #define __Player__
 
-#define WISP_SET_POS ccp(100 ,150)
-#define WISP_EXTEND 50
-
 #include <iostream>
 #include "GameObject.h"
 
@@ -39,7 +36,7 @@ private:
 	void reloadAction();
 
 	b2BodyDef wispBodyDef(Player* wisp);
-	b2FixtureDef wispFixtureDef(b2Shape* shape);
+	b2FixtureDef wispFixtureDef();
 	
 	virtual void update(float dt);
 

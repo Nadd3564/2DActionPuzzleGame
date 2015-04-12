@@ -11,8 +11,10 @@
 #include "GameLayer.h"
 
 const float ACCELERATION = 0.2;
-const CCPoint CROSS_ONE_POS = ccp(80, 135);
-const CCPoint CROSS_TWO_POS = ccp(125, 140);
+const CCPoint WISP_SET_POS = ccp(200, 150);
+const CCPoint CROSS_ONE_POS = ccp(230, 135);
+const CCPoint CROSS_TWO_POS = ccp(175, 140);
+const float WISP_EXTEND = 50;
 
 Player::Player(){}
 
@@ -63,6 +65,8 @@ void Player::reloadAction()
 	CCSpawn *spawn = CCSpawn::create(animate, fadeout, NULL);
 	CCSequence *seq = CCSequence::create(spawn, CCRemoveSelf::create(), NULL);
 	reload->runAction(seq);
+	CCFadeIn *fadein = CCFadeIn::create(0.5);
+	this->runAction(fadein);
 }
 
 bool Player::wispTouchBegan(CCTouch* pTouch, CCEvent* pEvent){
@@ -141,14 +145,19 @@ void Player::removeAndAdd(CCNode* wisp, CCTouch* touch){
 void Player::physicsOnEnable()
 {
 	//物理ボディ生成
-	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&wispBodyDef(this));
+	b2BodyDef bodyDef;
+	bodyDef = wispBodyDef(this);
+
+	this->m_pBody = GAME::getInstance()->getWorld()->CreateBody(&bodyDef);
 
 	//物理エンジン上の物質の形と大きさ
 	b2CircleShape spriteShape;
 	spriteShape.m_radius = this->getContentSize().width * 0.3 / PTM_RATIO;
 
 	//物理性質
-	this->m_pBody->CreateFixture(&wispFixtureDef(&spriteShape));
+	b2FixtureDef fixtureDef = wispFixtureDef();
+	fixtureDef.shape = &spriteShape;
+	this->m_pBody->CreateFixture(&fixtureDef);
 
 	this->setRigidBody(this->m_pBody);
 }
@@ -195,7 +204,7 @@ void Player::setChainTwo(CCNode* chain2, CCPoint pos){
 CCSprite* Player::initCrossOne(){
 	CCSprite* cross1 = CCSprite::create("Cross1.png");
 	cross1->setScale(0.5);
-	cross1->setPosition(ccp(100, 100));
+	cross1->setPosition(ccp(200, 100));
 	GAME::getInstance()->addChild(cross1, kOrder_Cross1);
 	return cross1;
 }
@@ -253,18 +262,15 @@ CCPoint Player::calcRetPos(CCPoint touch, int dist){
 //物理ボディ生成
 b2BodyDef Player::wispBodyDef(Player* wisp){
 	b2BodyDef bodyDef;
-    //bodyDef.type = b2_kinematicBody;
-	bodyDef.position.Set(wisp->getPositionX() / PTM_RATIO,
+    bodyDef.position.Set(wisp->getPositionX() / PTM_RATIO,
                                wisp->getPositionY() / PTM_RATIO);
 	bodyDef.userData = wisp; 
 	return bodyDef;
 }
 
 //物理性質
-b2FixtureDef Player::wispFixtureDef(b2Shape* shape){
-	assert(shape != NULL);
+b2FixtureDef Player::wispFixtureDef(){
 	b2FixtureDef fixtureDef;
-    fixtureDef.shape = shape;
     fixtureDef.density = 0.5;
     fixtureDef.restitution = 0.5;
 	fixtureDef.friction = 0.3;

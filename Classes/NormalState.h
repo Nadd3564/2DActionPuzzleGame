@@ -21,14 +21,14 @@ class NormalState : public GameState
 {
 public:
 
-	void stateUpdate(float dt) override;
-	bool onStateEnter() override;
-    bool onStateExit() override;
-	bool onTouchBeganEvent(CCTouch* pTouch, CCEvent* pEvent) override;
-	void onTouchMovedEvent(CCTouch* pTouch, CCEvent* pEvent) override;
-	void onTouchEndedEvent(CCTouch* pTouch, CCEvent* pEvent) override;
+	virtual void stateUpdate(float dt);
+	virtual bool onStateEnter();
+	virtual bool onStateExit();
+	virtual bool onTouchBeganEvent(CCTouch* pTouch, CCEvent* pEvent);
+	virtual void onTouchMovedEvent(CCTouch* pTouch, CCEvent* pEvent);
+	virtual void onTouchEndedEvent(CCTouch* pTouch, CCEvent* pEvent);
     
-    std::string getStateID() override { return s_normalID; }
+	virtual std::string getStateID(){ return s_normalID; }
     
     NormalState();
     virtual ~NormalState();

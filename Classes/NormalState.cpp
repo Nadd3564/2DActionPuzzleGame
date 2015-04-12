@@ -36,7 +36,7 @@ bool NormalState::onStateEnter() {
 	if (OM::getInstance()->getRemaining() != 3)
 		return false;
 	//エネミー生成
-	Enemy::create(ccp(736, 325), "enemy2.png")->addEnemy();
+	Enemy::create(ccp(836, 325), "enemy2.png")->addEnemy();
 	//背景生成
 	OM::getInstance()->initBackground();
 	//地面生成
