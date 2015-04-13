@@ -15,6 +15,7 @@
 
 void CollisionListener::BeginContact(b2Contact* contact)
 {
+	//衝突オブジェクトA&B
     b2Body * bodyA = contact->GetFixtureA()->GetBody();
     b2Body * bodyB = contact->GetFixtureB()->GetBody();
 	
@@ -22,7 +23,7 @@ void CollisionListener::BeginContact(b2Contact* contact)
 	RigidSprite *spriteB = static_cast<RigidSprite *>(bodyB->GetUserData());
 
 	if (spriteA && spriteB) {
-		
+		//enum型のタグを取得
 		int tagA = spriteA->getTag();
 		int tagB = spriteB->getTag();
 		

@@ -39,6 +39,8 @@ bool ObjectManager::init(int remaining, int level)
 	
 	setRemaining(remaining);
 	setLevel(level);
+
+	preloadSounds();
 	SimpleAudioEngine *engine = SimpleAudioEngine::sharedEngine();
 	if (!engine->isBackgroundMusicPlaying())
 	SimpleAudioEngine::sharedEngine()->playBackgroundMusic("homura.mp3", true);
