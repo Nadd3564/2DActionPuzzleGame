@@ -77,6 +77,15 @@ void ObjectManager::update(float dt)
 	m_pStateMachine->update(dt);
 }
 
+void ObjectManager::preloadSounds()
+{
+	SimpleAudioEngine *engine = SimpleAudioEngine::sharedEngine();
+	engine->preloadBackgroundMusic("homura.mp3");
+	engine->preloadEffect("se_maoudamashii_system45.mp3");
+	engine->preloadEffect("se_maoudamashii_element_wind02.mp3");
+	engine->preloadEffect("se_maoudamashii_element_fire07.mp3");
+}
+
 //GameLayerで呼び出しているインプットの処理
 bool ObjectManager::handleBeganEvents(CCTouch* pTouch, CCEvent* pEvent)
 {

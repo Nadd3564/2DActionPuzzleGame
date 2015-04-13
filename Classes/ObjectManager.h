@@ -64,15 +64,15 @@ public:
 
 private:
     
+	StateMachine* m_pStateMachine;
+	static ObjectManager* s_pInstance;
+	std::vector<GameObject*> m_gameObjects;
+
 	ObjectManager();
 	virtual ~ObjectManager();
 
-    StateMachine* m_pStateMachine;
-    static ObjectManager* s_pInstance;
-    std::vector<GameObject*> m_gameObjects;
+	void preloadSounds();
 
-	
-    
 };
 
 typedef ObjectManager OM;
